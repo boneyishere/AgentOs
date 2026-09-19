@@ -1,64 +1,103 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Container } from "./container";
+import { gsap } from "@/lib/motion/gsap-setup";
+import { useGsapContext } from "@/lib/motion/use-gsap-context";
 
 const NAV_LINKS = [
-  { label: "Platform", href: "#platform" },
-  { label: "Solutions", href: "#solutions" },
-  { label: "Resources", href: "#resources" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Features", href: "/features" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Resources", href: "/resources" },
 ];
 
 export function Nav() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  const headerRef = useGsapContext<HTMLElement>((_ctx, el, reducedMotion) => {
+    let scrolled = false;
+
+    const applyState = (isScrolled: boolean, animate: boolean) => {
+      const vars = {
+        height: isScrolled ? 60 : 76,
+        backgroundColor: isScrolled ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0)",
+        borderBottomColor: isScrolled ? "var(--border)" : "rgba(0,0,0,0)",
+        backdropFilter: isScrolled ? "blur(10px)" : "blur(0px)",
+      };
+      if (animate && !reducedMotion) {
+        gsap.to(el, { ...vars, duration: 0.3, ease: "power2.out" });
+      } else {
+        gsap.set(el, vars);
+      }
+    };
+
+    const onScroll = () => {
+      const next = window.scrollY > 24;
+      if (next !== scrolled) {
+        scrolled = next;
+        applyState(next, true);
+      }
+    };
+
+    applyState(false, false);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
-      <Container className="flex h-16 items-center justify-between">
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-[family-name:var(--font-heading)] text-lg font-semibold tracking-tight"
-        >
-          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground text-sm font-bold text-background">
-            A
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-50 flex items-center border-b border-transparent"
+    >
+      <Container className="flex w-full items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-xs font-bold text-background">
+            C
           </span>
-          AgentOS
+          <span className="text-base font-semibold tracking-tight">Codely</span>
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-foreground-muted transition-colors hover:text-foreground"
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive =
+              pathname === link.href || pathname.startsWith(`${link.href}/`);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={isActive ? "page" : undefined}
+                className={`group relative text-sm font-medium transition-colors hover:text-foreground ${
+                  isActive ? "text-foreground" : "text-foreground-muted"
+                }`}
+              >
+                {link.label}
+                <span
+                  className={`absolute -bottom-1 left-0 h-px bg-foreground transition-all duration-300 group-hover:w-full ${
+                    isActive ? "w-full" : "w-0"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden md:block">
           <Link
-            href="#login"
-            className="text-sm font-medium text-foreground-muted transition-colors hover:text-foreground"
+            href="/contact"
+            className="inline-flex items-center rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-85"
           >
-            Login
-          </Link>
-          <Link
-            href="#get-started"
-            className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
-          >
-            Build an AI Agent
+            Book a Demo
           </Link>
         </div>
 
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-11 w-11 items-center justify-center rounded-lg border border-border md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-border md:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
         >
@@ -67,31 +106,31 @@ export function Nav() {
       </Container>
 
       {open && (
-        <div className="border-t border-border bg-background px-4 py-4 md:hidden">
+        <div className="absolute inset-x-0 top-full border-t border-border bg-background px-4 py-4 md:hidden">
           <nav className="flex flex-col gap-1">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:bg-surface hover:text-foreground"
-              >
-                {link.label}
-              </a>
-            ))}
-            <a
-              href="#login"
-              onClick={() => setOpen(false)}
-              className="rounded-md px-3 py-2.5 text-sm font-medium text-foreground-muted hover:bg-surface hover:text-foreground"
-            >
-              Login
-            </a>
+            {NAV_LINKS.map((link) => {
+              const isActive =
+                pathname === link.href || pathname.startsWith(`${link.href}/`);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`rounded-md px-3 py-2.5 text-sm font-medium hover:bg-surface hover:text-foreground ${
+                    isActive ? "text-foreground" : "text-foreground-muted"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
             <Link
-              href="#get-started"
+              href="/contact"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-lg bg-foreground px-4 py-2.5 text-center text-sm font-medium text-background"
+              className="mt-2 rounded-full bg-foreground px-4 py-2.5 text-center text-sm font-medium text-background"
             >
-              Build an AI Agent
+              Book a Demo
             </Link>
           </nav>
         </div>

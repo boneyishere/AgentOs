@@ -1,12 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { gsap } from "@/lib/motion/gsap-setup";
+import { useGsapContext } from "@/lib/motion/use-gsap-context";
 
 export function Reveal({
   children,
@@ -19,18 +14,13 @@ export function Reveal({
   y?: number;
   delay?: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useGsapContext<HTMLDivElement>(
+    (_ctx, el, reducedMotion) => {
+      if (reducedMotion) {
+        gsap.set(el, { autoAlpha: 1, y: 0 });
+        return;
+      }
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
       gsap.fromTo(
         el,
         { autoAlpha: 0, y },
@@ -40,17 +30,12 @@ export function Reveal({
           duration: 0.7,
           delay,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            once: true,
-          },
+          scrollTrigger: { trigger: el, start: "top 85%", once: true },
         }
       );
-    }, ref);
-
-    return () => ctx.revert();
-  }, [y, delay]);
+    },
+    [y, delay]
+  );
 
   return (
     <div ref={ref} className={className}>

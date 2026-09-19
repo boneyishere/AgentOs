@@ -3,63 +3,58 @@ import { Container } from "./container";
 
 const COLUMNS = [
   {
-    title: "Platform",
-    links: ["AI Chat Agents", "AI Voice Agents", "Knowledge Base / RAG", "AI Models"],
-  },
-  {
-    title: "Solutions",
+    title: "Product",
     links: [
-      "Customer Support",
-      "Sales & Lead Qualification",
-      "Appointment Booking",
-      "Call Automation",
+      { label: "Features", href: "/features" },
+      { label: "Pricing", href: "/pricing" },
     ],
   },
   {
     title: "Resources",
-    links: ["Documentation", "Use Cases", "Blog"],
+    links: [{ label: "Resources", href: "/resources" }],
   },
   {
     title: "Company",
-    links: ["About", "Contact"],
+    links: [{ label: "Contact", href: "/contact" }],
   },
 ];
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-surface">
+    <footer className="border-t border-border">
       <Container className="py-16">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-6">
+        <div className="grid grid-cols-2 gap-10 border-b border-border pb-12 sm:grid-cols-5">
           <div className="col-span-2">
-            <Link
-              href="/"
-              className="flex items-center gap-2 font-[family-name:var(--font-heading)] text-lg font-semibold tracking-tight"
-            >
+            <Link href="/" className="flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground text-sm font-bold text-background">
-                A
+                C
               </span>
-              AgentOS
+              <span className="text-lg font-semibold tracking-tight">Codely</span>
             </Link>
             <p className="mt-3 max-w-xs text-sm text-foreground-muted">
-              One AI brain. Multiple channels. Chat and voice agents for
-              support, sales, and communication.
+              AI agents for the conversations that move your business forward —
+              voice-first, chat-supported.
             </p>
+            <Link
+              href="/contact"
+              className="mt-6 inline-flex w-fit items-center rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition-opacity hover:opacity-85"
+            >
+              Book a Demo
+            </Link>
           </div>
 
-          {COLUMNS.map((col) => (
-            <div key={col.title}>
-              <h3 className="text-sm font-semibold text-foreground">
-                {col.title}
-              </h3>
+          {COLUMNS.map((column) => (
+            <div key={column.title}>
+              <p className="text-sm font-medium text-foreground">{column.title}</p>
               <ul className="mt-4 space-y-3">
-                {col.links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
+                {column.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
                       className="text-sm text-foreground-muted transition-colors hover:text-foreground"
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -67,11 +62,11 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
-          <p className="text-sm text-foreground-muted">
-            &copy; {new Date().getFullYear()} AgentOS. All rights reserved.
-          </p>
-          <div className="flex gap-6 text-sm text-foreground-muted">
+        <div className="mt-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+          <span className="font-[family-name:var(--font-mono)] text-xs text-foreground-muted">
+            &copy; {new Date().getFullYear()} Codely
+          </span>
+          <div className="flex gap-6 font-[family-name:var(--font-mono)] text-xs text-foreground-muted">
             <a href="#" className="hover:text-foreground">
               Privacy
             </a>

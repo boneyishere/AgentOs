@@ -1,19 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --font-stack-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Helvetica, Arial, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji";
+  --font-stack-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-stack-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular",
+    Menlo, Consolas, monospace;
 
+  /* light surface (default) */
   --background: #ffffff;
-  --surface: #f7f7f5;
+  --surface: #fafafa;
   --surface-raised: #ffffff;
   --foreground: #0a0a0a;
-  --foreground-muted: #52525b;
-  --border: #e4e4e7;
-  --primary: #2c41b3;
-  --primary-foreground: #ffffff;
-  --primary-hover: #24358f;
+  --foreground-muted: #6b6b70;
+  --border: #ebebeb;
+  --border-strong: #d4d4d8;
+
+  /* ink surface — used deliberately for the hero visual + technology section only */
+  --ink: #0a0a0a;
+  --ink-foreground: #fafafa;
+  --ink-foreground-muted: #a1a1aa;
+  --ink-border: rgba(255, 255, 255, 0.12);
+  --ink-border-strong: rgba(255, 255, 255, 0.2);
+
+  /* accent — reserved for indicators, active states, and single emphasis points, never large fills */
+  --accent: #4959ee;
+  --accent-foreground: #ffffff;
+  --accent-soft: rgba(73, 89, 238, 0.08);
 }
 
 @theme inline {
@@ -23,21 +35,38 @@
   --color-foreground: var(--foreground);
   --color-foreground-muted: var(--foreground-muted);
   --color-border: var(--border);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary-hover: var(--primary-hover);
+  --color-border-strong: var(--border-strong);
+
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-ink-foreground-muted: var(--ink-foreground-muted);
+  --color-ink-border: var(--ink-border);
+  --color-ink-border-strong: var(--ink-border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+
   --font-sans: var(--font-stack-sans);
   --font-heading: var(--font-stack-sans);
+  --font-mono: var(--font-stack-mono);
 }
 
 html {
   scroll-behavior: smooth;
+  /* Keeps anchor-linked sections clear of the sticky nav on landing. */
+  scroll-padding-top: 6rem;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
