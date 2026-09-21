@@ -30,7 +30,7 @@ export function IntelligenceVisual() {
           <span
             key={tag}
             data-tag
-            className="rounded-full border border-border px-2 py-0.5 font-[family-name:var(--font-mono)] text-[10px] text-foreground-muted opacity-0"
+            className="rounded-full border border-border px-2 py-0.5 text-[10px] text-foreground-muted opacity-0"
           >
             {tag}
           </span>

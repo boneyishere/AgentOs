@@ -11,10 +11,10 @@ export default function NotFound() {
       <main className="flex-1">
         <section className="border-b border-border">
           <Container className="py-32 text-center sm:py-40">
-            <p className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.16em] text-foreground-muted">
+            <p className="text-xs uppercase tracking-[0.16em] text-foreground-muted">
               404
             </p>
-            <h1 className="mx-auto mt-6 max-w-xl text-4xl font-medium tracking-tight sm:text-5xl">
+            <h1 className="font-heading mx-auto mt-6 max-w-xl text-4xl font-medium tracking-tight sm:text-5xl">
               This page doesn&apos;t exist.
             </h1>
             <p className="mx-auto mt-5 max-w-md text-lg text-foreground-muted">

@@ -116,7 +116,7 @@ function LogoBentoCard({
     <div
       className={`rounded-3xl border border-border bg-background p-8 sm:p-10 ${className}`}
     >
-      <p className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.14em] text-foreground-muted">
+      <p className="text-xs uppercase tracking-[0.14em] text-foreground-muted">
         {label}
       </p>
       <h3 className="mt-3 text-xl font-medium tracking-tight">{headline}</h3>
@@ -150,7 +150,7 @@ function TextBentoCard({
       delay={delay}
       className={`rounded-3xl border border-border bg-background p-8 sm:p-10 ${className}`}
     >
-      <p className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.14em] text-foreground-muted">
+      <p className="text-xs uppercase tracking-[0.14em] text-foreground-muted">
         {label}
       </p>
       <h3 className="mt-3 text-xl font-medium tracking-tight">{headline}</h3>

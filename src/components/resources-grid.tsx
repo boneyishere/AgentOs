@@ -50,7 +50,7 @@ export function ResourcesGrid() {
                 href={`/resources/${item.slug}`}
                 className="group flex h-full flex-col rounded-2xl border border-border p-6 transition-colors hover:border-border-strong"
               >
-                <span className="w-fit rounded-full bg-surface px-2.5 py-1 font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
+                <span className="w-fit rounded-full bg-surface px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
                   {item.category}
                 </span>
                 <h3 className="mt-4 text-lg font-medium tracking-tight">

@@ -16,7 +16,7 @@ export function ClientLogos() {
     <section className="border-b border-border">
       <Container className="py-14 sm:py-16">
         <Reveal className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
-          <p className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.16em] text-foreground-muted">
+          <p className="text-xs uppercase tracking-[0.16em] text-foreground-muted">
             Trusted by teams building better customer experiences
           </p>
 

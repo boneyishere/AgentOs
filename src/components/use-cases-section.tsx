@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Container } from "./container";
+import { Reveal } from "./reveal";
 import {
   ConversationVisual,
   type ConversationBeat,
@@ -107,8 +108,15 @@ export function UseCasesSection() {
       <Container className="py-20 sm:py-28">
         <div className="max-w-xl">
           <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
-            One agent, mapped to how your business runs
+            Give your AI a job. Let it get to work.
           </TextReveal>
+          <Reveal delay={0.1}>
+            <p className="mt-4 max-w-lg text-foreground-muted">
+              From answering the phone to following up with leads, Codely can
+              take on the conversations and tasks your team handles every
+              day.
+            </p>
+          </Reveal>
         </div>
 
         <div className="-mx-4 mt-10 flex snap-x gap-2 overflow-x-auto px-4 pb-2 lg:hidden">
@@ -143,7 +151,7 @@ export function UseCasesSection() {
                   }`}
                 >
                   <div className="flex items-baseline gap-4">
-                    <span className="font-[family-name:var(--font-mono)] text-xs text-foreground-muted">
+                    <span className="text-xs text-foreground-muted">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span

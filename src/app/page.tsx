@@ -2,7 +2,6 @@ import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
 import { ClientLogos } from "@/components/client-logos";
 import { FeatureCards } from "@/components/feature-cards";
-import { TechnologySection } from "@/components/technology-section";
 import { UseCasesSection } from "@/components/use-cases-section";
 import { IndustriesSection } from "@/components/industries-section";
 import { FaqSection } from "@/components/faq-section";
@@ -18,7 +17,6 @@ export default function Home() {
         <Hero />
         <ClientLogos />
         <FeatureCards />
-        <TechnologySection />
         <UseCasesSection />
         <ImpactSection />
         <IndustriesSection />

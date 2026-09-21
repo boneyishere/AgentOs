@@ -27,7 +27,7 @@ export function ActionsVisual() {
     <div ref={ref} className="flex h-20 items-center justify-between">
       <div
         data-icon
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground font-[family-name:var(--font-mono)] text-[10px] text-background opacity-35"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground text-[10px] text-background opacity-35"
       >
         AI
       </div>

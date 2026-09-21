@@ -31,7 +31,7 @@ export function KnowledgeVisual() {
       <div className="h-px flex-1 border-t border-dashed border-border" />
       <div
         data-node
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground font-[family-name:var(--font-mono)] text-[10px] text-background"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground text-[10px] text-background"
       >
         AI
       </div>

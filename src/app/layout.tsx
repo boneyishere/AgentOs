@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Stack_Sans_Text } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -7,8 +7,8 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const stackSansText = Stack_Sans_Text({
+  variable: "--font-stack-sans-text",
   subsets: ["latin"],
 });
 
@@ -18,19 +18,19 @@ const SITE_DESCRIPTION =
 export const metadata: Metadata = {
   metadataBase: new URL("https://codely.ai"),
   title: {
-    default: "Codely — Conversations your business can act on.",
+    default: "Codely — Meet the AI that works for you.",
     template: "%s — Codely",
   },
   description: SITE_DESCRIPTION,
   openGraph: {
     type: "website",
     siteName: "Codely",
-    title: "Codely — Conversations your business can act on.",
+    title: "Codely — Meet the AI that works for you.",
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Codely — Conversations your business can act on.",
+    title: "Codely — Meet the AI that works for you.",
     description: SITE_DESCRIPTION,
   },
 };
@@ -39,9 +39,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`h-full antialiased ${geistSans.variable} ${geistMono.variable}`}
+      className={`h-full antialiased ${geistSans.variable} ${stackSansText.variable}`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body
+        className="min-h-full flex flex-col bg-background text-foreground"
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

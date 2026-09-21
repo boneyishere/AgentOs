@@ -63,10 +63,10 @@ export function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <span className="font-[family-name:var(--font-mono)] text-xs text-foreground-muted">
+          <span className="text-xs text-foreground-muted">
             &copy; {new Date().getFullYear()} Codely
           </span>
-          <div className="flex gap-6 font-[family-name:var(--font-mono)] text-xs text-foreground-muted">
+          <div className="flex gap-6 text-xs text-foreground-muted">
             <a href="#" className="hover:text-foreground">
               Privacy
             </a>

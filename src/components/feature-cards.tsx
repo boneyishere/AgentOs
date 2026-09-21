@@ -59,8 +59,15 @@ export function FeatureCards() {
       <Container className="py-20 sm:py-28">
         <div className="max-w-xl">
           <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
-            Everything an agent needs to have a real conversation
+            Not just AI that talks. AI that works.
           </TextReveal>
+          <Reveal delay={0.1}>
+            <p className="mt-4 max-w-lg text-foreground-muted">
+              Codely gives your AI the ability to understand your business,
+              remember your customers, communicate naturally, and take
+              action, turning conversations into real work.
+            </p>
+          </Reveal>
         </div>
 
         <div className="mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-6">

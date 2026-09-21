@@ -6,6 +6,7 @@ import { Reveal } from "./reveal";
 import { TextReveal } from "@/lib/motion/text-reveal";
 import { useScrollTimeline } from "@/lib/motion/scroll-timeline";
 import { gsap } from "@/lib/motion/gsap-setup";
+import GhostFibers from "./GhostFibers";
 
 function CornerBracket({ className = "" }: { className?: string }) {
   return (
@@ -43,8 +44,36 @@ export function CtaSection() {
   );
 
   return (
-    <section id="cta" className="border-b border-border">
-      <Container className="py-24 text-center sm:py-32">
+    <section id="cta" className="relative overflow-hidden border-b border-border">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <GhostFibers
+          lineColor="#140E35"
+          glowColor="#3437A0"
+          speed={0.2}
+          scale={2}
+          rotation={0}
+          rotationSpeed={0.25}
+          layers={4}
+          waveAmplitude={0.015}
+          waveFrequency={3}
+          waveSpeed={0.15}
+          layerSpeed={0.08}
+          twist={0.1}
+          twistFrequency={5}
+          twistSpeed={1.2}
+          lineFrequency={5}
+          lineSpacing={2}
+          lineSharpness={16}
+          glowFalloff={10}
+          glowIntensity={1.6}
+          brightness={2}
+          blueBoost={1.25}
+          vignette={0.8}
+          grain={0.05}
+          dpr={1}
+        />
+      </div>
+      <Container className="relative py-24 text-center sm:py-32">
         <div
           ref={frameRef}
           className="relative mx-auto max-w-2xl px-8 py-10 sm:px-14 sm:py-14"
@@ -54,11 +83,11 @@ export function CtaSection() {
           <CornerBracket className="bottom-0 left-0 -scale-y-100" />
           <CornerBracket className="bottom-0 right-0 -scale-100" />
 
-          <TextReveal className="mx-auto text-4xl font-medium tracking-tight sm:text-5xl">
+          <TextReveal className="mx-auto text-4xl font-medium tracking-tight text-white sm:text-5xl">
             Put an AI agent to work.
           </TextReveal>
           <Reveal delay={0.1}>
-            <p className="mx-auto mt-5 max-w-md text-lg text-foreground-muted">
+            <p className="mx-auto mt-5 max-w-md text-lg text-white/70">
               Tell us what your business handles today. We&apos;ll show you where
               Codely can help.
             </p>

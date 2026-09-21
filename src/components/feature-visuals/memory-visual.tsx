@@ -10,7 +10,7 @@ export function MemoryVisual() {
 
   return (
     <div ref={ref} className="flex h-20 flex-col justify-center gap-1.5">
-      <p className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
+      <p className="text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
         Past call · Tuesday
       </p>
       <span

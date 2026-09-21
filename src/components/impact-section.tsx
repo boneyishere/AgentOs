@@ -73,7 +73,7 @@ function ImpactCard({ item }: { item: (typeof IMPACTS)[number] }) {
         <p className="text-sm text-ink-foreground-muted">{item.description}</p>
       </div>
       {item.estimate && (
-        <p className="mt-6 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.1em] text-ink-foreground-muted">
+        <p className="mt-6 text-[11px] uppercase tracking-[0.1em] text-ink-foreground-muted">
           {item.estimate}
         </p>
       )}
@@ -115,7 +115,7 @@ export function ImpactSection() {
           <TextReveal className="max-w-lg text-3xl font-medium tracking-tight sm:text-4xl">
             Reduce cost. Remove risk.
           </TextReveal>
-          <span className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.14em] text-ink-foreground-muted">
+          <span className="text-xs uppercase tracking-[0.14em] text-ink-foreground-muted">
             Estimated impact
           </span>
         </div>

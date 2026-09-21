@@ -161,7 +161,7 @@ export function ConversationVisual({
       <div className="relative">
         <div className="flex items-center justify-between">
           <span
-            className={`inline-flex items-center gap-2 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.16em] ${
+            className={`inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] ${
               isFull ? "text-ink-foreground-muted" : "text-foreground-muted"
             }`}
           >
@@ -203,7 +203,7 @@ export function ConversationVisual({
               {beat.kind === "customer" || beat.kind === "agent" ? (
                 <div>
                   <p
-                    className={`font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.14em] ${
+                    className={`text-[10px] uppercase tracking-[0.14em] ${
                       isFull ? "text-ink-foreground-muted" : "text-foreground-muted"
                     }`}
                   >
@@ -218,7 +218,7 @@ export function ConversationVisual({
                   className="flex items-baseline gap-2.5 border-t pt-3.5"
                   style={{ borderColor: isFull ? "var(--ink-border)" : "var(--border)" }}
                 >
-                  <span className="shrink-0 font-[family-name:var(--font-mono)] text-[10px] font-medium uppercase tracking-[0.14em] text-accent">
+                  <span className="shrink-0 text-[10px] font-medium uppercase tracking-[0.14em] text-accent">
                     {beat.kind}
                   </span>
                   <span className={`text-xs ${isFull ? "text-ink-foreground-muted" : "text-foreground-muted"}`}>

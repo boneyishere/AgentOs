@@ -3,8 +3,7 @@
 :root {
   --font-stack-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
-  --font-stack-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular",
-    Menlo, Consolas, monospace;
+  --font-stack-sans-text-heading: var(--font-stack-sans-text), var(--font-stack-sans);
 
   /* light surface (default) */
   --background: #ffffff;
@@ -48,8 +47,7 @@
   --color-accent-soft: var(--accent-soft);
 
   --font-sans: var(--font-stack-sans);
-  --font-heading: var(--font-stack-sans);
-  --font-mono: var(--font-stack-mono);
+  --font-heading: var(--font-stack-sans-text-heading);
 }
 
 html {

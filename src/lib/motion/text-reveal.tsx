@@ -48,7 +48,7 @@ export function TextReveal({
 
   const Tag = as;
   return (
-    <Tag ref={ref} className={className}>
+    <Tag ref={ref} className={`font-heading ${className}`}>
       {children}
     </Tag>
   );

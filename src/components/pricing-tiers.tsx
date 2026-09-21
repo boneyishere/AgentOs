@@ -58,7 +58,7 @@ export function PricingTiers() {
                 }`}
               >
                 {tier.highlighted && (
-                  <span className="mb-4 w-fit rounded-full bg-foreground px-3 py-1 font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.14em] text-background">
+                  <span className="mb-4 w-fit rounded-full bg-foreground px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-background">
                     Most popular
                   </span>
                 )}

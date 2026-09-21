@@ -94,13 +94,13 @@ export function ContactFormSection() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <p className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.14em] text-foreground-muted">
+          <p className="text-xs uppercase tracking-[0.14em] text-foreground-muted">
             What happens next
           </p>
           <ol className="mt-5 space-y-5">
             {STEPS.map((step, i) => (
               <li key={step} className="flex gap-4">
-                <span className="font-[family-name:var(--font-mono)] text-sm text-accent">
+                <span className="text-sm text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="text-sm text-foreground-muted">{step}</span>

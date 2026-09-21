@@ -58,7 +58,7 @@ export default async function ResourceDetailPage({
             </Link>
 
             <div className="mt-8 flex items-center gap-3">
-              <span className="w-fit rounded-full bg-surface px-2.5 py-1 font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
+              <span className="w-fit rounded-full bg-surface px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
                 {resource.category}
               </span>
               <time dateTime={resource.date} className="text-xs text-foreground-muted">
@@ -80,7 +80,7 @@ export default async function ResourceDetailPage({
                 className="mt-10 grid grid-cols-1 gap-8 border-t border-border pt-10 sm:grid-cols-3"
               >
                 <div>
-                  <p className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
+                  <p className="text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
                     Problem
                   </p>
                   <p className="mt-2 text-sm text-foreground-muted">
@@ -88,7 +88,7 @@ export default async function ResourceDetailPage({
                   </p>
                 </div>
                 <div>
-                  <p className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
+                  <p className="text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
                     Codely
                   </p>
                   <p className="mt-2 text-sm text-foreground-muted">
@@ -96,7 +96,7 @@ export default async function ResourceDetailPage({
                   </p>
                 </div>
                 <div>
-                  <p className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.14em] text-accent">
+                  <p className="text-[10px] uppercase tracking-[0.14em] text-accent">
                     Outcome
                   </p>
                   <p className="mt-2 text-sm text-foreground">{resource.outcome}</p>
