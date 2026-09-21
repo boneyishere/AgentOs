@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Container } from "./container";
 import { TextReveal } from "@/lib/motion/text-reveal";
@@ -16,7 +17,7 @@ export function Hero() {
               as="h1"
               playOn="mount"
               delay={0.1}
-              className="max-w-xl text-5xl font-medium leading-[1.02] tracking-tight text-balance sm:text-6xl lg:text-[4.25rem]"
+              className="max-w-xl text-5xl font-medium leading-[1.12] tracking-tight text-balance sm:text-6xl lg:text-[4.25rem]"
             >
               Meet the <span className="text-accent">AI</span> that works for you.
             </TextReveal>
@@ -62,10 +63,12 @@ export function Hero() {
                 mouseRadius={0.3}
               />
             </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/Mic.svg"
-              alt="Codely AI voice agent"
+            <Image
+              src="/images/robot-agent.png"
+              alt="Codely AI agent"
+              width={722}
+              height={827}
+              priority
               className="relative h-[60%] w-auto object-contain"
             />
           </div>
