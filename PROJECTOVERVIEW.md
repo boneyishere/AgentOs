@@ -368,6 +368,14 @@ mobile menu toggle.
   (`lineColor="#140E35"`, `glowColor="#3437A0"`, `dpr={1}`, etc.). Treat as vendored.
 - **`FaqSection`** — controlled accordion via `useState`, `ChevronDown` rotation.
 - **`ResourcesGrid`** — client-side `All | Article | Case Study` filter over `RESOURCES`.
+- **`IndustriesSection`** — a pinned, scroll-driven story (desktop, motion-safe only): the
+  section pins for `~0.9 viewport-height × 9` of scroll while a `ScrollTrigger.create({pin,
+  scrub, onUpdate})` maps scroll progress to a `0–8` step index that swaps the two-column
+  content (eyebrow/headline/description/capabilities/CTA on the left, a stacked-and-crossfaded
+  photo on the right) for each of the 9 industries. No progress UI by design — the scroll
+  itself is the only navigation. Below `lg` and under `prefers-reduced-motion`, it falls back
+  to `IndustriesList`, a plain stacked, non-pinned list of the same 9 industries — see the
+  motion-safe pinned-story pattern in section 9.
 
 ---
 
@@ -407,6 +415,17 @@ class) instead of a GSAP timeline. The global `prefers-reduced-motion` block alr
 all CSS `animation-duration` to `0.01ms`, so this still satisfies the reduced-motion contract
 with zero extra code. Reserve this for ambient background texture only — anything scroll-triggered,
 staggered, or carrying information still goes through a `lib/motion` hook.
+
+**Pinned scroll-story pattern (`IndustriesSection`):** for a section that pins in place while
+scroll steps through several discrete content states (as opposed to `useScrollTimeline`'s single
+continuous scrub tween), call `ScrollTrigger.create({ trigger, pin: true, scrub: 1, onUpdate })`
+directly inside a `useGsapContext` effect, and use `onUpdate`'s `self.progress` to drive a React
+`useState` step index rather than tweening DOM properties in the timeline itself — the content
+swap is a normal React re-render, cross-faded with a small `gsap.fromTo` (text) and a stacked
+absolutely-positioned, opacity-transitioned layer per state (imagery). Gate the whole pin with
+`gsap.matchMedia("(min-width: 1024px)")` *and* an early `if (reducedMotion) return`, and back it
+with a CSS-only non-pinned fallback (`hidden motion-safe:lg:block` / `block motion-safe:lg:hidden`
+on the two variants) so mobile and reduced-motion visitors get the same content with no scroll-jacking.
 
 ---
 
@@ -452,6 +471,10 @@ export function getResourceBySlug(slug)
 - No tests, no CI, no analytics, no error boundary, no `loading.tsx`.
 - `next.config.ts` is empty (no image domains, no redirects, no headers).
 - Industry images are unoptimised JPGs served through `next/image` from `public/`.
+- The ISP Providers industry chapter has no real photography yet — it renders an abstract
+  accent-tinted gradient + icon placeholder (`Industry.image = null` in `industries-section.tsx`).
+  Drop a photo at `public/images/industries/isp.jpg` and set that entry's `image` field to wire
+  it in the same way as the other 8.
 - GSAP SplitText and DrawSVGPlugin are paid plugins — a build needs valid access to them.
 - There is a stray `package-lock.json` in the parent `D:/agent/` directory; the real project
   root is `D:/agent/AgentOs/`.
