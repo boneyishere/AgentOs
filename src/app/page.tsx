@@ -4,6 +4,7 @@ import { ClientLogos } from "@/components/client-logos";
 import { FeatureCards } from "@/components/feature-cards";
 import { UseCasesSection } from "@/components/use-cases-section";
 import { IndustriesSection } from "@/components/industries-section";
+import { StatsSection } from "@/components/stats-section";
 import { FaqSection } from "@/components/faq-section";
 import { ImpactSection } from "@/components/impact-section";
 import { CtaSection } from "@/components/cta-section";
@@ -20,6 +21,7 @@ export default function Home() {
         <UseCasesSection />
         <ImpactSection />
         <IndustriesSection />
+        <StatsSection />
         <FaqSection />
         <CtaSection />
       </main>

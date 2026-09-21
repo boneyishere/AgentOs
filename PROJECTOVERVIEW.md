@@ -108,7 +108,7 @@ D:/agent/
 - The `components/` directory is **flat** — one file per page section. Only
   `feature-visuals/` is nested, because those six are variations on a single idea.
 - Section components own their own data as a module-level `const` array
-  (`FEATURES`, `TIERS`, `FAQS`, `INDUSTRIES`, `IMPACTS`, `USE_CASES`, `LOGOS`, `ROWS`).
+  (`FEATURES`, `TIERS`, `FAQS`, `INDUSTRIES`, `IMPACTS`, `STATS`, `USE_CASES`, `LOGOS`, `ROWS`).
   Only `resources.ts` is extracted, because two routes share it.
 - `"use client"` only where genuinely needed (state, GSAP, event handlers). Pages and
   static sections stay Server Components.
@@ -119,7 +119,7 @@ D:/agent/
 
 | Route | File | Composition |
 | --- | --- | --- |
-| `/` | [src/app/page.tsx](src/app/page.tsx) | Nav, Hero, ClientLogos, FeatureCards, UseCasesSection, ImpactSection, IndustriesSection, FaqSection, CtaSection, Footer |
+| `/` | [src/app/page.tsx](src/app/page.tsx) | Nav, Hero, ClientLogos, FeatureCards, UseCasesSection, ImpactSection, IndustriesSection, StatsSection, FaqSection, CtaSection, Footer |
 | `/features` | [src/app/features/page.tsx](src/app/features/page.tsx) | Nav, PageHeader, FeatureDetailList, TechStackSection, FaqSection, CtaSection, Footer |
 | `/pricing` | [src/app/pricing/page.tsx](src/app/pricing/page.tsx) | Nav, PageHeader, PricingTiers, PricingComparisonTable, CtaSection, Footer |
 | `/resources` | [src/app/resources/page.tsx](src/app/resources/page.tsx) | Nav, PageHeader, ResourcesGrid, Footer |
@@ -192,6 +192,21 @@ Technology section. Do not extend it to other sections without a deliberate deci
 > the word "AI" in the hero headline, checkmarks, the live-call pulse dot, waveform bars,
 > the conversation progress rail, CTA corner brackets, focus rings, and blurred glow orbs
 > at low opacity. **Primary buttons are black (`bg-foreground`), not accent.**
+
+**Stat highlights — the `StatsSection` proof-stats cards only.** A small 4-colour set used
+solely for that section's per-card animated background gradient (no solid fills — these are
+soft/translucent tones only). Don't reuse outside that component; everywhere else stays on
+the single indigo accent above.
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `--stat-indigo-soft` | `rgba(73,89,238,0.18)` (same hue as `--accent`) | Card 1 gradient |
+| `--stat-violet-soft` | `rgba(167,139,250,0.22)` | Card 2 gradient |
+| `--stat-pink-soft` | `rgba(244,114,182,0.2)` | Card 3 gradient |
+| `--stat-mint-soft` | `rgba(110,231,183,0.22)` | Card 4 gradient |
+
+Referenced via `var(--stat-*-soft)` directly in each card's inline gradient `style` — not
+exposed as Tailwind background-fill utilities, since they're never used as a solid fill.
 
 ### Surfaces and elevation
 
@@ -312,8 +327,9 @@ One container, one max width, one gutter. Every section uses it. Don't hand-roll
 [footer.tsx](src/components/footer.tsx).
 
 **Sections** — hero, client-logos, feature-cards, use-cases-section, impact-section,
-industries-section, faq-section, cta-section, tech-stack-section, feature-detail-list,
-pricing-tiers, pricing-comparison-table, contact-form-section, resources-grid.
+industries-section, stats-section, faq-section, cta-section, tech-stack-section,
+feature-detail-list, pricing-tiers, pricing-comparison-table, contact-form-section,
+resources-grid.
 
 **Reusable class recipes**
 
@@ -382,6 +398,15 @@ straight to the **end state** — content must never be left invisible. State ch
 
 **Headline convention:** section headings go through `<TextReveal>`; the paragraph beneath
 goes in a `<Reveal delay={0.1}>`.
+
+**Ambient CSS-only loops (exception to "animate through `lib/motion` hooks"):** a purely
+decorative, indefinitely-looping effect with no scroll trigger and no state to preserve —
+e.g. `StatsSection`'s per-card background gradients — is done as a plain CSS `@keyframes`
+animation (defined in `globals.css`, applied via an arbitrary `animate-[name_Ns_ease_infinite]`
+class) instead of a GSAP timeline. The global `prefers-reduced-motion` block already clamps
+all CSS `animation-duration` to `0.01ms`, so this still satisfies the reduced-motion contract
+with zero extra code. Reserve this for ambient background texture only — anything scroll-triggered,
+staggered, or carrying information still goes through a `lib/motion` hook.
 
 ---
 
