@@ -96,14 +96,14 @@ export function PricingTiers() {
                   tier.highlighted ? "border-foreground" : "border-border"
                 }`}
               >
-                <div className="mb-4 flex h-7 items-center">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-lg font-medium">{tier.name}</h3>
                   {tier.highlighted && (
-                    <span className="w-fit rounded-full bg-accent px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-accent-foreground">
+                    <span className="w-fit shrink-0 rounded-full bg-accent px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-accent-foreground">
                       Most popular
                     </span>
                   )}
                 </div>
-                <h3 className="text-lg font-medium">{tier.name}</h3>
                 <p className="mt-2 text-sm text-foreground-muted">{tier.description}</p>
                 <p className="mt-6 flex items-baseline gap-1">
                   <span className="text-4xl font-medium tracking-tight">{tier.price}</span>

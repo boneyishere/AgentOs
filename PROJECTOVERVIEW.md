@@ -220,7 +220,12 @@ hover-lift nodes). Prefer a border change over a shadow.
 - Interactive elements carry `aria-label`, `aria-expanded`, `aria-current="page"`;
   decorative SVG and visuals carry `aria-hidden="true"`.
 - `html` is `antialiased` with `scroll-behavior: smooth` and `scroll-padding-top: 6rem`
-  (keeps anchor targets clear of the sticky nav).
+  (keeps anchor targets clear of the sticky nav). It also carries `data-scroll-behavior="smooth"`
+  (set in [layout.tsx](src/app/layout.tsx)) — **required** alongside the CSS. Next.js 16 stopped
+  auto-managing `scroll-behavior` during route navigation; without this attribute, the router's
+  scroll-to-top reset fights the global smooth-scroll and can land the next page scrolled
+  partway down (e.g. clicking a footer link lands mid-page instead of at the top). Don't remove
+  it while `scroll-behavior: smooth` stays global.
 - A global `prefers-reduced-motion` block clamps all CSS animation/transition to `0.01ms`
   and disables smooth scroll. JS motion handles this separately — see section 9.
 
