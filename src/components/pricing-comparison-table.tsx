@@ -4,23 +4,43 @@ import { Reveal } from "./reveal";
 import { TextReveal } from "@/lib/motion/text-reveal";
 
 type CellValue = string | boolean;
+type Row = { label: string; values: [CellValue, CellValue, CellValue, CellValue, CellValue] };
 
-const ROWS: { label: string; values: [CellValue, CellValue, CellValue] }[] = [
-  { label: "AI agents included", values: ["1", "3", "Unlimited"] },
-  { label: "Voice minutes / month", values: ["500", "2,500", "Custom"] },
-  { label: "Chat conversations", values: ["Unlimited", "Unlimited", "Unlimited"] },
-  { label: "Knowledge bases", values: ["1", "Unlimited", "Unlimited"] },
-  { label: "Conversation memory", values: [true, true, true] },
-  { label: "CRM & calendar integrations", values: [false, true, true] },
-  { label: "Custom API & webhooks", values: [false, true, true] },
-  { label: "Conversation intelligence & analytics", values: [false, true, true] },
-  { label: "Human handoff", values: [true, true, true] },
-  { label: "SSO & advanced security", values: [false, false, true] },
-  { label: "Dedicated success manager", values: [false, false, true] },
-  { label: "Support", values: ["Email", "Priority", "Dedicated"] },
+const ROWS: Row[] = [
+  { label: "Price / month", values: ["$49", "$399", "$799", "$1,499", "Contact Us"] },
+  {
+    label: "AI call minutes",
+    values: ["Up to 100", "Up to 1,200", "Up to 2,500", "Up to 5,000", "Scoped to you"],
+  },
+  {
+    label: "Chatbot conversations",
+    values: ["Up to 200", "Up to 3,000", "Up to 6,000", "Up to 12,000", "Scoped to you"],
+  },
+  {
+    label: "Concurrent voice channels",
+    values: ["1", "2", "4", "8", "Scoped to you"],
+  },
+  {
+    label: "Appointment booking & calendar sync",
+    values: [true, true, true, true, true],
+  },
+  { label: "Human handoff", values: [false, true, true, true, true] },
+  { label: "Knowledge base setup", values: [true, true, true, true, true] },
+  { label: "Automated follow-ups", values: [false, true, true, true, true] },
+  { label: "Multilingual support", values: [false, true, true, true, true] },
+  { label: "CRM & calendar integrations", values: [false, false, true, true, true] },
+  { label: "Custom workflows & webhooks", values: [false, false, true, true, true] },
+  { label: "Priority handoff routing", values: [false, false, true, true, true] },
+  { label: "Custom tools & data sources", values: [false, false, false, true, true] },
+  { label: "Dedicated account manager", values: [false, false, false, true, true] },
+  { label: "White-glove onboarding", values: [false, false, false, true, true] },
+  {
+    label: "Bespoke build & scoped engagement",
+    values: [false, false, false, false, true],
+  },
 ];
 
-const COLUMNS = ["Starter", "Growth", "Enterprise"];
+const COLUMNS = ["Starter", "Growth", "Pro", "Advanced", "Custom"];
 
 function Cell({ value }: { value: CellValue }) {
   if (typeof value === "boolean") {
@@ -42,7 +62,7 @@ export function PricingComparisonTable() {
         </TextReveal>
 
         <Reveal delay={0.1} className="mt-12 overflow-x-auto">
-          <table className="w-full min-w-[640px] border-collapse text-left">
+          <table className="w-full min-w-[760px] border-collapse text-left">
             <thead>
               <tr className="border-b border-border">
                 <th className="py-4 pr-4 text-sm font-medium text-foreground-muted">Feature</th>

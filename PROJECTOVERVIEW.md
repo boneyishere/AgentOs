@@ -470,11 +470,9 @@ export function getResourceBySlug(slug)
 - Privacy and Terms footer links are `href="#"` placeholders.
 - No tests, no CI, no analytics, no error boundary, no `loading.tsx`.
 - `next.config.ts` is empty (no image domains, no redirects, no headers).
-- Industry images are unoptimised JPGs served through `next/image` from `public/`.
-- The ISP Providers industry chapter has no real photography yet — it renders an abstract
-  accent-tinted gradient + icon placeholder (`Industry.image = null` in `industries-section.tsx`).
-  Drop a photo at `public/images/industries/isp.jpg` and set that entry's `image` field to wire
-  it in the same way as the other 8.
+- Industry images are unoptimised JPGs served through `next/image` from `public/`. All 9
+  industries (including ISP Providers) now have real photography — `Industry.image` is a
+  required `string`, and the old null-image placeholder path has been removed.
 - GSAP SplitText and DrawSVGPlugin are paid plugins — a build needs valid access to them.
 - There is a stray `package-lock.json` in the parent `D:/agent/` directory; the real project
   root is `D:/agent/AgentOs/`.

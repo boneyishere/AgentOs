@@ -6,41 +6,80 @@ import { Reveal } from "./reveal";
 const TIERS = [
   {
     name: "Starter",
-    price: "$199",
+    price: "$49",
     period: "/mo",
-    description: "For small teams launching their first AI agent.",
-    features: ["1 AI agent", "Chat + voice (500 minutes/mo)", "1 knowledge base", "Email support"],
+    description: "For a solo business testing AI-answered calls and chat for the first time.",
+    features: [
+      "Up to 100 AI call minutes",
+      "Up to 200 chatbot conversations",
+      "1 concurrent voice channel",
+      "Appointment booking & calendar sync",
+      "Business knowledge base setup",
+    ],
     cta: "Book a Demo",
     highlighted: false,
   },
   {
     name: "Growth",
-    price: "$599",
+    price: "$399",
     period: "/mo",
-    description: "For growing teams running agents across channels.",
+    description: "For growing businesses handling steady call and message volume.",
     features: [
-      "3 AI agents",
-      "Chat + voice (2,500 minutes/mo)",
-      "Unlimited knowledge bases",
-      "CRM & calendar integrations",
-      "Priority support",
+      "Up to 1,200 AI call minutes",
+      "Up to 3,000 chatbot conversations",
+      "2 concurrent voice channels",
+      "Human handoff when needed",
+      "Automated follow-ups",
+      "Multilingual support",
     ],
     cta: "Book a Demo",
     highlighted: true,
   },
   {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    description: "For companies with complex, high-volume needs.",
+    name: "Pro",
+    price: "$799",
+    period: "/mo",
+    description: "For multi-location or higher-volume businesses that need integrations.",
     features: [
-      "Unlimited agents",
-      "Custom voice volume",
-      "Dedicated infrastructure",
-      "SSO & advanced security",
-      "Dedicated success manager",
+      "Up to 2,500 AI call minutes",
+      "Up to 6,000 chatbot conversations",
+      "4 concurrent voice channels",
+      "CRM & calendar integrations",
+      "Custom workflows & webhooks",
+      "Priority human handoff routing",
     ],
-    cta: "Talk to Sales",
+    cta: "Book a Demo",
+    highlighted: false,
+  },
+  {
+    name: "Advanced",
+    price: "$1,499",
+    period: "/mo",
+    description: "For established businesses running Codely as their primary front line.",
+    features: [
+      "Up to 5,000 AI call minutes",
+      "Up to 12,000 chatbot conversations",
+      "8 concurrent voice channels",
+      "Custom tools & data source connections",
+      "Dedicated account manager",
+      "White-glove onboarding",
+    ],
+    cta: "Book a Demo",
+    highlighted: false,
+  },
+  {
+    name: "Custom",
+    price: "Contact Us",
+    period: "",
+    description: "For call volume, integrations, or workflow needs outside the standard tiers.",
+    features: [
+      "No fixed minutes, conversation, or channel caps",
+      "Dedicated solutions call to map your requirements",
+      "Custom integrations with your phone system, CRM, or tools",
+      "Negotiated pricing based on scope",
+      "Direct, ongoing point of contact",
+    ],
+    cta: "Contact Us",
     highlighted: false,
   },
 ];
@@ -49,19 +88,21 @@ export function PricingTiers() {
   return (
     <section className="border-b border-border">
       <Container className="py-20 sm:py-28">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {TIERS.map((tier, i) => (
-            <Reveal key={tier.name} delay={i * 0.08} className="h-full">
+            <Reveal key={tier.name} delay={(i % 3) * 0.08} className="h-full">
               <div
                 className={`flex h-full flex-col rounded-2xl border p-8 ${
                   tier.highlighted ? "border-foreground" : "border-border"
                 }`}
               >
-                {tier.highlighted && (
-                  <span className="mb-4 w-fit rounded-full bg-foreground px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-background">
-                    Most popular
-                  </span>
-                )}
+                <div className="mb-4 flex h-7 items-center">
+                  {tier.highlighted && (
+                    <span className="w-fit rounded-full bg-accent px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-accent-foreground">
+                      Most popular
+                    </span>
+                  )}
+                </div>
                 <h3 className="text-lg font-medium">{tier.name}</h3>
                 <p className="mt-2 text-sm text-foreground-muted">{tier.description}</p>
                 <p className="mt-6 flex items-baseline gap-1">
@@ -94,6 +135,13 @@ export function PricingTiers() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={0.2}>
+          <p className="mt-10 text-center text-sm text-foreground-muted">
+            All plans: no setup fee, cancel anytime, dedicated onboarding call included. Minutes
+            and conversations beyond a plan&apos;s included volume are billed at a flat overage rate.
+          </p>
+        </Reveal>
       </Container>
     </section>
   );

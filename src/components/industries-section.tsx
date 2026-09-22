@@ -3,10 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Check, Wifi } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
-import { TextReveal } from "@/lib/motion/text-reveal";
 import { gsap, ScrollTrigger } from "@/lib/motion/gsap-setup";
 import { useGsapContext } from "@/lib/motion/use-gsap-context";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
@@ -17,9 +16,7 @@ type Industry = {
   headline: string;
   description: string;
   capabilities: [string, string, string, string];
-  cta: string;
-  /** null until real photography is supplied — renders an abstract placeholder instead. */
-  image: string | null;
+  image: string;
 };
 
 const INDUSTRIES: Industry[] = [
@@ -35,8 +32,7 @@ const INDUSTRIES: Industry[] = [
       "Information collection",
       "Call routing",
     ],
-    cta: "Explore Healthcare AI",
-    image: "/images/industries/healthcare.jpg",
+    image: "/images/industries/healthcare-v2.jpg",
   },
   {
     slug: "isp",
@@ -50,8 +46,7 @@ const INDUSTRIES: Industry[] = [
       "Troubleshooting",
       "Plan information",
     ],
-    cta: "Explore ISP AI",
-    image: null,
+    image: "/images/industries/isp-v2.jpg",
   },
   {
     slug: "home-services",
@@ -60,8 +55,7 @@ const INDUSTRIES: Industry[] = [
     description:
       "Codely can understand what customers need, collect job details, answer questions, and schedule appointments.",
     capabilities: ["Answer calls", "Understand the job", "Collect details", "Book appointments"],
-    cta: "Explore Home Services AI",
-    image: "/images/industries/home-services.jpg",
+    image: "/images/industries/home-services-v2.jpg",
   },
   {
     slug: "education",
@@ -75,8 +69,7 @@ const INDUSTRIES: Industry[] = [
       "Information collection",
       "Appointment booking",
     ],
-    cta: "Explore Education AI",
-    image: "/images/industries/education.jpg",
+    image: "/images/industries/education-v2.jpg",
   },
   {
     slug: "automotive",
@@ -85,8 +78,7 @@ const INDUSTRIES: Industry[] = [
     description:
       "Codely can handle vehicle enquiries, service requests, appointment scheduling, and customer follow-ups.",
     capabilities: ["Vehicle enquiries", "Service requests", "Appointment booking", "Follow-ups"],
-    cta: "Explore Automotive AI",
-    image: "/images/industries/automotive.jpg",
+    image: "/images/industries/automotive-v2.jpg",
   },
   {
     slug: "law-firms",
@@ -100,8 +92,7 @@ const INDUSTRIES: Industry[] = [
       "Qualification",
       "Consultation booking",
     ],
-    cta: "Explore Legal AI",
-    image: "/images/industries/law-firms.jpg",
+    image: "/images/industries/law-firms-v2.jpg",
   },
   {
     slug: "real-estate",
@@ -110,8 +101,7 @@ const INDUSTRIES: Industry[] = [
     description:
       "Codely can answer property enquiries, qualify buyers and sellers, answer common questions, schedule viewings, and follow up with leads.",
     capabilities: ["Answer enquiries", "Qualify leads", "Schedule viewings", "Follow up"],
-    cta: "Explore Real Estate AI",
-    image: "/images/industries/real-estate.jpg",
+    image: "/images/industries/real-estate-v2.jpg",
   },
   {
     slug: "restaurants",
@@ -120,8 +110,7 @@ const INDUSTRIES: Industry[] = [
     description:
       "Codely can handle reservations, menu questions, booking requests, customer enquiries, and everyday guest conversations without tying up your staff.",
     capabilities: ["Reservations", "Guest questions", "Booking requests", "Customer support"],
-    cta: "Explore Restaurant AI",
-    image: "/images/industries/restaurants.jpg",
+    image: "/images/industries/restaurants-v2.jpg",
   },
   {
     slug: "hospitality",
@@ -130,45 +119,72 @@ const INDUSTRIES: Industry[] = [
     description:
       "Codely can handle reservations, guest questions, booking requests, and everyday customer conversations around the clock.",
     capabilities: ["Reservations", "Guest questions", "Booking requests", "Customer support"],
-    cta: "Explore Hospitality AI",
-    image: "/images/industries/hospitality.jpg",
+    image: "/images/industries/hospitality-v2.jpg",
   },
 ];
 
 const TOTAL = INDUSTRIES.length;
 const VH_PER_CHAPTER = 0.9;
 
-function IndustryVisual({ item, active }: { item: Industry; active: boolean }) {
+function IndustryVisual({
+  item,
+  active,
+  direction = 1,
+  animated = false,
+}: {
+  item: Industry;
+  active: boolean;
+  /** Scroll direction driving the reveal: 1 = forward (wipe up), -1 = backward (wipe down). */
+  direction?: 1 | -1;
+  /** Only the pinned desktop story drives a GSAP reveal; the static mobile list stays plain. */
+  animated?: boolean;
+}) {
+  const maskRef = useRef<HTMLDivElement | null>(null);
+  const scaleRef = useRef<HTMLDivElement | null>(null);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!animated) return;
+    const mask = maskRef.current;
+    const scale = scaleRef.current;
+    if (!mask || !scale) return;
+
+    if (reducedMotion) {
+      gsap.set(mask, { clipPath: "inset(0% 0% 0% 0%)" });
+      gsap.set(scale, { scale: 1 });
+      return;
+    }
+
+    if (!active) return;
+
+    const from = direction === 1 ? "inset(100% 0% 0% 0%)" : "inset(0% 0% 100% 0%)";
+
+    gsap.killTweensOf([mask, scale]);
+    gsap
+      .timeline()
+      .fromTo(
+        mask,
+        { clipPath: from },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 0.75, ease: "power2.out" },
+        0
+      )
+      .fromTo(scale, { scale: 1.1 }, { scale: 1, duration: 0.85, ease: "power2.out" }, 0);
+  }, [active, direction, animated, reducedMotion]);
+
   return (
-    <div
-      className={`absolute inset-0 transition-[opacity,transform] duration-[900ms] ease-out ${
-        active ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
-      }`}
-    >
-      {item.image ? (
-        <Image
-          src={item.image}
-          alt={item.eyebrow}
-          fill
-          sizes="(min-width: 1024px) 700px, 100vw"
-          priority={item.slug === "healthcare"}
-          className="object-cover"
-        />
-      ) : (
-        <div className="relative flex h-full w-full items-center justify-center bg-surface">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 30% 30%, var(--accent-soft), transparent 60%)",
-            }}
+    <div className="absolute inset-0" style={{ zIndex: active ? 2 : 1 }}>
+      <div ref={maskRef} className="absolute inset-0 overflow-hidden">
+        <div ref={scaleRef} className="absolute inset-0">
+          <Image
+            src={item.image}
+            alt={item.eyebrow}
+            fill
+            sizes="(min-width: 1024px) 700px, 100vw"
+            priority={item.slug === "healthcare"}
+            className="object-cover"
           />
-          <span className="relative flex h-20 w-20 items-center justify-center rounded-full bg-foreground text-background">
-            <Wifi className="h-8 w-8" />
-          </span>
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -186,21 +202,31 @@ function IndustryCapabilities({ item }: { item: Industry }) {
   );
 }
 
-function IndustryCta({ item }: { item: Industry }) {
+function IndustryCta() {
   return (
     <Link
       href="/contact"
       className="group mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-foreground"
     >
-      {item.cta}
+      Book a Demo
       <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
     </Link>
+  );
+}
+
+function IndustryChip({ eyebrow }: { eyebrow: string }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-border-strong bg-surface px-4 py-1.5 text-base font-medium tracking-tight text-foreground">
+      {eyebrow}
+    </span>
   );
 }
 
 /** Desktop-only, motion-safe: the pinned scroll-driven story. */
 function IndustriesStory() {
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const prevIndexRef = useRef(0);
   const textRef = useRef<HTMLDivElement | null>(null);
 
   const pinRef = useGsapContext<HTMLDivElement>((_ctx, el, reducedMotion) => {
@@ -218,7 +244,10 @@ function IndustriesStory() {
         scrub: 1,
         onUpdate: (self) => {
           const next = Math.min(TOTAL - 1, Math.floor(self.progress * TOTAL));
-          setIndex((prev) => (prev === next ? prev : next));
+          if (next === prevIndexRef.current) return;
+          setDirection(next > prevIndexRef.current ? 1 : -1);
+          prevIndexRef.current = next;
+          setIndex(next);
         },
       });
 
@@ -233,7 +262,12 @@ function IndustriesStory() {
   useEffect(() => {
     const el = textRef.current;
     if (!el || reducedMotion) return;
-    gsap.fromTo(el, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" });
+    gsap.killTweensOf(el.children);
+    gsap.fromTo(
+      el.children,
+      { autoAlpha: 0, y: 12 },
+      { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out", stagger: 0.05 }
+    );
   }, [index, reducedMotion]);
 
   const active = INDUSTRIES[index];
@@ -245,20 +279,24 @@ function IndustriesStory() {
     >
       <div className="grid w-full grid-cols-[45fr_55fr] items-center gap-16">
         <div ref={textRef} className="max-w-md">
-          <p className="text-xs uppercase tracking-[0.16em] text-foreground-muted">
-            {active.eyebrow}
-          </p>
+          <IndustryChip eyebrow={active.eyebrow} />
           <h3 className="mt-4 text-3xl font-medium leading-snug tracking-tight">
             {active.headline}
           </h3>
           <p className="mt-4 text-sm text-foreground-muted">{active.description}</p>
           <IndustryCapabilities item={active} />
-          <IndustryCta item={active} />
+          <IndustryCta />
         </div>
 
         <div className="relative h-[64vh] max-h-[600px] overflow-hidden rounded-2xl">
           {INDUSTRIES.map((item, i) => (
-            <IndustryVisual key={item.slug} item={item} active={i === index} />
+            <IndustryVisual
+              key={item.slug}
+              item={item}
+              active={i === index}
+              direction={direction}
+              animated
+            />
           ))}
         </div>
       </div>
@@ -275,15 +313,15 @@ function IndustriesList() {
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
             <IndustryVisual item={item} active />
           </div>
-          <p className="mt-6 text-xs uppercase tracking-[0.16em] text-foreground-muted">
-            {item.eyebrow}
-          </p>
+          <div className="mt-6">
+            <IndustryChip eyebrow={item.eyebrow} />
+          </div>
           <h3 className="mt-3 text-2xl font-medium leading-snug tracking-tight">
             {item.headline}
           </h3>
           <p className="mt-3 max-w-lg text-sm text-foreground-muted">{item.description}</p>
           <IndustryCapabilities item={item} />
-          <IndustryCta item={item} />
+          <IndustryCta />
         </Reveal>
       ))}
     </Container>
@@ -292,23 +330,7 @@ function IndustriesList() {
 
 export function IndustriesSection() {
   return (
-    <section className="border-b border-border">
-      <Container className="pb-14 pt-20 sm:pb-16 sm:pt-28">
-        <div className="max-w-xl">
-          <p className="text-xs uppercase tracking-[0.16em] text-foreground-muted">Industries</p>
-          <TextReveal className="mt-4 text-3xl font-medium tracking-tight sm:text-4xl">
-            Built around your business.
-          </TextReveal>
-          <Reveal delay={0.1}>
-            <p className="mt-4 max-w-lg text-foreground-muted">
-              Every business has different customers, conversations, and workflows.
-              Codely adapts to the way your business works and gives your AI the
-              context and capabilities to handle real work.
-            </p>
-          </Reveal>
-        </div>
-      </Container>
-
+    <section className="border-b border-border pt-20 sm:pt-28">
       {/* Exactly one of these two is visible at a time, purely via the
           complementary `motion-safe:lg:` CSS variants below — no viewport
           or prefers-reduced-motion branching in JS needed at this level. */}
