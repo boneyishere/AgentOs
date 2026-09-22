@@ -2,11 +2,13 @@
 
 import { useRef } from "react";
 import {
-  CalendarCheck,
   Clock,
   HeartHandshake,
+  ClipboardList,
   PhoneMissed,
   ShieldCheck,
+  TrendingUp,
+  Users,
   Zap,
 } from "lucide-react";
 import { Container } from "./container";
@@ -18,52 +20,55 @@ import { useGsapContext } from "@/lib/motion/use-gsap-context";
 const IMPACTS = [
   {
     icon: PhoneMissed,
-    headline: "Fewer missed calls, fewer lost customers",
-    description:
-      "After-hours and peak-time calls get answered instead of going to voicemail.",
-  },
-  {
-    icon: Clock,
-    headline: "Lower overtime and staffing costs",
-    description:
-      "Agents absorb call volume spikes without extra shifts or seasonal hires.",
-  },
-  {
-    icon: CalendarCheck,
-    headline: "Fewer scheduling errors and double-bookings",
-    description:
-      "Appointments sync directly to your calendar, removing manual entry mistakes.",
-  },
-  {
-    icon: ShieldCheck,
-    headline: "Reduced compliance and quality risk",
-    description:
-      "Every conversation follows the same instructions and escalation rules — no inconsistent answers.",
+    title: "Never miss an opportunity",
+    description: "Respond to customers even when your team is busy or unavailable.",
   },
   {
     icon: Zap,
-    headline: "Faster response, lower churn risk",
-    description: "Customers get answered immediately instead of waiting in a queue.",
+    title: "Respond instantly",
+    description: "Give customers answers without making them wait for someone to become available.",
   },
   {
     icon: HeartHandshake,
-    headline: "Less burnout on your front-line team",
-    description:
-      "Repetitive, high-volume questions get handled automatically, freeing staff for complex cases.",
+    title: "Free your team",
+    description: "Take repetitive conversations and administrative work off your team's plate.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Keep leads moving",
+    description: "Qualify, follow up, schedule, and re-engage prospects automatically.",
+  },
+  {
+    icon: Clock,
+    title: "Serve customers around the clock",
+    description: "Give customers access to your business beyond normal working hours.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Make every interaction consistent",
+    description: "Ensure customers receive the right information according to your business rules.",
+  },
+  {
+    icon: Users,
+    title: "Scale conversations",
+    description: "Handle more customer conversations without requiring the same increase in manual effort.",
+  },
+  {
+    icon: ClipboardList,
+    title: "Give your team better context",
+    description: "Turn conversations into useful information your team can act on.",
   },
 ];
 
 function ImpactHeading() {
   return (
-    <div className="max-w-lg">
+    <div className="max-w-xl">
       <TextReveal className="text-3xl font-medium tracking-tight text-ink-foreground sm:text-4xl">
-        Take the busywork off your team&apos;s plate.
+        The practical impact of putting an AI agent to work.
       </TextReveal>
       <Reveal delay={0.1}>
         <p className="mt-4 max-w-lg text-ink-foreground-muted">
-          Let AI handle the conversations that consume your team&apos;s time,
-          while your people focus on the customers and work that need them
-          most.
+          The outcomes businesses actually feel once an agent is handling real conversations.
         </p>
       </Reveal>
     </div>
@@ -89,10 +94,10 @@ function ImpactCard({
       <span className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-ink-border bg-white/10 text-ink-foreground backdrop-blur-sm">
         <Icon className="h-4.5 w-4.5" />
       </span>
-      <p className="relative mt-5 text-xl font-medium leading-snug text-ink-foreground">
-        {item.headline}
+      <p className="relative mt-5 text-lg font-medium leading-snug text-ink-foreground">
+        {item.title}
       </p>
-      <div className="relative mt-6 flex-1 border-t border-ink-border pt-5">
+      <div className="relative mt-4 flex-1 border-t border-ink-border pt-4">
         <p className="text-sm text-ink-foreground-muted">{item.description}</p>
       </div>
     </div>
@@ -121,7 +126,7 @@ function buildEdgeMasks(leftPx: number, rightPx: number) {
 
 /**
  * Desktop-only, motion-safe: the section pins in place while vertical scroll
- * drives the card track horizontally, card 1 through card 6. Once the last
+ * drives the card track horizontally, card 1 through card 8. Once the last
  * card is fully in view the pin releases and scroll continues normally; the
  * same tween reverses cleanly on scroll-up since it's scrubbed directly off
  * scroll position rather than played on a click/slide trigger. Pinned to a
@@ -140,7 +145,9 @@ function buildEdgeMasks(leftPx: number, rightPx: number) {
  * all) whenever that edge has nothing left to reveal — the very first card
  * at rest, and the very last card once fully scrolled into view — and
  * grows to the full `EDGE_MASK_PX` as soon as there's actually content
- * sliding past that boundary.
+ * sliding past that boundary. That's what keeps the true first/last card
+ * genuinely sharp instead of a static mask blurring whatever happens to
+ * sit in that pixel zone regardless of scroll position.
  */
 function ImpactScrollTrack() {
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -162,8 +169,7 @@ function ImpactScrollTrack() {
 
       const updateMasks = () => {
         const distance = getDistance();
-        const scrolled =
-          distance > 0 ? gsap.utils.clamp(0, distance, -(gsap.getProperty(track, "x") as number)) : 0;
+        const scrolled = distance > 0 ? gsap.utils.clamp(0, distance, -(gsap.getProperty(track, "x") as number)) : 0;
         const leftPx = Math.min(EDGE_MASK_PX, scrolled);
         const rightPx = Math.min(EDGE_MASK_PX, distance - scrolled);
         const { fade, blur } = buildEdgeMasks(leftPx, rightPx);
@@ -214,7 +220,7 @@ function ImpactScrollTrack() {
         <div ref={stageRef} className="overflow-hidden">
           <div ref={trackRef} className="flex w-fit gap-6">
             {IMPACTS.map((item) => (
-              <ImpactCard key={item.headline} item={item} className="w-[300px] shrink-0 sm:w-[340px]" />
+              <ImpactCard key={item.title} item={item} className="w-[270px] shrink-0 sm:w-[300px]" />
             ))}
           </div>
         </div>
@@ -240,20 +246,19 @@ function ImpactGrid() {
       <ImpactHeading />
       <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {IMPACTS.map((item) => (
-          <ImpactCard key={item.headline} item={item} className="h-full" />
+          <ImpactCard key={item.title} item={item} className="h-full" />
         ))}
       </div>
     </Container>
   );
 }
 
-export function ImpactSection() {
+export function FeaturesImpactSection() {
   return (
     <section className="border-b border-border bg-ink text-ink-foreground">
       {/* Exactly one of these two is visible at a time, purely via the
           complementary `motion-safe:lg:` CSS variants below — mirrors the
-          pinned scroll-story pattern used by IndustriesSection and
-          FeaturesImpactSection. */}
+          pinned scroll-story pattern used by IndustriesSection. */}
       <div className="hidden motion-safe:lg:block">
         <ImpactScrollTrack />
       </div>

@@ -99,9 +99,7 @@ export function PricingTiers() {
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="text-lg font-medium">{tier.name}</h3>
                   {tier.highlighted && (
-                    <span className="w-fit shrink-0 rounded-full bg-accent px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-accent-foreground">
-                      Most popular
-                    </span>
+                    <span className="shrink-0 text-sm font-medium text-accent">Most popular</span>
                   )}
                 </div>
                 <p className="mt-2 text-sm text-foreground-muted">{tier.description}</p>

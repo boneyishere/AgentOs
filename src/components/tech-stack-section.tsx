@@ -77,13 +77,11 @@ function LogoChip({ item }: { item: Logo }) {
 }
 
 function LogoBentoCard({
-  label,
   headline,
   subtext,
   items,
   className = "",
 }: {
-  label: string;
   headline: string;
   subtext: string;
   items: Logo[];
@@ -116,10 +114,7 @@ function LogoBentoCard({
     <div
       className={`rounded-3xl border border-border bg-background p-8 sm:p-10 ${className}`}
     >
-      <p className="text-xs uppercase tracking-[0.14em] text-foreground-muted">
-        {label}
-      </p>
-      <h3 className="mt-3 text-xl font-medium tracking-tight">{headline}</h3>
+      <h3 className="text-xl font-medium tracking-tight">{headline}</h3>
       <p className="mt-2 max-w-md text-sm text-foreground-muted">{subtext}</p>
       <div ref={gridRef} className="mt-6 flex flex-wrap gap-3">
         {items.map((item) => (
@@ -131,14 +126,12 @@ function LogoBentoCard({
 }
 
 function TextBentoCard({
-  label,
   headline,
   subtext,
   items,
   delay = 0,
   className = "",
 }: {
-  label: string;
   headline: string;
   subtext: string;
   items: string[];
@@ -150,21 +143,16 @@ function TextBentoCard({
       delay={delay}
       className={`rounded-3xl border border-border bg-background p-8 sm:p-10 ${className}`}
     >
-      <p className="text-xs uppercase tracking-[0.14em] text-foreground-muted">
-        {label}
-      </p>
-      <h3 className="mt-3 text-xl font-medium tracking-tight">{headline}</h3>
+      <h3 className="text-xl font-medium tracking-tight">{headline}</h3>
       <p className="mt-2 text-sm text-foreground-muted">{subtext}</p>
-      <div className="mt-6 flex flex-wrap gap-2.5">
+      <ul className="mt-6 space-y-2.5">
         {items.map((item) => (
-          <span
-            key={item}
-            className="rounded-full border border-border bg-surface px-3.5 py-1.5 text-sm font-medium text-foreground"
-          >
+          <li key={item} className="flex items-start gap-2 text-sm text-foreground-muted">
+            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
             {item}
-          </span>
+          </li>
         ))}
-      </div>
+      </ul>
     </Reveal>
   );
 }
@@ -186,28 +174,24 @@ export function TechStackSection() {
 
         <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <LogoBentoCard
-            label="Language models"
             headline="Bring the model that fits"
             subtext="Power every agent with the best available reasoning model, or let Codely choose automatically per conversation."
             items={LANGUAGE_MODELS}
             className="lg:col-span-2"
           />
           <TextBentoCard
-            label="Voice"
             headline="Natural speech, built in"
             subtext="Real-time speech recognition and natural-sounding responses in the languages your customers speak."
             items={VOICE}
             delay={0.05}
           />
           <LogoBentoCard
-            label="Integrations"
             headline="Connects to what you already use"
             subtext="No new systems to learn — agents plug straight into your calendar, CRM, and existing tools."
             items={INTEGRATIONS}
             className="lg:col-span-2"
           />
           <TextBentoCard
-            label="Infrastructure"
             headline="Secure by default"
             subtext="Built on a real-time, encrypted pipeline with access control and usage visibility from day one."
             items={INFRASTRUCTURE}

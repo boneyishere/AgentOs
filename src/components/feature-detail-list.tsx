@@ -1,87 +1,118 @@
-import { BookOpen, Bot, History, MessageSquare, Phone, Wand2 } from "lucide-react";
+import type { ComponentType } from "react";
+import { Bot, BookOpen, History, Mic, SlidersHorizontal, Sparkles, Wand2 } from "lucide-react";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
+import { TextReveal } from "@/lib/motion/text-reveal";
 import { VoiceVisual } from "./feature-visuals/voice-visual";
-import { ChatVisual } from "./feature-visuals/chat-visual";
 import { KnowledgeVisual } from "./feature-visuals/knowledge-visual";
 import { MemoryVisual } from "./feature-visuals/memory-visual";
 import { ActionsVisual } from "./feature-visuals/actions-visual";
 import { IntelligenceVisual } from "./feature-visuals/intelligence-visual";
 
-const FEATURES = [
+const FEATURES: {
+  title: string;
+  icon: ComponentType<{ className?: string }>;
+  description: string;
+  points: string[];
+  Visual?: ComponentType;
+}[] = [
   {
-    title: "AI Voice Agents",
-    icon: Phone,
-    description:
-      "Real-time voice conversations that sound natural, not scripted — handling both inbound support calls and outbound outreach.",
+    title: "Voice AI",
+    icon: Mic,
+    description: "Natural, real-time voice conversations.",
     points: [
-      "Natural, low-latency speech in real time",
+      "Speech-to-text",
+      "Text-to-speech",
+      "Real-time conversation",
+      "Natural interruption handling",
+      "Voice selection",
+      "Phone connectivity",
       "Inbound and outbound calling",
-      "Multilingual speech recognition and responses",
-      "Live call transfer to a human when needed",
     ],
     Visual: VoiceVisual,
   },
   {
-    title: "AI Chat Agents",
-    icon: MessageSquare,
-    description:
-      "Conversational, context-aware chat that lives on your website or app and escalates gracefully when it should.",
+    title: "AI Models",
+    icon: Sparkles,
+    description: "Use the intelligence appropriate for the job.",
     points: [
-      "Embeds on your website or app",
-      "Context-aware, multi-turn conversations",
-      "Rich replies — links, quick actions, forms",
-      "Seamless handoff to voice or a human agent",
+      "Multiple AI model support",
+      "Model selection",
+      "Model-specific configuration",
+      "Context-aware responses",
+      "Custom system instructions",
     ],
-    Visual: ChatVisual,
   },
   {
-    title: "Knowledge & Context",
+    title: "Knowledge Base",
     icon: BookOpen,
-    description:
-      "Every answer is grounded in your actual business content, not a generic model response.",
+    description: "Give the agent access to the information it needs.",
     points: [
-      "Import websites, PDFs, docs, and FAQs",
-      "Automatic retrieval grounded in your content",
-      "Knowledge stays current as source docs change",
+      "Business knowledge",
+      "Website content",
+      "Documents",
+      "FAQs",
+      "Policies",
+      "Custom information",
+      "Retrieval-based responses",
     ],
     Visual: KnowledgeVisual,
   },
   {
-    title: "Memory",
+    title: "Memory & Context",
     icon: History,
-    description:
-      "Conversations don't reset — agents recall what a customer said last time, on any channel.",
+    description: "Keep relevant information across conversations.",
     points: [
-      "Remembers prior conversations and calls",
-      "Customer context carries across channels",
-      "Configurable retention per business",
+      "Conversation history",
+      "Customer context",
+      "Persistent information",
+      "Previous interactions",
+      "Context-aware responses",
     ],
     Visual: MemoryVisual,
   },
   {
-    title: "Actions & Integrations",
+    title: "Tools & Actions",
     icon: Wand2,
-    description:
-      "Agents don't just talk — they check calendars, update records, and trigger the workflows your team already relies on.",
+    description: "Connect the agent to real business operations.",
     points: [
-      "Calendar booking and rescheduling",
-      "CRM updates and lead creation",
-      "Custom API and webhook actions",
-      "Workflow triggers for your existing tools",
+      "APIs",
+      "External services",
+      "Booking systems",
+      "CRM",
+      "Databases",
+      "Custom tools",
+      "Webhooks",
+      "Automated workflows",
     ],
     Visual: ActionsVisual,
   },
   {
+    title: "Agent Configuration",
+    icon: SlidersHorizontal,
+    description: "Control how the agent behaves.",
+    points: [
+      "Custom instructions",
+      "Business rules",
+      "Personality",
+      "Tone of voice",
+      "Guardrails",
+      "Escalation rules",
+      "Response behavior",
+    ],
+  },
+  {
     title: "Conversation Intelligence",
     icon: Bot,
-    description:
-      "Every conversation becomes structured signal your team can act on, without reading a single transcript.",
+    description: "Understand what happens across conversations.",
     points: [
-      "Transcripts and summaries for every conversation",
-      "Automatic intent and sentiment tagging",
-      "Lead scoring: qualified, potential, unqualified",
-      "Exportable analytics and reporting",
+      "Transcripts",
+      "Summaries",
+      "Intent",
+      "Lead information",
+      "Conversation outcomes",
+      "Customer questions",
+      "Performance insights",
     ],
     Visual: IntelligenceVisual,
   },
@@ -91,37 +122,56 @@ export function FeatureDetailList() {
   return (
     <section className="border-b border-border">
       <Container className="py-20 sm:py-28">
-        {FEATURES.map(({ title, icon: Icon, description, points, Visual }, i) => (
-          <Reveal key={title} delay={(i % 3) * 0.05}>
-            <div className="border-t border-border py-14 first:border-t-0 first:pt-0">
-              <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface text-accent">
-                  <Icon className="h-4.5 w-4.5" />
-                </span>
-                <h3 className="text-lg font-medium">{title}</h3>
-              </div>
-              <p className="mt-3 max-w-xl text-foreground-muted">{description}</p>
+        <div className="max-w-xl">
+          <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
+            The technology behind every conversation.
+          </TextReveal>
+          <Reveal delay={0.1}>
+            <p className="mt-4 max-w-lg text-foreground-muted">
+              How Codely makes all of that possible.
+            </p>
+          </Reveal>
+        </div>
 
-              <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px] lg:items-center">
-                <ul className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-                  {points.map((point) => (
-                    <li
-                      key={point}
-                      className="flex items-start gap-2 text-sm text-foreground-muted"
-                    >
-                      <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
+        <div className="mt-4">
+          {FEATURES.map(({ title, icon: Icon, description, points, Visual }, i) => (
+            <Reveal key={title} delay={(i % 3) * 0.05}>
+              <div className="border-t border-border py-14 first:border-t-0">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface text-accent">
+                    <Icon className="h-4.5 w-4.5" />
+                  </span>
+                  <h3 className="text-lg font-medium">{title}</h3>
+                </div>
+                <p className="mt-3 max-w-xl text-foreground-muted">{description}</p>
 
-                <div className="rounded-2xl border border-border bg-surface p-6 sm:p-7">
-                  <Visual />
+                <div
+                  className={`mt-8 grid grid-cols-1 gap-8 ${
+                    Visual ? "lg:grid-cols-[1fr_320px] lg:items-center" : ""
+                  }`}
+                >
+                  <ul className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+                    {points.map((point) => (
+                      <li
+                        key={point}
+                        className="flex items-start gap-2 text-sm text-foreground-muted"
+                      >
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {Visual && (
+                    <div className="rounded-2xl border border-border bg-surface p-6 sm:p-7">
+                      <Visual />
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          </Reveal>
-        ))}
+            </Reveal>
+          ))}
+        </div>
       </Container>
     </section>
   );

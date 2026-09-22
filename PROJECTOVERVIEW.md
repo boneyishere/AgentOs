@@ -120,7 +120,7 @@ D:/agent/
 | Route | File | Composition |
 | --- | --- | --- |
 | `/` | [src/app/page.tsx](src/app/page.tsx) | Nav, Hero, ClientLogos, FeatureCards, UseCasesSection, ImpactSection, IndustriesSection, StatsSection, FaqSection, CtaSection, Footer |
-| `/features` | [src/app/features/page.tsx](src/app/features/page.tsx) | Nav, PageHeader, FeatureDetailList, TechStackSection, FaqSection, CtaSection, Footer |
+| `/features` | [src/app/features/page.tsx](src/app/features/page.tsx) | Nav, PageHeader, AgentCapabilitiesSection, FeatureDetailList, TechStackSection, DeploymentSection, FeaturesImpactSection, FaqSection, CtaSection, Footer |
 | `/pricing` | [src/app/pricing/page.tsx](src/app/pricing/page.tsx) | Nav, PageHeader, PricingTiers, PricingComparisonTable, CtaSection, Footer |
 | `/resources` | [src/app/resources/page.tsx](src/app/resources/page.tsx) | Nav, PageHeader, ResourcesGrid, Footer |
 | `/resources/[slug]` | [src/app/resources/\[slug\]/page.tsx](src/app/resources/[slug]/page.tsx) | Statically generated via `generateStaticParams` from `RESOURCES` |
@@ -333,8 +333,9 @@ One container, one max width, one gutter. Every section uses it. Don't hand-roll
 
 **Sections** — hero, client-logos, feature-cards, use-cases-section, impact-section,
 industries-section, stats-section, faq-section, cta-section, tech-stack-section,
-feature-detail-list, pricing-tiers, pricing-comparison-table, contact-form-section,
-resources-grid.
+agent-capabilities-section, feature-detail-list, deployment-section,
+features-impact-section, pricing-tiers, pricing-comparison-table,
+contact-form-section, resources-grid.
 
 **Reusable class recipes**
 
