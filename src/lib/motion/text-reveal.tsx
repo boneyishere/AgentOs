@@ -40,6 +40,22 @@ export function TextReveal({
         if (cancelled) return;
 
         split = new SplitText(el, { type: "lines", mask: "lines" });
+
+        // Each line mask inherits `line-height` from the heading and hard-
+        // clips to it (`overflow: clip`), with no allowance for descenders.
+        // Tailwind's default line-height for text-5xl/6xl is exactly 1 —
+        // zero room below the baseline — so letters like g/y/p/q get their
+        // tails cut off; smaller sizes still leave very little room. A
+        // bottom padding buffer gives descenders space without touching the
+        // heading's own line-height/spacing; the matching negative margin
+        // cancels the padding's contribution to layout height so nothing
+        // downstream shifts.
+        split.masks.forEach((maskEl) => {
+          const style = (maskEl as HTMLElement).style;
+          style.paddingBottom = "0.2em";
+          style.marginBottom = "-0.2em";
+        });
+
         tween = gsap.fromTo(
           split.lines,
           { yPercent: 110 },
