@@ -31,11 +31,22 @@ export function ConversationVisual({
   variant = "full",
   label = "CALL IN PROGRESS",
   className = "",
+  scrollGated = true,
 }: {
   script: ConversationBeat[];
   variant?: "full" | "compact";
   label?: string;
   className?: string;
+  /**
+   * Compact variant only: gate the reveal on scrolling the element into
+   * view. Pass `false` for an instance swapped in later by user interaction
+   * (e.g. a selector click) rather than a fresh page scroll — re-gating on
+   * scroll position for those can leave the new content stuck invisible if
+   * the element isn't currently within the trigger zone (mobile's stacked
+   * layout in particular often puts it lower on the page than the trigger
+   * threshold, so a swap while the user is mid-read never reveals).
+   */
+  scrollGated?: boolean;
 }) {
   const beatRefs = useRef<Array<HTMLDivElement | null>>([]);
   const waveRef = useRef<HTMLDivElement | null>(null);
@@ -55,9 +66,8 @@ export function ConversationVisual({
 
       const tl = gsap.timeline({
         delay: isFull ? 0.4 : 0,
-        scrollTrigger: isFull
-          ? undefined
-          : { trigger: el, start: "top 78%", once: true },
+        scrollTrigger:
+          isFull || !scrollGated ? undefined : { trigger: el, start: "top 78%", once: true },
       });
 
       if (waveRef.current) {
@@ -131,7 +141,7 @@ export function ConversationVisual({
         }
       }
     },
-    [script, variant]
+    [script, variant, scrollGated]
   );
 
   return (

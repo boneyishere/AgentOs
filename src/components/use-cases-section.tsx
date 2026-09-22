@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
 import {
@@ -88,7 +88,30 @@ const USE_CASES: { label: string; description: string; script: ConversationBeat[
 
 export function UseCasesSection() {
   const [active, setActive] = useState(0);
+  // Only the very first card's reveal should wait on scroll position; every
+  // later switch (click or auto-advance) happens while the user is already
+  // looking at this section, so it should play immediately — otherwise a
+  // switch while the card sits just outside the "top 78%" trigger zone
+  // (common on mobile's stacked layout) leaves the new content stuck
+  // invisible. See ConversationVisual's `scrollGated` prop.
+  const [hasSwitched, setHasSwitched] = useState(false);
   const current = USE_CASES[active];
+  const pillRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  const goTo = (i: number) => {
+    setHasSwitched(true);
+    setActive(i);
+  };
+
+  // Keep the active pill scrolled into view on mobile, whether it became
+  // active from a tap or from auto-advance cycling past what's visible.
+  useEffect(() => {
+    pillRefs.current[active]?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  }, [active]);
 
   // Auto-advance once the current script has fully played out, timed to
   // roughly match ConversationVisual's internal reveal pace (see
@@ -98,7 +121,7 @@ export function UseCasesSection() {
     const beatCount = USE_CASES[active].script.length;
     const revealMs = 200 + Math.max(beatCount - 1, 0) * 450 + 500;
     const timer = setTimeout(() => {
-      setActive((prev) => (prev + 1) % USE_CASES.length);
+      goTo((active + 1) % USE_CASES.length);
     }, revealMs + 2600);
     return () => clearTimeout(timer);
   }, [active]);
@@ -119,12 +142,15 @@ export function UseCasesSection() {
           </Reveal>
         </div>
 
-        <div className="-mx-4 mt-10 flex snap-x gap-2 overflow-x-auto px-4 pb-2 lg:hidden">
+        <div className="-mx-6 mt-10 flex snap-x gap-2 overflow-x-auto px-6 pb-2 lg:hidden">
           {USE_CASES.map((useCase, i) => (
             <button
               key={useCase.label}
+              ref={(node) => {
+                pillRefs.current[i] = node;
+              }}
               type="button"
-              onClick={() => setActive(i)}
+              onClick={() => goTo(i)}
               className={`shrink-0 snap-start rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                 i === active
                   ? "border-foreground bg-foreground text-background"
@@ -136,14 +162,16 @@ export function UseCasesSection() {
           ))}
         </div>
 
+        <p className="mt-4 text-sm text-foreground-muted lg:hidden">{current.description}</p>
+
         <div className="mt-6 grid grid-cols-1 gap-10 lg:mt-14 lg:grid-cols-[minmax(0,440px)_1fr] lg:gap-8">
           <ul className="hidden lg:block">
             {USE_CASES.map((useCase, i) => (
               <li key={useCase.label}>
                 <button
                   type="button"
-                  onMouseEnter={() => setActive(i)}
-                  onClick={() => setActive(i)}
+                  onMouseEnter={() => goTo(i)}
+                  onClick={() => goTo(i)}
                   className={`flex w-full flex-col gap-1.5 border-l-2 px-4 py-4 text-left transition-colors ${
                     i === active
                       ? "border-accent"
@@ -175,7 +203,8 @@ export function UseCasesSection() {
             variant="compact"
             script={current.script}
             label={current.label.toUpperCase()}
-            className="ml-[175px] min-h-[420px] max-w-[calc(100%-285px)]"
+            scrollGated={!hasSwitched}
+            className="min-h-[360px] w-full sm:min-h-[420px] lg:ml-[175px] lg:max-w-[calc(100%-285px)]"
           />
         </div>
       </Container>

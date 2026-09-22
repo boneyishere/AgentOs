@@ -24,9 +24,14 @@ export function Nav() {
     const applyState = (isScrolled: boolean, animate: boolean) => {
       const vars = {
         height: isScrolled ? 60 : 76,
-        backgroundColor: isScrolled ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0)",
+        // Fully opaque — no backdrop-filter. `position: sticky` combined
+        // with `backdrop-filter` is a known source of compositing glitches
+        // on some mobile browsers/GPUs, where the blur ends up applied to a
+        // stale snapshot of already-scrolled-past content instead of
+        // updating live, showing old text "frozen" behind the bar. A solid
+        // background sidesteps that class of bug entirely.
+        backgroundColor: isScrolled ? "var(--background)" : "rgba(255,255,255,0)",
         borderBottomColor: isScrolled ? "var(--border)" : "rgba(0,0,0,0)",
-        backdropFilter: isScrolled ? "blur(10px)" : "blur(0px)",
       };
       if (animate && !reducedMotion) {
         gsap.to(el, { ...vars, duration: 0.3, ease: "power2.out" });
