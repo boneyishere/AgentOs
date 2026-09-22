@@ -1,9 +1,27 @@
+import type { LucideIcon } from "lucide-react";
+import {
+  ArrowRightLeft,
+  MessagesSquare,
+  Activity,
+  ListChecks,
+  Building2,
+  Stethoscope,
+  Truck,
+} from "lucide-react";
+import type { CoverColor } from "@/components/resource-cover";
+
+export type ResourceImage = {
+  color: CoverColor;
+  icon: LucideIcon;
+};
+
 export type ArticleResource = {
   slug: string;
   category: "Article";
   title: string;
   excerpt: string;
   date: string;
+  image: ResourceImage;
   body: string[];
 };
 
@@ -13,6 +31,7 @@ export type CaseStudyResource = {
   title: string;
   excerpt: string;
   date: string;
+  image: ResourceImage;
   problem: string;
   implementation: string;
   outcome: string;
@@ -28,6 +47,7 @@ export const RESOURCES: Resource[] = [
     excerpt:
       "Handoff isn't a failure state — it's a design decision. Here's how to build escalation rules that keep customers confident, not stuck.",
     date: "2026-01-14",
+    image: { color: "indigo", icon: ArrowRightLeft },
     body: [
       "The best AI agents aren't the ones that never escalate — they're the ones that escalate at exactly the right moment. Treating every handoff as a failure pushes teams toward agents that stall, hedge, or loop rather than admit they've hit a limit.",
       "Start by mapping the handoff triggers explicitly: unresolved intent after two clarifying questions, explicit customer request for a human, anything touching billing disputes or legal language, and any action the agent isn't authorized to take on its own.",
@@ -42,6 +62,7 @@ export const RESOURCES: Resource[] = [
     excerpt:
       "Most businesses default to chat because it's easier to ship. That's not always where your customers actually want to talk to you.",
     date: "2025-11-03",
+    image: { color: "violet", icon: MessagesSquare },
     body: [
       "Chat is easier to launch, easier to review, and easier to iterate on — which is exactly why most teams start there, whether or not it's where their customers actually want to be.",
       "Voice tends to win when the interaction is time-sensitive (a missed appointment, a service outage) or when typing is inconvenient (a customer driving, a tradesperson on a job site). Chat tends to win for anything that benefits from a paper trail, or when a customer is multitasking and doesn't want a live conversation.",
@@ -56,6 +77,7 @@ export const RESOURCES: Resource[] = [
     excerpt:
       "Transcripts are data. Conversation intelligence is what turns that data into decisions your team can act on.",
     date: "2025-09-22",
+    image: { color: "pink", icon: Activity },
     body: [
       "Every AI conversation produces a transcript by default — but a transcript alone doesn't tell you anything a person hasn't already read. Conversation intelligence is the layer that turns that raw text into structured signal.",
       "At minimum, that means intent classification (what was this conversation actually about), sentiment (how did the customer feel by the end, not just the start), and lead scoring for anything sales-adjacent (qualified, potential, unqualified).",
@@ -70,6 +92,7 @@ export const RESOURCES: Resource[] = [
     excerpt:
       "Most first deployments fail on scope, not technology. A short list of questions to answer before you go live.",
     date: "2025-08-05",
+    image: { color: "mint", icon: ListChecks },
     body: [
       "Before writing a single instruction, define the agent's scope in one sentence: what it handles, and — just as important — what it explicitly hands off. Vague scope is the single most common cause of a rocky first deployment.",
       "Load the knowledge base with the documents your team actually references today, not an idealized version of them. If your team keeps a separate spreadsheet of exceptions to the official policy, the agent needs that too.",
@@ -83,6 +106,7 @@ export const RESOURCES: Resource[] = [
     title: "Northwind Retail",
     excerpt: "Fewer missed customer inquiries, faster response time.",
     date: "2025-10-12",
+    image: { color: "indigo", icon: Building2 },
     problem: "After-hours calls went to voicemail and were rarely returned.",
     implementation:
       "A Codely voice agent answers around the clock, checks store hours and inventory FAQs, and books callbacks.",
@@ -94,6 +118,7 @@ export const RESOURCES: Resource[] = [
     title: "Bellcastle Clinics",
     excerpt: "Lower front-desk call volume, no double-bookings.",
     date: "2025-07-29",
+    image: { color: "violet", icon: Stethoscope },
     problem: "Front desk overwhelmed by reschedule requests.",
     implementation:
       "Codely handles rescheduling end-to-end via voice and chat, synced to the practice calendar.",
@@ -105,6 +130,7 @@ export const RESOURCES: Resource[] = [
     title: "Ferrow Logistics",
     excerpt: "Sales team spends time only on qualified conversations.",
     date: "2025-05-16",
+    image: { color: "pink", icon: Truck },
     problem:
       "Inbound sales calls weren't consistently qualified before reaching reps.",
     implementation:

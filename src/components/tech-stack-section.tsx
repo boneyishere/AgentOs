@@ -38,9 +38,9 @@ const LANGUAGE_MODELS: Logo[] = [
 
 const INTEGRATIONS: Logo[] = [
   { kind: "brand", Logo: SiGooglecalendar, color: SiGooglecalendarHex, name: "Google Calendar" },
-  { kind: "fallback", Icon: Sparkles, color: "#0072C6", name: "Outlook" },
+  { kind: "fallback", Icon: Sparkles, color: "#2F69F1", name: "Outlook" },
   { kind: "brand", Logo: SiHubspot, color: SiHubspotHex, name: "HubSpot" },
-  { kind: "fallback", Icon: Cloud, color: "#00A1E0", name: "Salesforce" },
+  { kind: "fallback", Icon: Cloud, color: "#2F69F1", name: "Salesforce" },
   { kind: "fallback", Icon: Hash, color: "#4A154B", name: "Slack" },
   { kind: "brand", Logo: SiZapier, color: SiZapierHex, name: "Zapier" },
   { kind: "fallback", Icon: Webhook, color: "#6B7280", name: "Custom API & webhooks" },

@@ -44,10 +44,10 @@ export function Hero() {
               </Link>
             </div>
           </div>
-          <div className="relative mx-auto flex h-[550px] w-full max-w-[600px] items-center justify-center overflow-hidden rounded-2xl bg-ink">
+          <div className="relative ml-auto flex h-[550px] w-full max-w-[600px] items-center justify-center overflow-hidden rounded-2xl bg-ink">
             <div className="pointer-events-none absolute inset-0" aria-hidden="true">
               <Ferrofluid
-                colors={["#2c3899", "#4959ee", "#aab4fb"]}
+                colors={["#2F69F1", "#2F69F1", "#2F69F1"]}
                 speed={0.4}
                 scale={1.4}
                 turbulence={0.9}

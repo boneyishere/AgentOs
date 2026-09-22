@@ -55,7 +55,7 @@ const FEATURES = [
 
 export function FeatureCards() {
   return (
-    <section id="features" className="border-b border-border bg-surface">
+    <section id="features" className="border-b border-border bg-[#fdffff]">
       <Container className="py-20 sm:py-28">
         <div className="max-w-xl">
           <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
@@ -75,7 +75,7 @@ export function FeatureCards() {
             <Reveal
               key={title}
               delay={(i % 3) * 0.06}
-              className={`bg-background p-6 sm:p-7 ${span}`}
+              className={`bg-[#FBFBFB] p-6 sm:p-7 ${span}`}
             >
               <h3 className="text-base font-medium">{title}</h3>
               <p className="mt-2 text-sm text-foreground-muted">{description}</p>

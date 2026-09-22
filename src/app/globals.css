@@ -6,23 +6,23 @@
   --font-stack-sans-text-heading: var(--font-stack-sans-text), var(--font-stack-sans);
 
   /* light surface (default) */
-  --background: #ffffff;
+  --background: #fdffff;
   --surface: #fafafa;
   --surface-raised: #ffffff;
-  --foreground: #0a0a0a;
+  --foreground: #1a1a1a;
   --foreground-muted: #6b6b70;
   --border: #ebebeb;
   --border-strong: #d4d4d8;
 
   /* ink surface — used deliberately for the hero visual + technology section only */
-  --ink: #0a0a0a;
+  --ink: #1a1a1a;
   --ink-foreground: #fafafa;
   --ink-foreground-muted: #a1a1aa;
   --ink-border: rgba(255, 255, 255, 0.12);
   --ink-border-strong: rgba(255, 255, 255, 0.2);
 
   /* accent — reserved for indicators, active states, and single emphasis points, never large fills */
-  --accent: #4959ee;
+  --accent: #2f69f1;
   --accent-foreground: #ffffff;
   --accent-soft: rgba(73, 89, 238, 0.08);
 
