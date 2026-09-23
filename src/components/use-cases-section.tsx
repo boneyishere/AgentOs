@@ -97,6 +97,7 @@ export function UseCasesSection() {
   const [hasSwitched, setHasSwitched] = useState(false);
   const current = USE_CASES[active];
   const pillRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const pillScrollerRef = useRef<HTMLDivElement | null>(null);
 
   const goTo = (i: number) => {
     setHasSwitched(true);
@@ -105,12 +106,16 @@ export function UseCasesSection() {
 
   // Keep the active pill scrolled into view on mobile, whether it became
   // active from a tap or from auto-advance cycling past what's visible.
+  // Scoped to the pill strip's own horizontal scroll position (not
+  // `scrollIntoView`, which also scrolls the *page* back to this section on
+  // every auto-advance tick if the user has since scrolled elsewhere).
   useEffect(() => {
-    pillRefs.current[active]?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "center",
-    });
+    const scroller = pillScrollerRef.current;
+    const pill = pillRefs.current[active];
+    if (!scroller || !pill) return;
+    const target =
+      pill.offsetLeft - scroller.clientWidth / 2 + pill.clientWidth / 2;
+    scroller.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
   }, [active]);
 
   // Auto-advance once the current script has fully played out, timed to
@@ -142,7 +147,10 @@ export function UseCasesSection() {
           </Reveal>
         </div>
 
-        <div className="-mx-6 mt-10 flex snap-x gap-2 overflow-x-auto px-6 pb-2 lg:hidden">
+        <div
+          ref={pillScrollerRef}
+          className="-mx-6 mt-10 flex snap-x gap-2 overflow-x-auto px-6 pb-2 lg:hidden"
+        >
           {USE_CASES.map((useCase, i) => (
             <button
               key={useCase.label}
