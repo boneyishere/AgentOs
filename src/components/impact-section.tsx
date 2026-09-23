@@ -124,14 +124,16 @@ function buildEdgeMasks(leftPx: number, rightPx: number) {
  * drives the card track horizontally, card 1 through card 6. Once the last
  * card is fully in view the pin releases and scroll continues normally; the
  * same tween reverses cleanly on scroll-up since it's scrubbed directly off
- * scroll position rather than played on a click/slide trigger. Sized to its
- * own content (heading + one card row + standard section padding), not a
- * full `h-screen` box like IndustriesSection — that content is short enough
- * relative to the viewport that forcing it to fill the full screen just
- * left a large empty band above/below it. The trade-off: while actively
- * pinned and scrubbing the track, the area below this shorter box still
- * shows plain section background for the scroll distance the pin needs to
- * hold the viewport — smaller than the old full-screen gap, not zero.
+ * scroll position rather than played on a click/slide trigger. Pinned to a
+ * full `h-screen` box (like IndustriesSection) — this isn't just visual
+ * framing, it's load-bearing: `pin: true` reserves `getDistance()` px of
+ * *extra* scroll distance in the document no matter how tall this element
+ * is, and while pinned the viewport keeps showing this exact box for that
+ * whole distance. Size the box to less than the viewport (e.g. to just fit
+ * the heading + one card row) and that reserved distance shows up as a
+ * growing band of bare section background beneath the box for the length of
+ * the scrub — worse than a static empty band, since it visibly grows as you
+ * scroll. `h-screen` makes the box itself consume that space instead.
  *
  * The edge fade/blur is a pure CSS mask on the viewport layer itself, not a
  * filter applied to individual cards: a `mask-image` on the overflow stage
@@ -210,7 +212,7 @@ function ImpactScrollTrack() {
   }, []);
 
   return (
-    <Container ref={pinRef} className="py-20 sm:py-28">
+    <Container ref={pinRef} className="flex h-screen flex-col justify-center">
       <ImpactHeading />
 
       {/* Constrained to this Container's own width — cards scroll only
