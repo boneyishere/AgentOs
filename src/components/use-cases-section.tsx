@@ -173,17 +173,17 @@ export function UseCasesSection() {
         <p className="mt-4 text-sm text-foreground-muted lg:hidden">{current.description}</p>
 
         <div className="mt-6 grid grid-cols-1 gap-10 lg:mt-14 lg:grid-cols-[minmax(0,440px)_1fr] lg:gap-8">
-          <ul className="hidden lg:block">
+          <ul className="hidden flex-col gap-3 lg:flex">
             {USE_CASES.map((useCase, i) => (
               <li key={useCase.label}>
                 <button
                   type="button"
                   onMouseEnter={() => goTo(i)}
                   onClick={() => goTo(i)}
-                  className={`flex w-full flex-col gap-1.5 border-l-2 px-4 py-4 text-left transition-colors ${
+                  className={`flex w-full flex-col gap-1.5 rounded-2xl border px-5 py-4 text-left transition-all duration-200 ${
                     i === active
-                      ? "border-accent"
-                      : "border-transparent hover:border-border"
+                      ? "-translate-y-0.5 border-border-strong bg-background shadow-md"
+                      : "border-border bg-background hover:border-border-strong"
                   }`}
                 >
                   <div className="flex items-baseline gap-4">
