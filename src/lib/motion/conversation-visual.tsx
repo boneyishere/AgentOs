@@ -150,7 +150,7 @@ export function ConversationVisual({
       className={`relative overflow-hidden rounded-2xl border ${
         isFull
           ? "border-ink-border bg-ink p-6 text-ink-foreground sm:p-8"
-          : "border-border bg-background p-5"
+          : "border-white/15 bg-accent p-5 text-accent-foreground"
       } ${className}`}
     >
       {isFull && (
@@ -172,12 +172,16 @@ export function ConversationVisual({
         <div className="flex items-center justify-between">
           <span
             className={`inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] ${
-              isFull ? "text-ink-foreground-muted" : "text-foreground-muted"
+              isFull ? "text-ink-foreground-muted" : "text-accent-foreground/70"
             }`}
           >
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+              <span
+                className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isFull ? "bg-accent" : "bg-accent-foreground"}`}
+              />
+              <span
+                className={`relative inline-flex h-1.5 w-1.5 rounded-full ${isFull ? "bg-accent" : "bg-accent-foreground"}`}
+              />
             </span>
             {label}
           </span>
@@ -186,7 +190,7 @@ export function ConversationVisual({
             {WAVEFORM_BARS.map((h, i) => (
               <span
                 key={i}
-                className={`w-0.5 origin-bottom rounded-full ${isFull ? "bg-accent/70" : "bg-accent/50"}`}
+                className={`w-0.5 origin-bottom rounded-full ${isFull ? "bg-accent/70" : "bg-accent-foreground/60"}`}
                 style={{ height: `${h}px` }}
               />
             ))}
@@ -214,24 +218,26 @@ export function ConversationVisual({
                 <div>
                   <p
                     className={`text-[10px] uppercase tracking-[0.14em] ${
-                      isFull ? "text-ink-foreground-muted" : "text-foreground-muted"
+                      isFull ? "text-ink-foreground-muted" : "text-accent-foreground/70"
                     }`}
                   >
                     {beat.kind === "customer" ? "Customer" : "AI Agent"}
                   </p>
-                  <p className={`mt-1 text-sm leading-relaxed ${isFull ? "text-ink-foreground" : "text-foreground"}`}>
+                  <p className={`mt-1 text-sm leading-relaxed ${isFull ? "text-ink-foreground" : "text-accent-foreground"}`}>
                     &ldquo;{beat.text}&rdquo;
                   </p>
                 </div>
               ) : (
                 <div
                   className="flex items-baseline gap-2.5 border-t pt-3.5"
-                  style={{ borderColor: isFull ? "var(--ink-border)" : "var(--border)" }}
+                  style={{ borderColor: isFull ? "var(--ink-border)" : "rgba(255, 255, 255, 0.18)" }}
                 >
-                  <span className="shrink-0 text-[10px] font-medium uppercase tracking-[0.14em] text-accent">
+                  <span
+                    className={`shrink-0 text-[10px] font-medium uppercase tracking-[0.14em] ${isFull ? "text-accent" : "text-accent-foreground"}`}
+                  >
                     {beat.kind}
                   </span>
-                  <span className={`text-xs ${isFull ? "text-ink-foreground-muted" : "text-foreground-muted"}`}>
+                  <span className={`text-xs ${isFull ? "text-ink-foreground-muted" : "text-accent-foreground/70"}`}>
                     {beat.label}
                   </span>
                 </div>

@@ -179,24 +179,33 @@ Technology section. Do not extend it to other sections without a deliberate deci
 | `--ink-border` | `rgba(255,255,255,0.12)` | `border-ink-border` |
 | `--ink-border-strong` | `rgba(255,255,255,0.2)` | `border-ink-border-strong` |
 
-**Accent — indigo `#4959ee`.**
+**Accent — blue `#2f69f1`.**
 
 | Token | Value | Utility |
 | --- | --- | --- |
-| `--accent` | `#4959ee` | `text-accent`, `bg-accent`, `border-accent` |
+| `--accent` | `#2f69f1` | `text-accent`, `bg-accent`, `border-accent` |
 | `--accent-foreground` | `#ffffff` | `text-accent-foreground` |
 | `--accent-soft` | `rgba(73,89,238,0.08)` | `bg-accent-soft` |
 
-> **Accent rule (enforced by the existing code):** the accent is for *indicators, active
-> states, and a single emphasis point* — never a large fill. In practice it appears as:
-> the word "AI" in the hero headline, checkmarks, the live-call pulse dot, waveform bars,
-> the conversation progress rail, CTA corner brackets, focus rings, and blurred glow orbs
-> at low opacity. **Primary buttons are black (`bg-foreground`), not accent.**
+> `--accent-soft`, `--stat-indigo-soft`, and `conversation-visual.tsx`'s `ACCENT_RGB`
+> constant still carry the *previous* accent hue (`73,89,238` / `#4959ee`) rather than the
+> current `--accent` value above — pre-existing drift, not yet reconciled. Don't assume
+> they match `--accent` until they're updated to `47,105,241`.
+
+> **Accent rule:** the accent is for *indicators, active states, and a single emphasis
+> point* — never a large fill, with one deliberate exception: `ConversationVisual`'s
+> `compact` variant (the Use Cases card) fills its whole card with `bg-accent` /
+> `text-accent-foreground`, mirroring the scarce-but-present `ink` surface exception below.
+> Don't extend the large-fill treatment beyond that one card without a reason. Elsewhere
+> it still appears only as: the word "AI" in the hero headline, checkmarks, the live-call
+> pulse dot, waveform bars, the conversation progress rail, CTA corner brackets, focus
+> rings, and blurred glow orbs at low opacity. **Primary buttons are black
+> (`bg-foreground`), not accent.**
 
 **Stat highlights — the `StatsSection` proof-stats cards only.** A small 4-colour set used
 solely for that section's per-card animated background gradient (no solid fills — these are
 soft/translucent tones only). Don't reuse outside that component; everywhere else stays on
-the single indigo accent above.
+the single accent above.
 
 | Token | Value | Use |
 | --- | --- | --- |
