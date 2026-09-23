@@ -129,9 +129,14 @@ function buildEdgeMasks(leftPx: number, rightPx: number) {
  * drives the card track horizontally, card 1 through card 8. Once the last
  * card is fully in view the pin releases and scroll continues normally; the
  * same tween reverses cleanly on scroll-up since it's scrubbed directly off
- * scroll position rather than played on a click/slide trigger. Pinned to a
- * full `h-screen` box (like IndustriesSection) so there's no dead space
- * below the content for the scroll duration it's held in place.
+ * scroll position rather than played on a click/slide trigger. Sized to its
+ * own content (heading + one card row + standard section padding), not a
+ * full `h-screen` box like IndustriesSection — that content is short enough
+ * relative to the viewport that forcing it to fill the full screen just
+ * left a large empty band above/below it. The trade-off: while actively
+ * pinned and scrubbing the track, the area below this shorter box still
+ * shows plain section background for the scroll distance the pin needs to
+ * hold the viewport — smaller than the old full-screen gap, not zero.
  *
  * The edge fade/blur is a pure CSS mask on the viewport layer itself, not a
  * filter applied to individual cards: a `mask-image` on the overflow stage
@@ -211,7 +216,7 @@ function ImpactScrollTrack() {
   }, []);
 
   return (
-    <Container ref={pinRef} className="flex h-screen flex-col justify-center">
+    <Container ref={pinRef} className="py-20 sm:py-28">
       <ImpactHeading />
 
       {/* Constrained to this Container's own width — cards scroll only
