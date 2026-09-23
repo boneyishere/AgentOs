@@ -26,13 +26,11 @@ export function Nav() {
 
       <header className="fixed inset-x-0 top-4 z-50">
         <Container>
-          {/* `backdrop-filter` on an always-visible fixed element is also a
-              known source of ghosting on mobile GPUs, independent of
-              `position: sticky` — the blur can render against a stale
-              snapshot while the browser's own toolbar is animating. Keep
-              the pill fully opaque below `lg`, and only turn on the glass
-              effect at desktop widths where this doesn't happen. */}
-          <div className="relative flex items-center justify-between rounded-full border border-white/50 bg-white px-6 py-2.5 shadow-[0_8px_30px_rgba(26,26,26,0.08)] lg:bg-white/70 lg:backdrop-blur-xl lg:backdrop-saturate-150">
+          {/* Glass effect (translucency + blur + saturation) is applied at
+              all widths, including mobile — accepted tradeoff: this can
+              cause ghosting on some mobile GPUs while the browser's own
+              toolbar is animating (see the fixed-vs-sticky note above). */}
+          <div className="relative flex items-center justify-between rounded-full border border-white/50 bg-white/70 px-6 py-2.5 shadow-[0_8px_30px_rgba(26,26,26,0.08)] backdrop-blur-xl backdrop-saturate-150">
             <Link href="/" className="flex items-center gap-2">
               <span className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-xs font-bold text-background">
                 C
