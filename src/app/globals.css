@@ -89,6 +89,18 @@ body {
   }
 }
 
+/* Use Cases auto-advance countdown — transform-only (GPU-cheap), duration set
+   per-instance via inline style. Reduced motion's global animation-duration
+   clamp below collapses this to its end state (a full bar) instantly. */
+@keyframes use-case-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

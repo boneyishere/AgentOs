@@ -104,6 +104,29 @@ const USE_CASES: {
   },
 ];
 
+// Matches ConversationVisual's internal reveal pace (beats start at 0.2s,
+// stagger 0.45s, 0.5s each) plus a pause so the outcome is readable before
+// auto-advancing — shared by the advance timer and the progress bar so they
+// can never drift out of sync with each other.
+function getCycleMs(beatCount: number) {
+  return 200 + Math.max(beatCount - 1, 0) * 450 + 500 + 2600;
+}
+
+/** Thin, transform-only fill under the active desktop card, showing time
+ *  left until auto-advance. Restarts naturally on remount (a fresh active
+ *  index) — no imperative animation control needed. Reduced motion still
+ *  gets a meaningful end state (full bar, not a missing one), it just skips
+ *  the incremental fill per the site's `animation-duration` clamp. */
+function AutoAdvanceProgress({ durationMs }: { durationMs: number }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-accent [animation:use-case-progress_linear_forwards]"
+      style={{ animationDuration: `${durationMs}ms` }}
+    />
+  );
+}
+
 export function UseCasesSection() {
   const [active, setActive] = useState(0);
   // Only the very first card's reveal should wait on scroll position; every
@@ -136,16 +159,11 @@ export function UseCasesSection() {
     scroller.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
   }, [active]);
 
-  // Auto-advance once the current script has fully played out, timed to
-  // roughly match ConversationVisual's internal reveal pace (see
-  // conversation-visual.tsx: beats start at 0.2s, stagger 0.45s, 0.5s each),
-  // plus a pause so the outcome is readable before moving on.
+  // Auto-advance once the current script has fully played out.
   useEffect(() => {
-    const beatCount = USE_CASES[active].script.length;
-    const revealMs = 200 + Math.max(beatCount - 1, 0) * 450 + 500;
     const timer = setTimeout(() => {
       goTo((active + 1) % USE_CASES.length);
-    }, revealMs + 2600);
+    }, getCycleMs(USE_CASES[active].script.length));
     return () => clearTimeout(timer);
   }, [active]);
 
@@ -198,7 +216,7 @@ export function UseCasesSection() {
                   type="button"
                   onMouseEnter={() => goTo(i)}
                   onClick={() => goTo(i)}
-                  className={`flex w-full flex-col gap-1.5 rounded-2xl px-5 py-4 text-left transition-all duration-200 ${
+                  className={`relative flex w-full flex-col gap-1.5 overflow-hidden rounded-2xl px-5 py-4 text-left transition-all duration-200 ${
                     i === active
                       ? "-translate-y-0.5 bg-background shadow-[0_8px_30px_rgba(26,26,26,0.08)]"
                       : ""
@@ -206,8 +224,8 @@ export function UseCasesSection() {
                 >
                   <div className="flex items-center gap-3">
                     <Icon
-                      className={`h-4 w-4 shrink-0 ${
-                        i === active ? "text-accent" : "text-foreground-muted"
+                      className={`h-4 w-4 shrink-0 transition-transform duration-300 ${
+                        i === active ? "scale-110 text-accent" : "scale-100 text-foreground-muted"
                       }`}
                     />
                     <span
@@ -219,6 +237,9 @@ export function UseCasesSection() {
                     </span>
                   </div>
                   <p className="pl-7 text-sm text-foreground-muted">{description}</p>
+                  {i === active && (
+                    <AutoAdvanceProgress durationMs={getCycleMs(USE_CASES[i].script.length)} />
+                  )}
                 </button>
               </li>
             ))}

@@ -59,6 +59,7 @@ export function ConversationVisual({
       const beatsDuration = 0.2 + Math.max(beats.length - 1, 0) * 0.45 + 0.5;
 
       if (reducedMotion) {
+        gsap.set(el, { autoAlpha: 1, y: 0 });
         gsap.set(beats, { autoAlpha: 1, y: 0 });
         if (railRef.current) gsap.set(railRef.current, { scaleY: 1 });
         return;
@@ -69,6 +70,11 @@ export function ConversationVisual({
         scrollTrigger:
           isFull || !scrollGated ? undefined : { trigger: el, start: "top 78%", once: true },
       });
+
+      // The card itself (not just its beats) eases in — smooths the compact
+      // variant's swap, which is a hard React `key` remount with no exit
+      // transition, into something that at least enters gently each time.
+      tl.fromTo(el, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" }, 0);
 
       if (waveRef.current) {
         tl.to(

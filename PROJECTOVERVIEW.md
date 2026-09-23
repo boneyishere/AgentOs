@@ -200,8 +200,8 @@ Technology section. Do not extend it to other sections without a deliberate deci
 > Don't extend the large-fill treatment beyond that one card without a reason. Elsewhere
 > it still appears only as: the word "AI" in the hero headline, checkmarks, the live-call
 > pulse dot, waveform bars, the conversation progress rail, CTA corner brackets, focus
-> rings, and blurred glow orbs at low opacity. **Primary buttons are black
-> (`bg-foreground`), not accent.**
+> rings, blurred glow orbs at low opacity, and the Use Cases active card's auto-advance
+> progress bar. **Primary buttons are black (`bg-foreground`), not accent.**
 
 **Stat highlights — the `StatsSection` proof-stats cards only.** A small 4-colour set used
 solely for that section's per-card animated background gradient (no solid fills — these are
@@ -433,8 +433,16 @@ e.g. `StatsSection`'s per-card background gradients — is done as a plain CSS `
 animation (defined in `globals.css`, applied via an arbitrary `animate-[name_Ns_ease_infinite]`
 class) instead of a GSAP timeline. The global `prefers-reduced-motion` block already clamps
 all CSS `animation-duration` to `0.01ms`, so this still satisfies the reduced-motion contract
-with zero extra code. Reserve this for ambient background texture only — anything scroll-triggered,
-staggered, or carrying information still goes through a `lib/motion` hook.
+with zero extra code. Reserve this for ambient background texture only — anything scroll-triggered
+or staggered still goes through a `lib/motion` hook.
+
+A narrower second case gets the same CSS-only treatment despite carrying real information: the
+Use Cases active card's auto-advance countdown bar (`UseCasesSection`'s `AutoAdvanceProgress`) is
+a single `transform: scaleX()` fill, duration set per-instance via inline `style`, not scroll-tied
+or staggered. Reduced motion's duration clamp collapses it straight to a full bar — still a
+truthful, meaningful end state (not a missing or frozen-mid-fill one) — so it's exempted the same
+way. If a future info-bearing animation is staggered, scroll-tied, or needs a *specific* non-full
+reduced-motion end state, it still belongs in a `lib/motion` hook, not this exception.
 
 **Pinned scroll-story pattern (`IndustriesSection`):** for a section that pins in place while
 scroll steps through several discrete content states (as opposed to `useScrollTimeline`'s single
