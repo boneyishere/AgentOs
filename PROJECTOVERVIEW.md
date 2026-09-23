@@ -185,12 +185,13 @@ Technology section. Do not extend it to other sections without a deliberate deci
 | --- | --- | --- |
 | `--accent` | `#2f69f1` | `text-accent`, `bg-accent`, `border-accent` |
 | `--accent-foreground` | `#ffffff` | `text-accent-foreground` |
-| `--accent-soft` | `rgba(73,89,238,0.08)` | `bg-accent-soft` |
+| `--accent-soft` | `rgba(47,105,241,0.08)` | `bg-accent-soft` |
 
-> `--accent-soft`, `--stat-indigo-soft`, and `conversation-visual.tsx`'s `ACCENT_RGB`
-> constant still carry the *previous* accent hue (`73,89,238` / `#4959ee`) rather than the
-> current `--accent` value above — pre-existing drift, not yet reconciled. Don't assume
-> they match `--accent` until they're updated to `47,105,241`.
+> `--stat-indigo-soft` and `conversation-visual.tsx`'s `ACCENT_RGB` constant still carry the
+> *previous* accent hue (`73,89,238` / `#4959ee`) rather than the current `--accent` value
+> above — pre-existing drift, not yet reconciled. Don't assume they match `--accent` until
+> they're updated to `47,105,241`. (`--accent-soft` was reconciled to the current hue when
+> it was first put to use, on `IndustryChip`.)
 
 > **Accent rule:** the accent is for *indicators, active states, and a single emphasis
 > point* — never a large fill, with one deliberate exception: `ConversationVisual`'s

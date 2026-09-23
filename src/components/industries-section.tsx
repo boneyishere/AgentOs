@@ -216,7 +216,7 @@ function IndustryCta() {
 
 function IndustryChip({ eyebrow }: { eyebrow: string }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-border-strong bg-surface px-4 py-1.5 text-base font-medium tracking-tight text-foreground">
+    <span className="inline-flex items-center rounded-full border border-accent/30 bg-accent-soft px-4 py-1.5 text-base font-medium tracking-tight text-accent">
       {eyebrow}
     </span>
   );

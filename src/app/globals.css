@@ -24,7 +24,7 @@
   /* accent — reserved for indicators, active states, and single emphasis points, never large fills */
   --accent: #2f69f1;
   --accent-foreground: #ffffff;
-  --accent-soft: rgba(73, 89, 238, 0.08);
+  --accent-soft: rgba(47, 105, 241, 0.08);
 
   /* stat highlights — the per-card background gradient in the proof-stats section only */
   --stat-indigo-soft: rgba(73, 89, 238, 0.18);
