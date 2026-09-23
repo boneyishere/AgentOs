@@ -220,10 +220,12 @@ exposed as Tailwind background-fill utilities, since they're never used as a sol
 ### Surfaces and elevation
 
 The site is almost entirely flat. Depth comes from **1px borders and background steps**,
-not shadows. `shadow-sm` / `shadow-md` appear in exactly two places — the Technology
-diagram's hover-lift nodes, and the active card in the Use Cases desktop list (which lifts
-with `-translate-y-0.5` + `shadow-md`, deliberately "popped" rather than flat, at the
-user's request). Prefer a border change over a shadow anywhere else.
+not shadows. `shadow-sm` / `shadow-md` appear exactly once (the Technology diagram's
+hover-lift nodes). The Use Cases desktop list has one more deliberate exception: only the
+*active* item gets a card treatment at all (inactive items carry no border/background/shadow),
+using the nav pill's soft shadow recipe — `shadow-[0_8px_30px_rgba(26,26,26,0.08)]` — plus
+`-translate-y-0.5`, not the harsher default `shadow-md`. Prefer a border change over a shadow
+anywhere else.
 
 ### Focus and accessibility
 

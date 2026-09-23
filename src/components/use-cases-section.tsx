@@ -1,6 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+  CalendarCheck,
+  LifeBuoy,
+  Phone,
+  RefreshCw,
+  TrendingUp,
+  type LucideIcon,
+} from "lucide-react";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
 import {
@@ -9,9 +17,15 @@ import {
 } from "@/lib/motion/conversation-visual";
 import { TextReveal } from "@/lib/motion/text-reveal";
 
-const USE_CASES: { label: string; description: string; script: ConversationBeat[] }[] = [
+const USE_CASES: {
+  label: string;
+  description: string;
+  icon: LucideIcon;
+  script: ConversationBeat[];
+}[] = [
   {
     label: "AI Receptionist",
+    icon: Phone,
     description:
       "Handles incoming calls, understands requests, and routes them where they need to go.",
     script: [
@@ -25,6 +39,7 @@ const USE_CASES: { label: string; description: string; script: ConversationBeat[
   },
   {
     label: "Sales & Lead Qualification",
+    icon: TrendingUp,
     description:
       "Qualifies inbound leads with the right questions and scores them automatically.",
     script: [
@@ -41,6 +56,7 @@ const USE_CASES: { label: string; description: string; script: ConversationBeat[
   },
   {
     label: "Customer Support",
+    icon: LifeBuoy,
     description: "Resolves common questions instantly using your knowledge base.",
     script: [
       { kind: "customer", text: "My order hasn't arrived yet." },
@@ -56,6 +72,7 @@ const USE_CASES: { label: string; description: string; script: ConversationBeat[
   },
   {
     label: "Appointment Booking",
+    icon: CalendarCheck,
     description: "Checks availability and confirms bookings without back-and-forth.",
     script: [
       { kind: "customer", text: "Can I book a visit for Friday?" },
@@ -71,6 +88,7 @@ const USE_CASES: { label: string; description: string; script: ConversationBeat[
   },
   {
     label: "Follow-ups",
+    icon: RefreshCw,
     description: "Re-engages missed calls and stale leads automatically.",
     script: [
       { kind: "understanding", label: "Missed call detected" },
@@ -174,33 +192,33 @@ export function UseCasesSection() {
 
         <div className="mt-6 grid grid-cols-1 gap-10 lg:mt-14 lg:grid-cols-[minmax(0,440px)_1fr] lg:gap-8">
           <ul className="hidden flex-col gap-3 lg:flex">
-            {USE_CASES.map((useCase, i) => (
-              <li key={useCase.label}>
+            {USE_CASES.map(({ label, description, icon: Icon }, i) => (
+              <li key={label}>
                 <button
                   type="button"
                   onMouseEnter={() => goTo(i)}
                   onClick={() => goTo(i)}
-                  className={`flex w-full flex-col gap-1.5 rounded-2xl border px-5 py-4 text-left transition-all duration-200 ${
+                  className={`flex w-full flex-col gap-1.5 rounded-2xl px-5 py-4 text-left transition-all duration-200 ${
                     i === active
-                      ? "-translate-y-0.5 border-border-strong bg-background shadow-md"
-                      : "border-border bg-background hover:border-border-strong"
+                      ? "-translate-y-0.5 bg-background shadow-[0_8px_30px_rgba(26,26,26,0.08)]"
+                      : ""
                   }`}
                 >
-                  <div className="flex items-baseline gap-4">
-                    <span className="text-xs text-foreground-muted">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                  <div className="flex items-center gap-3">
+                    <Icon
+                      className={`h-4 w-4 shrink-0 ${
+                        i === active ? "text-accent" : "text-foreground-muted"
+                      }`}
+                    />
                     <span
                       className={`text-base font-medium ${
                         i === active ? "text-foreground" : "text-foreground-muted"
                       }`}
                     >
-                      {useCase.label}
+                      {label}
                     </span>
                   </div>
-                  <p className="pl-8 text-sm text-foreground-muted">
-                    {useCase.description}
-                  </p>
+                  <p className="pl-7 text-sm text-foreground-muted">{description}</p>
                 </button>
               </li>
             ))}
