@@ -16,7 +16,9 @@ export function Hero() {
   const sectionRef = useScrollTimeline<HTMLElement>(
     { start: "top top", end: "bottom top", scrub: 0.6 },
     (tl, el, reducedMotion) => {
-      if (reducedMotion) return;
+      // Desktop only: on phones the copy and visual stack, so parallaxing the
+      // visual away while it's the thing being looked at just fights the reader.
+      if (reducedMotion || !window.matchMedia("(min-width: 1024px)").matches) return;
       tl.to(el.querySelector("[data-hero-copy]"), { yPercent: -22, autoAlpha: 0.15, ease: "none" }, 0);
       tl.to(el.querySelector("[data-hero-visual]"), { y: 90, scale: 0.92, ease: "none" }, 0);
     }
@@ -58,7 +60,7 @@ export function Hero() {
           <div
             ref={visualRef}
             data-hero-visual
-            className="relative ml-auto flex h-[550px] w-full max-w-[600px] items-center justify-center overflow-hidden rounded-2xl bg-ink"
+            className="relative ml-auto flex h-[380px] w-full max-w-[600px] items-center justify-center overflow-hidden rounded-2xl bg-ink sm:h-[480px] lg:h-[550px]"
           >
             <div className="pointer-events-none absolute inset-0" aria-hidden="true">
               <Ferrofluid

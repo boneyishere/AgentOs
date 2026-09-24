@@ -12,10 +12,10 @@ export function CtaSection() {
     <section id="cta" className="border-b border-border">
       <Container className="py-20 sm:py-28">
         <div className="relative isolate flex h-[min(620px,calc(100vh-10rem))] min-h-[440px] items-center justify-center overflow-hidden rounded-2xl bg-ink shadow-soft">
-          <div className="absolute inset-0 -z-10" aria-hidden="true">
+          <div className="absolute inset-0 -z-10 opacity-55 sm:opacity-100" aria-hidden="true">
             <Orb hoverIntensity={0.5} rotateOnHover={true} hue={0} forceHoverState={false} />
           </div>
-          <div className="pointer-events-none relative mx-auto max-w-2xl px-8 text-center">
+          <div className="pointer-events-none relative mx-auto max-w-2xl px-6 text-center sm:px-8">
             <TextReveal className="type-section mx-auto font-medium text-white">
               Your agent could be answering by Friday.
             </TextReveal>

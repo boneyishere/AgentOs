@@ -41,7 +41,7 @@ export function ComplianceVisual() {
       <div className="flex items-end justify-between">
         <div>
           <p className="text-xs text-foreground-muted">Policy adherence</p>
-          <p data-pct className="mt-1 text-4xl font-medium tracking-tight tabular-nums text-foreground">
+          <p data-pct className="mt-1 text-3xl font-medium tracking-tight sm:text-4xl tabular-nums text-foreground">
             100%
           </p>
         </div>

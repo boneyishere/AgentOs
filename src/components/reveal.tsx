@@ -21,18 +21,21 @@ export function Reveal({
         return;
       }
 
+      // Phones: no blur (costly to paint on many elements) and no sibling
+      // delays (in a single column they just make stacked cards arrive late).
+      const desktop = window.matchMedia("(min-width: 1024px)").matches;
       gsap.fromTo(
         el,
-        { autoAlpha: 0, y, filter: "blur(8px)" },
+        { autoAlpha: 0, y: desktop ? y : Math.min(y, 14), filter: desktop ? "blur(8px)" : "none" },
         {
           autoAlpha: 1,
           y: 0,
-          filter: "blur(0px)",
-          duration: 0.9,
-          delay,
+          filter: desktop ? "blur(0px)" : "none",
+          duration: desktop ? 0.9 : 0.6,
+          delay: desktop ? delay : 0,
           ease: "power3.out",
           clearProps: "filter",
-          scrollTrigger: { trigger: el, start: "top 85%", once: true },
+          scrollTrigger: { trigger: el, start: desktop ? "top 85%" : "top 92%", once: true },
         }
       );
     },

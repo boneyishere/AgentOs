@@ -59,7 +59,7 @@ export function MissedCallsVisual() {
       <div className="flex items-end justify-between">
         <div>
           <p className="text-xs text-foreground-muted">Missed today</p>
-          <p className="mt-1 text-4xl font-medium tracking-tight tabular-nums text-foreground">
+          <p className="mt-1 text-3xl font-medium tracking-tight sm:text-4xl tabular-nums text-foreground">
             <span data-count>0</span>
           </p>
         </div>
@@ -67,7 +67,7 @@ export function MissedCallsVisual() {
       </div>
       <ul className="mt-5 divide-y divide-border overflow-hidden rounded-xl border border-border bg-background">
         {CALLS.map((call) => (
-          <li key={call.time} data-row className="flex items-center gap-3 px-3.5 py-2.5 text-[13px]">
+          <li key={call.time} data-row className="flex items-center gap-2.5 px-3 py-2.5 text-[13px] sm:gap-3 sm:px-3.5">
             <span data-icon className="text-teal">
               <PhoneIncoming className="h-3.5 w-3.5" />
             </span>
@@ -86,7 +86,8 @@ export function MissedCallsVisual() {
                 className="inline-flex items-center gap-1 justify-self-end rounded-full border border-teal/30 bg-teal/[0.08] px-2 py-0.5 text-[11px] text-foreground [grid-area:1/1]"
               >
                 <Check className="h-3 w-3 text-teal" strokeWidth={2.5} />
-                Answered by AI
+                <span className="sm:hidden">Answered</span>
+                <span className="hidden sm:inline">Answered by AI</span>
               </span>
             </span>
           </li>

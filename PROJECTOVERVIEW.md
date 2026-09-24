@@ -639,6 +639,23 @@ imported on first registration, so it never lands in the initial bundle.
   labelled lanes). DOM labels in each `feature-visuals/*` file are positioned to match the
   scene coordinates noted there — keep them in sync if you move scene geometry.
 
+**Mobile motion contract (below `lg`).** Phones get calmer, cheaper motion; desktop keeps
+the full choreography.
+- **Reveal:** no blur, no sibling stagger delay (single columns would just arrive late),
+  a 14px rise over 0.6s, and it triggers at `top 92%`.
+- **Hero:** the scroll parallax is desktop-only, and the visual panel is shorter
+  (380 → 480 → 550px).
+- **Pinned and stacked sections stay flat:** the Impact deck and the Industries pinned
+  story fall back to plain stacks, and the Deployment switchboard drops its wires.
+- **Particles:** the stage caps DPR at 1.5 on coarse pointers. Intelligence lanes end where
+  the lane labels start (`labelShare` in `scenes.ts`), so the labels never sit on the
+  particles.
+- **Impact visuals:** the big numbers step down to `text-3xl`, and the call log
+  shortens its badge to "Answered".
+- **CTA:** the Orb ring drops to 55% opacity so it doesn't cut through the text.
+- **Pointer-only effects** (magnetic, tilt, spotlight, particle cursor) stay off on
+  touch.
+
 **Reduced-motion contract:** every animation must have a reduced-motion branch that jumps
 straight to the **end state** — content must never be left invisible. State changes that
 *carry information* (like a hover timeline's end state) still happen, just without the tween.

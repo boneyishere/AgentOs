@@ -38,6 +38,13 @@ const FALLBACK: Record<string, string> = {
   "--rose": "#d8607e",
 };
 
+// Phones get a lower backing-store ratio: fill-rate is the bottleneck there,
+// and 1.5x is visually indistinguishable for soft round points.
+function pixelRatio() {
+  const cap = window.matchMedia("(pointer: coarse)").matches ? 1.5 : 2;
+  return Math.min(window.devicePixelRatio, cap);
+}
+
 // Raw sRGB triplets: the ShaderMaterial writes gl_FragColor straight to the
 // canvas, so these must bypass three's linear colour management.
 function srgb(hex: string): [number, number, number] {
@@ -204,7 +211,7 @@ class ParticleStage {
           antialias: false,
           powerPreference: "high-performance",
         });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(pixelRatio());
         renderer.setClearColor(0x000000, 0);
         renderer.autoClear = false;
         this.canvas = canvas;
@@ -236,7 +243,7 @@ class ParticleStage {
         uProgress: { value: 0 },
         uHover: { value: 0 },
         uAspect: { value: aspect },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        uPixelRatio: { value: pixelRatio() },
         uSize: { value: 2 },
         uCamDist: { value: CAM_DIST },
         uMouse: { value: new three.Vector2() },

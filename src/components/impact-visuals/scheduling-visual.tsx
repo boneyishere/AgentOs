@@ -24,10 +24,10 @@ export function SchedulingVisual() {
 
   return (
     <div ref={ref} className="w-full max-w-[400px]">
-      <div className="flex items-end justify-between">
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
         <div>
           <p className="text-xs text-foreground-muted">Thursday</p>
-          <p className="mt-1 text-4xl font-medium tracking-tight text-foreground">0 conflicts</p>
+          <p className="mt-1 text-3xl font-medium tracking-tight sm:text-4xl text-foreground">0 conflicts</p>
         </div>
         <span className="grid">
           <span

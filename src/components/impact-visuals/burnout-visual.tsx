@@ -45,7 +45,7 @@ export function BurnoutVisual() {
       <div className="flex items-end justify-between">
         <div>
           <p className="text-xs text-foreground-muted">Repetitive tickets on the team</p>
-          <p data-count className="mt-1 text-4xl font-medium tracking-tight tabular-nums text-foreground">
+          <p data-count className="mt-1 text-3xl font-medium tracking-tight sm:text-4xl tabular-nums text-foreground">
             12
           </p>
         </div>

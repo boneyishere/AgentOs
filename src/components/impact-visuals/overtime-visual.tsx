@@ -47,7 +47,7 @@ export function OvertimeVisual() {
       <div className="flex items-end justify-between">
         <div>
           <p className="text-xs text-foreground-muted">Overtime this week</p>
-          <p data-count className="mt-1 text-4xl font-medium tracking-tight tabular-nums text-foreground">
+          <p data-count className="mt-1 text-3xl font-medium tracking-tight sm:text-4xl tabular-nums text-foreground">
             2h
           </p>
         </div>

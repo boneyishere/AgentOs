@@ -241,7 +241,10 @@ function intelligence(a: number, c: Cloud, R: () => number) {
   for (let i = 0; i < n; i++) {
     c.add(0, 0, 0, Math.floor(R() * 3));
   }
-  return { size: 2.0, p0: [-a * 1.05, a * 0.55, 0] as Vec3, p1: [0, 0, 0] as Vec3 };
+  // Lanes end where the DOM lane labels begin; labels need ~130px, so narrow
+  // (phone) cards reserve a bigger share of the width. Assumes a ~190px-tall slot.
+  const labelShare = Math.min(0.46, 130 / (a * 190));
+  return { size: 2.0, p0: [-a * 1.05, a * (1 - 2 * labelShare) - 0.08, 0] as Vec3, p1: [0, 0, 0] as Vec3 };
 }
 
 export function buildScene(mode: ParticleMode, aspect: number): SceneData {

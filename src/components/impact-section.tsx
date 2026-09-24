@@ -71,14 +71,14 @@ function ImpactCard({ item }: { item: (typeof IMPACTS)[number] }) {
       className="spotlight relative origin-top overflow-hidden rounded-2xl border border-border bg-background shadow-soft lg:grid lg:h-[min(500px,calc(100vh-13rem))] lg:grid-cols-[1fr_1.1fr]"
       style={{ "--hue": item.hue } as React.CSSProperties}
     >
-      <div className="flex flex-col justify-between gap-10 p-7 sm:p-9 lg:p-11">
+      <div className="flex flex-col gap-4 p-6 sm:p-9 lg:justify-between lg:gap-10 lg:p-11">
         <h3 className="max-w-md text-[1.5rem] font-medium leading-[1.18] tracking-tight text-balance text-foreground sm:text-[1.625rem] xl:text-[1.75rem]">
           {item.headline}
         </h3>
-        <p className="max-w-sm text-foreground-muted">{item.description}</p>
+        <p className="max-w-sm text-[15px] text-foreground-muted sm:text-base">{item.description}</p>
       </div>
 
-      <div className="m-3 mt-0 flex items-center justify-center rounded-xl border border-border bg-surface p-6 sm:p-8 lg:mt-3">
+      <div className="m-3 mt-2 flex items-center justify-center rounded-xl border border-border bg-surface p-4 sm:mt-0 sm:p-8 lg:mt-3">
         <Visual />
       </div>
 

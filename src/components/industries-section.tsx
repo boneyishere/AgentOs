@@ -304,7 +304,7 @@ function IndustriesList() {
     <Container className="block space-y-14 pb-20 motion-safe:lg:hidden sm:pb-28">
       {INDUSTRIES.map((item, i) => (
         <Reveal key={item.slug} delay={(i % 3) * 0.06} className="border-t border-border pt-10">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface ring-1 ring-inset ring-border">
             <IndustryVisual item={item} active />
           </div>
           <div className="mt-6">
