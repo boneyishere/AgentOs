@@ -233,7 +233,7 @@ export function UseCasesSection() {
                   onClick={() => setActive(i)}
                   className={`relative flex w-full flex-col gap-1.5 overflow-hidden rounded-2xl px-5 py-4 text-left transition-all duration-200 ${
                     i === active
-                      ? "-translate-y-0.5 bg-background shadow-[0_8px_30px_rgba(26,26,26,0.08)]"
+                      ? "bg-background shadow-soft"
                       : ""
                   }`}
                 >

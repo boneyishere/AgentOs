@@ -64,7 +64,7 @@ function LogoChip({ item }: { item: Logo }) {
   return (
     <div
       data-chip
-      className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3.5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-border-strong hover:shadow-md"
+      className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-soft"
     >
       {item.kind === "brand" ? (
         <item.Logo size={22} color={item.color} />

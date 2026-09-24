@@ -62,7 +62,6 @@ const IMPACTS: {
 // Sticky offsets: clear the floating nav, then let each earlier card's top edge peek out.
 const NAV_CLEARANCE = 104;
 const PEEK = 16;
-const FRAME_SHADOW = "0 24px 70px -34px rgba(26, 26, 26, 0.22)";
 
 function ImpactCard({ item }: { item: (typeof IMPACTS)[number] }) {
   const { Visual } = item;
@@ -70,8 +69,8 @@ function ImpactCard({ item }: { item: (typeof IMPACTS)[number] }) {
     <article
       data-deck-card
       data-replay
-      className="spotlight relative origin-top overflow-hidden rounded-2xl border border-border bg-background lg:grid lg:h-[min(500px,calc(100vh-13rem))] lg:grid-cols-[1fr_1.1fr]"
-      style={{ "--hue": item.hue, boxShadow: FRAME_SHADOW } as React.CSSProperties}
+      className="spotlight relative origin-top overflow-hidden rounded-2xl border border-border bg-background shadow-soft lg:grid lg:h-[min(500px,calc(100vh-13rem))] lg:grid-cols-[1fr_1.1fr]"
+      style={{ "--hue": item.hue } as React.CSSProperties}
     >
       <div className="flex flex-col justify-between gap-10 p-7 sm:p-9 lg:p-11">
         <h3 className="max-w-md text-3xl font-medium leading-[1.1] tracking-tight text-balance text-foreground xl:text-[2.6rem]">

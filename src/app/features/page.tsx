@@ -6,7 +6,7 @@ import { AgentCapabilitiesSection } from "@/components/agent-capabilities-sectio
 import { FeatureDetailList } from "@/components/feature-detail-list";
 import { TechStackSection } from "@/components/tech-stack-section";
 import { DeploymentSection } from "@/components/deployment-section";
-import { FeaturesImpactSection } from "@/components/features-impact-section";
+import { ImpactSection } from "@/components/impact-section";
 import { FaqSection } from "@/components/faq-section";
 import { CtaSection } from "@/components/cta-section";
 
@@ -29,7 +29,7 @@ export default function FeaturesPage() {
         <FeatureDetailList />
         <TechStackSection />
         <DeploymentSection />
-        <FeaturesImpactSection />
+        <ImpactSection />
         <FaqSection />
         <CtaSection />
       </main>

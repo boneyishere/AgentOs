@@ -17,7 +17,8 @@ export type AgentRunData = { label: string; script: RunBeat[] };
 
 const INTRO = 0.5;
 // Resting elevation of the white stage; the result glow tweens from it.
-const FRAME_SHADOW = "0 24px 70px -34px rgba(26, 26, 26, 0.22)";
+// Mirrors --elevation; spelled out because the result glow tweens from it.
+const FRAME_SHADOW = "0 1px 2px rgba(26, 26, 26, 0.04), 0 6px 18px -10px rgba(26, 26, 26, 0.1)";
 const SPARK_HUES = ["--accent", "--iris", "--rose", "--amber", "--teal"];
 const WAVE_BARS = [5, 9, 6, 12, 8, 14, 7, 11, 5, 9, 13, 6, 10, 7];
 
@@ -215,7 +216,7 @@ export function AgentRun({
         const hue = tokenRgb(NODE[beat.kind].hue);
         tl.to(
           glow,
-          { y: geo.glow, backgroundColor: `rgba(${hue.rgb}, 0.2)`, duration: 0.9, ease: "power3.inOut" },
+          { y: geo.glow, backgroundColor: `rgba(${hue.rgb}, 0.1)`, duration: 0.9, ease: "power3.inOut" },
           s
         );
         // A signal pulse rides the rail head down from the previous node.
@@ -226,7 +227,7 @@ export function AgentRun({
               y: layout[i - 1].nodeY,
               autoAlpha: 1,
               backgroundColor: hue.hex,
-              boxShadow: `0 0 0 4px rgba(${hue.rgb}, 0.14), 0 0 16px 2px rgba(${hue.rgb}, 0.75)`,
+              boxShadow: `0 0 0 3px rgba(${hue.rgb}, 0.12), 0 0 8px rgba(${hue.rgb}, 0.45)`,
             },
             { y: geo.nodeY, duration: 0.5, ease: "power2.inOut" },
             s
@@ -368,7 +369,7 @@ export function AgentRun({
             frame,
             { boxShadow: `${FRAME_SHADOW}, 0 0 0 0px rgba(${rgb}, 0)` },
             {
-              boxShadow: `0 30px 90px -32px rgba(${rgb}, 0.45), 0 0 0 1px rgba(${rgb}, 0.4)`,
+              boxShadow: `0 1px 2px rgba(${rgb}, 0.06), 0 8px 22px -12px rgba(${rgb}, 0.22), 0 0 0 1px rgba(${rgb}, 0.32)`,
               duration: 0.6,
               ease: "power2.out",
             },
@@ -410,7 +411,7 @@ export function AgentRun({
       <div
         data-glow
         aria-hidden="true"
-        className="pointer-events-none absolute -left-24 top-0 -z-10 h-56 w-56 rounded-full bg-accent/20 blur-3xl"
+        className="pointer-events-none absolute -left-24 top-0 -z-10 h-56 w-56 rounded-full bg-accent/10 blur-3xl"
       />
 
       <div className="flex items-center justify-between border-b border-border bg-background px-5 py-4 sm:px-6">

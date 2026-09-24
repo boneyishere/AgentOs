@@ -67,7 +67,7 @@ export function SchedulingVisual() {
 
 function Booking({ name }: { name: string }) {
   return (
-    <div className="flex h-[38px] items-center justify-between rounded-lg border border-iris/25 bg-[color-mix(in_srgb,var(--iris)_7%,white)] px-3 text-[12px] text-foreground shadow-[0_4px_14px_-8px_rgba(26,26,26,0.25)]">
+    <div className="flex h-[38px] items-center justify-between rounded-lg border border-iris/25 bg-[color-mix(in_srgb,var(--iris)_7%,white)] px-3 text-[12px] text-foreground shadow-soft">
       <span className="truncate">{name}</span>
       <span data-check className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-iris">
         <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />

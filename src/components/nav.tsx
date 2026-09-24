@@ -30,7 +30,7 @@ export function Nav() {
               all widths, including mobile — accepted tradeoff: this can
               cause ghosting on some mobile GPUs while the browser's own
               toolbar is animating (see the fixed-vs-sticky note above). */}
-          <div className="relative flex items-center justify-between rounded-full border border-white/50 bg-white/70 px-6 py-2.5 shadow-[0_8px_30px_rgba(26,26,26,0.08)] backdrop-blur-xl backdrop-saturate-150">
+          <div className="relative flex items-center justify-between rounded-full border border-white/50 bg-white/70 px-6 py-2.5 shadow-soft backdrop-blur-xl backdrop-saturate-150">
             <Link href="/" className="flex items-center gap-2">
               <span className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-xs font-bold text-background">
                 C
@@ -82,7 +82,7 @@ export function Nav() {
             </button>
 
             {open && (
-              <div className="absolute inset-x-0 top-full mt-2 rounded-3xl border border-white/50 bg-white px-4 py-4 shadow-[0_8px_30px_rgba(26,26,26,0.08)] md:hidden">
+              <div className="absolute inset-x-0 top-full mt-2 rounded-3xl border border-white/50 bg-white px-4 py-4 shadow-soft md:hidden">
                 <nav className="flex flex-col gap-1">
                   {NAV_LINKS.map((link) => {
                     const isActive =

@@ -124,7 +124,7 @@ D:/agent/
 | Route | File | Composition |
 | --- | --- | --- |
 | `/` | [src/app/page.tsx](src/app/page.tsx) | Nav, Hero, ClientLogos, FeatureCards, UseCasesSection, ImpactSection, IndustriesSection, StatsSection, FaqSection, CtaSection, Footer |
-| `/features` | [src/app/features/page.tsx](src/app/features/page.tsx) | Nav, PageHeader, AgentCapabilitiesSection, FeatureDetailList, TechStackSection, DeploymentSection, FeaturesImpactSection, FaqSection, CtaSection, Footer |
+| `/features` | [src/app/features/page.tsx](src/app/features/page.tsx) | Nav, PageHeader, AgentCapabilitiesSection, FeatureDetailList, TechStackSection, DeploymentSection, ImpactSection, FaqSection, CtaSection, Footer |
 | `/pricing` | [src/app/pricing/page.tsx](src/app/pricing/page.tsx) | Nav, PageHeader, PricingTiers, PricingComparisonTable, CtaSection, Footer |
 | `/resources` | [src/app/resources/page.tsx](src/app/resources/page.tsx) | Nav, PageHeader, ResourcesGrid, Footer |
 | `/resources/[slug]` | [src/app/resources/\[slug\]/page.tsx](src/app/resources/[slug]/page.tsx) | Statically generated via `generateStaticParams` from `RESOURCES` |
@@ -173,8 +173,8 @@ Tailwind colour like `text-gray-500`.**
 | `--border` | `#ebebeb` | `border-border` | Default hairline |
 | `--border-strong` | `#d4d4d8` | `border-border-strong` | Hover / emphasis border |
 
-**Ink surface — deliberately rare.** Reserved for the hero visual panel, the `/features`
-Impact band, and the CTA. Do not extend it to other sections without a
+**Ink surface — deliberately rare.** Reserved for the hero visual panel and the CTA. Do not
+extend it to other sections without a
 deliberate decision.
 
 | Token | Value | Utility |
@@ -241,13 +241,14 @@ animated background gradient, now retuned to the signal hues at low alpha.
 
 ### Surfaces and elevation
 
-The site is almost entirely flat. Depth comes from **1px borders and background steps**,
-not shadows. `shadow-sm` / `shadow-md` appear exactly once (the Technology diagram's
-hover-lift nodes). The Use Cases desktop list has one more deliberate exception: only the
-*active* item gets a card treatment at all (inactive items carry no border/background/shadow),
-using the nav pill's soft shadow recipe — `shadow-[0_8px_30px_rgba(26,26,26,0.08)]` — plus
-`-translate-y-0.5`, not the harsher default `shadow-md`. Prefer a border change over a shadow
-anywhere else.
+The site is almost entirely flat. Depth comes from **1px borders and background steps**.
+Where something genuinely lifts off the page, there is exactly **one** elevation:
+`shadow-soft` (token `--elevation`: `0 1px 2px rgba(26,26,26,.04), 0 6px 18px -10px
+rgba(26,26,26,.1)`). It's used on the nav pill and mobile menu, the Use Cases active item,
+the `AgentRun` stage, the Impact deck cards, the scheduling booking chips, and the
+Technology nodes on hover. **No other shadows** — no `shadow-md`/`lg`/`xl` and no arbitrary
+`shadow-[…]` drop shadows. The owner explicitly asked for subtle shadows only. The
+`AgentRun` result glow and rail pulse are the only coloured glows, and both are kept faint.
 
 ### Focus and accessibility
 
@@ -379,7 +380,7 @@ One container, one max width, one gutter. Every section uses it. Don't hand-roll
 **Sections** — hero, client-logos, feature-cards, use-cases-section, impact-section,
 industries-section, stats-section, faq-section, cta-section, tech-stack-section,
 agent-capabilities-section, feature-detail-list, deployment-section,
-features-impact-section, pricing-tiers, pricing-comparison-table,
+pricing-tiers, pricing-comparison-table,
 contact-form-section, resources-grid.
 
 **Reusable class recipes**
@@ -435,7 +436,7 @@ mobile menu toggle.
   across the top edge on hover. The wide Intelligence card goes two-column on `lg`. The
   card background sits on a wrapper *outside* `<Reveal>` so the grid's `bg-border` gaps
   never show as a grey slab while cards fade in.
-- **`ImpactSection`** (home) — a **sticky stacking deck** on a `bg-surface` band. Six wide
+- **`ImpactSection`** (home and `/features`) — a **sticky stacking deck** on a `bg-surface` band. Six wide
   white cards (`spotlight`, each with its own `--hue`), each split into index / label /
   headline / copy and an inset `bg-surface` panel holding its `impact-visuals/*` story. On
   `lg` (motion-safe) each card's wrapper is `sticky` at `104px + i × 16px`, so earlier

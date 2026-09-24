@@ -39,6 +39,9 @@
   --stat-violet-soft: rgba(116, 112, 232, 0.12);
   --stat-pink-soft: rgba(216, 96, 126, 0.1);
   --stat-mint-soft: rgba(31, 165, 150, 0.12);
+
+  /* the one elevation — a barely-there lift, never a dramatic drop shadow */
+  --elevation: 0 1px 2px rgba(26, 26, 26, 0.04), 0 6px 18px -10px rgba(26, 26, 26, 0.1);
 }
 
 @theme inline {
@@ -69,6 +72,8 @@
   --color-stat-violet-soft: var(--stat-violet-soft);
   --color-stat-pink-soft: var(--stat-pink-soft);
   --color-stat-mint-soft: var(--stat-mint-soft);
+
+  --shadow-soft: var(--elevation);
 
   --font-sans: var(--font-stack-sans);
   --font-heading: var(--font-stack-sans-text-heading);
