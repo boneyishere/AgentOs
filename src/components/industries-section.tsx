@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { Container } from "./container";
+import { AgentButton } from "./agent-button";
 import { Reveal } from "./reveal";
 import { gsap, ScrollTrigger } from "@/lib/motion/gsap-setup";
 import { useGsapContext } from "@/lib/motion/use-gsap-context";
@@ -115,9 +115,9 @@ const INDUSTRIES: Industry[] = [
   {
     slug: "hospitality",
     eyebrow: "Hospitality",
-    headline: "Make every guest conversation effortless.",
+    headline: "Answer the front desk at 3 AM like it's 3 PM.",
     description:
-      "Codely can handle reservations, guest questions, booking requests, and everyday customer conversations around the clock.",
+      "Codely handles reservations, late check-ins, room questions, and booking changes at any hour, in the guest's own language.",
     capabilities: ["Reservations", "Guest questions", "Booking requests", "Customer support"],
     image: "/images/industries/hospitality-v2.jpg",
   },
@@ -204,13 +204,7 @@ function IndustryCapabilities({ item }: { item: Industry }) {
 
 function IndustryCta() {
   return (
-    <Link
-      href="/contact"
-      className="group mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-foreground"
-    >
-      Book a Demo
-      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-    </Link>
+    <AgentButton href="/contact" tone="outline" className="mt-8" />
   );
 }
 

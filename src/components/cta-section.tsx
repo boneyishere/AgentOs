@@ -1,37 +1,34 @@
 "use client";
 
-import Link from "next/link";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
 import { TextReveal } from "@/lib/motion/text-reveal";
 import Orb from "./Orb";
 import { Magnetic } from "@/lib/motion/magnetic";
+import { AgentButton } from "./agent-button";
 
 export function CtaSection() {
   return (
-    <section id="cta" className="relative overflow-hidden border-b border-border bg-ink">
-      <div className="absolute inset-0" aria-hidden="true">
-        <Orb hoverIntensity={0.5} rotateOnHover={true} hue={0} forceHoverState={false} />
-      </div>
-      <Container className="pointer-events-none relative py-24 text-center sm:py-32">
-        <div className="relative mx-auto max-w-2xl px-8 py-10 sm:px-14 sm:py-14">
-          <TextReveal className="mx-auto text-4xl font-medium tracking-tight text-white sm:text-5xl">
-            Put an AI agent to work.
-          </TextReveal>
-          <Reveal delay={0.1}>
-            <p className="mx-auto mt-5 max-w-md text-lg text-white/70">
-              Tell us what your business handles today. We&apos;ll show you where
-              Codely can help.
-            </p>
-            <Magnetic className="pointer-events-auto mt-9">
-              <Link
-                href="/contact"
-                className="inline-flex h-[50px] items-center rounded-full bg-white px-6 text-base font-medium text-foreground transition-opacity hover:opacity-85"
-              >
-                Book a Demo
-              </Link>
-            </Magnetic>
-          </Reveal>
+    <section id="cta" className="border-b border-border">
+      <Container className="py-20 sm:py-28">
+        <div className="relative isolate flex h-[min(620px,calc(100vh-10rem))] min-h-[440px] items-center justify-center overflow-hidden rounded-2xl bg-ink shadow-soft">
+          <div className="absolute inset-0 -z-10" aria-hidden="true">
+            <Orb hoverIntensity={0.5} rotateOnHover={true} hue={0} forceHoverState={false} />
+          </div>
+          <div className="pointer-events-none relative mx-auto max-w-2xl px-8 text-center">
+            <TextReveal className="type-section mx-auto font-medium text-white">
+              Your agent could be answering by Friday.
+            </TextReveal>
+            <Reveal delay={0.1}>
+              <p className="type-lead mx-auto mt-5 max-w-md text-white/70">
+                Tell us what your phones and inbox look like today. We&apos;ll show you what
+                the agent would take on first.
+              </p>
+              <Magnetic className="pointer-events-auto mt-9">
+                <AgentButton href="/contact" tone="light" />
+              </Magnetic>
+            </Reveal>
+          </div>
         </div>
       </Container>
     </section>

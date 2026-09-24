@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "./container";
+import { AgentButton } from "./agent-button";
 
 const COLUMNS = [
   {
@@ -32,15 +33,10 @@ export function Footer() {
               <span className="text-lg font-semibold tracking-tight">Codely</span>
             </Link>
             <p className="mt-3 max-w-xs text-sm text-foreground-muted">
-              AI agents for the conversations that move your business forward —
-              voice-first, chat-supported.
+              Voice and chat agents that pick up, look things up, and get the job done for
+              your customers.
             </p>
-            <Link
-              href="/contact"
-              className="mt-6 inline-flex h-[50px] w-fit items-center rounded-full bg-foreground px-5 text-base font-medium text-background transition-opacity hover:opacity-85"
-            >
-              Book a Demo
-            </Link>
+            <AgentButton href="/contact" className="mt-6" />
           </div>
 
           {COLUMNS.map((column) => (

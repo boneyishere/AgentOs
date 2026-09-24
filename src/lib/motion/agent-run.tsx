@@ -1,7 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AudioLines, Check, Mic, Sparkles, Zap, type LucideIcon } from "lucide-react";
+import { Check } from "lucide-react";
+import {
+  BotIcon,
+  MicIcon,
+  SparkleIcon,
+  WorkflowIcon,
+  type AgentIcon,
+} from "@/components/icons/agent-icons";
+
+const ResultIcon: AgentIcon = ({ className }) => (
+  <Check className={className} strokeWidth={2.25} aria-hidden="true" />
+);
 import { gsap, SplitText } from "./gsap-setup";
 import { useGsapContext } from "./use-gsap-context";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -44,12 +55,12 @@ export function getRunSeconds(script: RunBeat[]) {
 }
 
 // Each beat kind owns one muted signal hue.
-const NODE: Record<RunBeat["kind"], { icon: LucideIcon; eyebrow: string; hue: string }> = {
-  customer: { icon: Mic, eyebrow: "Customer", hue: "--iris" },
-  understanding: { icon: Sparkles, eyebrow: "Understanding", hue: "--rose" },
-  action: { icon: Zap, eyebrow: "Action", hue: "--amber" },
-  agent: { icon: AudioLines, eyebrow: "AI Agent", hue: "--accent" },
-  result: { icon: Check, eyebrow: "Result", hue: "--teal" },
+const NODE: Record<RunBeat["kind"], { icon: AgentIcon; eyebrow: string; hue: string }> = {
+  customer: { icon: MicIcon, eyebrow: "Customer", hue: "--iris" },
+  understanding: { icon: SparkleIcon, eyebrow: "Understanding", hue: "--rose" },
+  action: { icon: WorkflowIcon, eyebrow: "Action", hue: "--amber" },
+  agent: { icon: BotIcon, eyebrow: "AI Agent", hue: "--accent" },
+  result: { icon: ResultIcon, eyebrow: "Result", hue: "--teal" },
 };
 
 function tokenRgb(token: string) {
@@ -229,7 +240,7 @@ export function AgentRun({
               backgroundColor: hue.hex,
               boxShadow: `0 0 0 3px rgba(${hue.rgb}, 0.12), 0 0 8px rgba(${hue.rgb}, 0.45)`,
             },
-            { y: geo.nodeY, duration: 0.5, ease: "power2.inOut" },
+            { y: geo.nodeY, duration: 0.5, ease: "power2.inOut", immediateRender: false },
             s
           );
           tl.to(pulse, { autoAlpha: 0, scale: 2.2, duration: 0.3, ease: "power2.out" }, s + 0.5);
@@ -238,6 +249,8 @@ export function AgentRun({
         tl.fromTo(node, { scale: 0.3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.55, ease: "back.out(2.2)" }, s + 0.1);
         tl.to(q(node, "[data-node-on]"), { opacity: 1, duration: 0.3 }, s + 0.35);
         tl.to(node, { color: beat.kind === "result" ? "#ffffff" : hue.hex, duration: 0.3 }, s + 0.35);
+        // Fires the node icon's own animation exactly as the node ignites.
+        tl.set(node, { attr: { "data-icon-active": "true" } }, s + 0.35);
         tl.fromTo(
           q(node, "[data-burst]"),
           { scale: 1, opacity: 0.8 },
@@ -497,7 +510,7 @@ function Beat({ beat }: { beat: RunBeat }) {
             ))}
           </>
         )}
-        <Icon className="relative h-3.5 w-3.5" />
+        <Icon className="relative !h-3.5 !w-3.5" />
       </span>
 
       <div className="min-w-0 pt-1">

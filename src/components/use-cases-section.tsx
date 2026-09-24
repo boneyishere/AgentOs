@@ -2,27 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  CalendarCheck,
-  LifeBuoy,
-  Phone,
-  RefreshCw,
-  TrendingUp,
-  type LucideIcon,
-} from "lucide-react";
+  CalendarIcon,
+  ChartIcon,
+  LifebuoyIcon,
+  LoopIcon,
+  PhoneIcon,
+  type AgentIcon,
+} from "./icons/agent-icons";
 import { Container } from "./container";
-import { Reveal } from "./reveal";
+import { SectionHeading } from "./section-heading";
 import { AgentRun, getRunSeconds, type RunBeat } from "@/lib/motion/agent-run";
-import { TextReveal } from "@/lib/motion/text-reveal";
 
 const USE_CASES: {
   label: string;
   description: string;
-  icon: LucideIcon;
+  icon: AgentIcon;
   script: RunBeat[];
 }[] = [
   {
     label: "AI Receptionist",
-    icon: Phone,
+    icon: PhoneIcon,
     description:
       "Handles incoming calls, understands requests, and routes them where they need to go.",
     script: [
@@ -41,13 +40,13 @@ const USE_CASES: {
   },
   {
     label: "Sales & Lead Qualification",
-    icon: TrendingUp,
+    icon: ChartIcon,
     description:
       "Qualifies inbound leads with the right questions and scores them automatically.",
     script: [
       { kind: "customer", text: "I'm interested in your enterprise plan." },
       { kind: "understanding", tags: ["Sales intent", "Enterprise"], confidence: 0.94 },
-      { kind: "agent", text: "Great — how many seats, and what's your timeline?" },
+      { kind: "agent", text: "Great. How many seats, and when do you want to go live?" },
       { kind: "customer", text: "Around 50 seats, ideally live next quarter." },
       {
         kind: "action",
@@ -60,7 +59,7 @@ const USE_CASES: {
   },
   {
     label: "Customer Support",
-    icon: LifeBuoy,
+    icon: LifebuoyIcon,
     description: "Resolves common questions instantly using your knowledge base.",
     script: [
       { kind: "customer", text: "My order hasn't arrived yet." },
@@ -71,13 +70,13 @@ const USE_CASES: {
         system: "Knowledge base",
         steps: ["Find order #4821", "Check carrier status", "Estimate delivery"],
       },
-      { kind: "agent", text: "Your order shipped yesterday — it's due tomorrow by 6 PM." },
-      { kind: "result", label: "Issue resolved", detail: "No human needed · 38s" },
+      { kind: "agent", text: "It shipped yesterday and arrives tomorrow by 6 PM." },
+      { kind: "result", label: "Issue resolved", detail: "Resolved in 38 seconds" },
     ],
   },
   {
     label: "Appointment Booking",
-    icon: CalendarCheck,
+    icon: CalendarIcon,
     description: "Checks availability and confirms bookings without back-and-forth.",
     script: [
       { kind: "customer", text: "Can I book a visit for Friday?" },
@@ -88,14 +87,14 @@ const USE_CASES: {
         system: "Calendar",
         steps: ["Friday · fully booked", "Next opening · Sat 11 AM"],
       },
-      { kind: "agent", text: "Friday's full, but I have Saturday at 11 AM — does that work?" },
+      { kind: "agent", text: "Friday's full, but I have Saturday at 11 AM. Does that work?" },
       { kind: "customer", text: "Saturday works great." },
       { kind: "result", label: "Appointment confirmed", detail: "Sat 11:00 · invite sent" },
     ],
   },
   {
     label: "Follow-ups",
-    icon: RefreshCw,
+    icon: LoopIcon,
     description: "Re-engages missed calls and stale leads automatically.",
     script: [
       { kind: "understanding", tags: ["Missed call", "Warm lead"], confidence: 0.91 },
@@ -105,7 +104,7 @@ const USE_CASES: {
         system: "SMS",
         steps: ["Draft message", "Send to caller"],
       },
-      { kind: "customer", text: "Thanks for reaching back out — yes, still interested." },
+      { kind: "customer", text: "Thanks for following up. Yes, still interested." },
       { kind: "agent", text: "Great! Want me to schedule a quick call this week?" },
       { kind: "result", label: "Call scheduled", detail: "Thu 2 PM · added to calendar" },
     ],
@@ -185,18 +184,10 @@ export function UseCasesSection() {
   return (
     <section ref={sectionRef} id="use-cases" className="section-light border-b border-border">
       <Container className="py-20 sm:py-28">
-        <div className="max-w-xl">
-          <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
-            Give your AI a job. Let it get to work.
-          </TextReveal>
-          <Reveal delay={0.1}>
-            <p className="mt-4 max-w-lg text-foreground-muted">
-              From answering the phone to following up with leads, Codely can
-              take on the conversations and tasks your team handles every
-              day.
-            </p>
-          </Reveal>
-        </div>
+        <SectionHeading
+          title="Five jobs it can take off your team today."
+          subtitle="Pick one and watch a real conversation play out, from the first ring to the thing that actually gets done."
+        />
 
         <div
           ref={pillScrollerRef}
@@ -229,6 +220,7 @@ export function UseCasesSection() {
               <li key={label}>
                 <button
                   type="button"
+                  data-icon-active={i === active}
                   onMouseEnter={() => setActive(i)}
                   onClick={() => setActive(i)}
                   className={`relative flex w-full flex-col gap-1.5 overflow-hidden rounded-2xl px-5 py-4 text-left transition-all duration-200 ${
@@ -239,8 +231,8 @@ export function UseCasesSection() {
                 >
                   <div className="flex items-center gap-3">
                     <Icon
-                      className={`h-4 w-4 shrink-0 transition-transform duration-300 ${
-                        i === active ? "scale-110 text-accent" : "scale-100 text-foreground-muted"
+                      className={`transition-colors duration-300 ${
+                        i === active ? "text-accent" : "text-foreground-muted"
                       }`}
                     />
                     <span

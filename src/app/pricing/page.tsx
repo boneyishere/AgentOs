@@ -9,7 +9,7 @@ import { CtaSection } from "@/components/cta-section";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Simple, transparent pricing for Codely's AI voice and chat agent platform — from a solo business testing its first AI agent to custom, high-volume deployments.",
+    "Codely pricing, from a solo business trying its first AI agent to custom, high-volume deployments. Pay for minutes and conversations, nothing hidden.",
 };
 
 export default function PricingPage() {
@@ -18,7 +18,7 @@ export default function PricingPage() {
       <Nav />
       <main className="flex-1">
         <PageHeader
-          title="Simple pricing that scales with you."
+          title="Pay for the calls it takes, not the seats it fills."
           description="Start with call minutes and chat conversations, then add voice channels and integrations as your business grows."
         />
         <PricingTiers />

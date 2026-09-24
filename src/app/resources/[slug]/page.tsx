@@ -66,7 +66,7 @@ export default async function ResourceDetailPage({
               <TextReveal
                 as="h1"
                 playOn="mount"
-                className="mt-6 text-4xl font-medium tracking-tight sm:text-5xl"
+                className="type-page mt-6 font-medium"
               >
                 {resource.title}
               </TextReveal>

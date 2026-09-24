@@ -13,7 +13,7 @@ import { CtaSection } from "@/components/cta-section";
 export const metadata: Metadata = {
   title: "Features",
   description:
-    "Everything your AI agent needs to do real work — from natural conversations to business actions, across voice, web, and messaging.",
+    "How a Codely agent talks, looks things up, remembers customers, and gets work done across phone, web, and messaging.",
 };
 
 export default function FeaturesPage() {
@@ -22,8 +22,8 @@ export default function FeaturesPage() {
       <Nav />
       <main className="flex-1">
         <PageHeader
-          title="Everything your AI agent needs to do real work."
-          description="From natural conversations to business actions, Codely gives AI agents the capabilities, tools, and context they need to work across your business."
+          title="What your agent can do, and how it does it."
+          description="The voice, the knowledge, the memory, and the hands. Every part of a Codely agent, explained without the jargon."
         />
         <AgentCapabilitiesSection />
         <FeatureDetailList />

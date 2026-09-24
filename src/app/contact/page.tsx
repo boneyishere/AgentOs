@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { PageHeader } from "@/components/page-header";
-import { ContactFormSection } from "@/components/contact-form-section";
+import { LeadIntake } from "@/components/lead-intake";
 
 export const metadata: Metadata = {
-  title: "Contact Sales",
+  title: "Get your agent",
   description:
-    "Tell us what your business handles today, and we'll show you where a Codely AI agent can help.",
+    "Answer a few quick questions about your business and we'll build a first version of your Codely agent within one business day.",
 };
 
 export default function ContactPage() {
@@ -16,10 +16,10 @@ export default function ContactPage() {
       <Nav />
       <main className="flex-1">
         <PageHeader
-          title="Let's talk about your business."
-          description="Tell us what you're trying to solve — we'll show you how Codely can help, and set up a personalized walkthrough."
+          title="Tell us about your business. We'll build your agent."
+          description="A few quick questions. Within one business day you'll hear a first version of your agent, built on your answers, handling your kind of call."
         />
-        <ContactFormSection />
+        <LeadIntake />
       </main>
       <Footer />
     </>

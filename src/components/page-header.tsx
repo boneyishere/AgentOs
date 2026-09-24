@@ -16,7 +16,7 @@ export function PageHeader({
         <TextReveal
           as="h1"
           playOn="mount"
-          className="max-w-2xl text-4xl font-medium tracking-tight sm:text-5xl"
+          className="type-page max-w-3xl font-medium"
         >
           {title}
         </TextReveal>

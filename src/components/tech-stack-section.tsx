@@ -16,7 +16,7 @@ import {
 import { Boxes, Cloud, Hash, LucideIcon, Sparkles, Webhook } from "lucide-react";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
-import { TextReveal } from "@/lib/motion/text-reveal";
+import { SectionHeading } from "./section-heading";
 import { gsap } from "@/lib/motion/gsap-setup";
 import { useGsapContext } from "@/lib/motion/use-gsap-context";
 
@@ -64,7 +64,7 @@ function LogoChip({ item }: { item: Logo }) {
   return (
     <div
       data-chip
-      className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-soft"
+      className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3.5 transition-colors duration-200 hover:border-border-strong"
     >
       {item.kind === "brand" ? (
         <item.Logo size={22} color={item.color} />
@@ -161,16 +161,10 @@ export function TechStackSection() {
   return (
     <section className="border-b border-border bg-surface">
       <Container className="py-20 sm:py-28">
-        <div className="max-w-xl">
-          <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
-            Built on infrastructure you can trust
-          </TextReveal>
-          <Reveal delay={0.1}>
-            <p className="mt-4 text-foreground-muted">
-              Real providers and real integrations — not a black box.
-            </p>
-          </Reveal>
-        </div>
+        <SectionHeading
+          title="What your agent runs on."
+          subtitle="The models, voices, and integrations behind every conversation, all in plain sight."
+        />
 
         <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <LogoBentoCard
@@ -187,7 +181,7 @@ export function TechStackSection() {
           />
           <LogoBentoCard
             headline="Connects to what you already use"
-            subtext="No new systems to learn — agents plug straight into your calendar, CRM, and existing tools."
+            subtext="Agents plug straight into your calendar, CRM, and existing tools, with nothing new for your team to learn."
             items={INTEGRATIONS}
             className="lg:col-span-2"
           />

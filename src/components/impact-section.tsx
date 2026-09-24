@@ -2,8 +2,7 @@
 
 import type { ComponentType } from "react";
 import { Container } from "./container";
-import { Reveal } from "./reveal";
-import { TextReveal } from "@/lib/motion/text-reveal";
+import { SectionHeading } from "./section-heading";
 import { gsap } from "@/lib/motion/gsap-setup";
 import { useGsapContext } from "@/lib/motion/use-gsap-context";
 import { MissedCallsVisual } from "./impact-visuals/missed-calls-visual";
@@ -40,7 +39,7 @@ const IMPACTS: {
   {
     headline: "Reduced compliance and quality risk",
     description:
-      "Every conversation follows the same instructions and escalation rules — no inconsistent answers.",
+      "Every conversation follows the same instructions and escalation rules, so answers stay consistent.",
     hue: "var(--teal)",
     Visual: ComplianceVisual,
   },
@@ -73,7 +72,7 @@ function ImpactCard({ item }: { item: (typeof IMPACTS)[number] }) {
       style={{ "--hue": item.hue } as React.CSSProperties}
     >
       <div className="flex flex-col justify-between gap-10 p-7 sm:p-9 lg:p-11">
-        <h3 className="max-w-md text-3xl font-medium leading-[1.1] tracking-tight text-balance text-foreground xl:text-[2.6rem]">
+        <h3 className="max-w-md text-[1.5rem] font-medium leading-[1.18] tracking-tight text-balance text-foreground sm:text-[1.625rem] xl:text-[1.75rem]">
           {item.headline}
         </h3>
         <p className="max-w-sm text-foreground-muted">{item.description}</p>
@@ -130,17 +129,10 @@ export function ImpactSection() {
       style={{ "--light": "var(--iris)" } as React.CSSProperties}
     >
       <Container className="relative py-20 sm:py-28">
-        <div className="max-w-xl">
-          <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
-            Take the busywork off your team&apos;s plate.
-          </TextReveal>
-          <Reveal delay={0.1}>
-            <p className="mt-4 max-w-lg text-foreground-muted">
-              Let AI handle the conversations that consume your team&apos;s time, while your
-              people focus on the customers and work that need them most.
-            </p>
-          </Reveal>
-        </div>
+        <SectionHeading
+          title="Your team gets its day back."
+          subtitle="The agent absorbs the repetitive calls and admin, so your people spend their time on the customers who need a human."
+        />
 
         <div ref={deckRef} className="mt-14 lg:mt-16">
           {IMPACTS.map((item, i) => (

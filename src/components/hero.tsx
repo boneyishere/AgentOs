@@ -9,6 +9,8 @@ import { useScrollTimeline } from "@/lib/motion/scroll-timeline";
 import { useTilt } from "@/lib/motion/use-tilt";
 import { Magnetic } from "@/lib/motion/magnetic";
 import Ferrofluid from "./Ferrofluid";
+import { AgentButton } from "./agent-button";
+import { ScrambleText } from "@/lib/motion/scramble-text";
 
 export function Hero() {
   const sectionRef = useScrollTimeline<HTMLElement>(
@@ -32,29 +34,23 @@ export function Hero() {
               delay={0.1}
               className="max-w-xl text-5xl font-medium leading-[1.12] tracking-[-0.5px] text-balance sm:text-6xl lg:text-[4.25rem] lg:tracking-[-2px]"
             >
-              Meet the <span className="text-accent">AI</span> that works for you.
+              The <ScrambleText text="AI" className="text-accent" /> front desk that never clocks out.
             </TextReveal>
 
             <p className="mt-7 max-w-md text-lg leading-8 text-foreground-muted">
-              Codely gives businesses AI agents that can talk, understand,
-              remember, and act across real customer conversations.
+              Codely answers your calls and chats, remembers every customer, and books,
+              updates, and follows up inside the tools you already use.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-6">
               <Magnetic>
-                <Link
-                  href="/contact"
-                  className="inline-flex h-[50px] items-center gap-2 rounded-full bg-foreground px-5 text-base font-medium text-background transition-opacity hover:opacity-85"
-                >
-                  Book a Demo
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+                <AgentButton href="/contact" />
               </Magnetic>
               <Link
                 href="/features"
                 className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground"
               >
-                Explore Features
+                See how it works
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>

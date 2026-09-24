@@ -1,6 +1,6 @@
 import { Container } from "./container";
 import { Reveal } from "./reveal";
-import { TextReveal } from "@/lib/motion/text-reveal";
+import { SectionHeading } from "./section-heading";
 import { VoiceVisual } from "./feature-visuals/voice-visual";
 import { ChatVisual } from "./feature-visuals/chat-visual";
 import { KnowledgeVisual } from "./feature-visuals/knowledge-visual";
@@ -12,7 +12,7 @@ const FEATURES = [
   {
     title: "AI Voice Agents",
     description:
-      "Answer and make calls in natural speech — real-time conversations that sound human, not scripted.",
+      "Takes and places calls in a natural voice, replying in under a second.",
     Visual: VoiceVisual,
     hue: "var(--accent)",
     span: "sm:col-span-2 lg:col-span-4",
@@ -44,7 +44,7 @@ const FEATURES = [
   {
     title: "Actions & Integrations",
     description:
-      "Agents don't just respond — they check calendars, update CRMs, and trigger workflows.",
+      "Checks calendars, updates your CRM, and starts workflows while the customer is still on the line.",
     Visual: ActionsVisual,
     hue: "var(--teal)",
     span: "sm:col-span-2 lg:col-span-2",
@@ -64,18 +64,10 @@ export function FeatureCards() {
   return (
     <section id="features" className="section-light border-b border-border bg-background">
       <Container className="relative py-20 sm:py-28">
-        <div className="max-w-xl">
-          <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
-            Not just AI that talks. AI that works.
-          </TextReveal>
-          <Reveal delay={0.1}>
-            <p className="mt-4 max-w-lg text-foreground-muted">
-              Codely gives your AI the ability to understand your business,
-              remember your customers, communicate naturally, and take
-              action, turning conversations into real work.
-            </p>
-          </Reveal>
-        </div>
+        <SectionHeading
+          title="Six things your agent does from day one."
+          subtitle="It talks, reads your docs, remembers who it spoke to, and acts inside your systems. Here is what each of those looks like."
+        />
 
         <div className="mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-6">
           {FEATURES.map(({ title, description, Visual, span, wide, hue }, i) => (

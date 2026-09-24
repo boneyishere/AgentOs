@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Container } from "./container";
+import { AgentButton } from "./agent-button";
 import { Reveal } from "./reveal";
-import { TextReveal } from "@/lib/motion/text-reveal";
+import { SectionHeading } from "./section-heading";
 
 const FAQS = [
   {
     q: "Will the AI sound like a real person?",
-    a: "Codely's AI is designed for natural conversations. It can understand what customers are saying, respond in context, ask follow up questions, and keep the conversation moving naturally.",
+    a: "Close enough that most callers just talk to it normally. It handles interruptions, asks follow up questions, and keeps a natural pace, and it will always say it's an AI if someone asks.",
   },
   {
     q: "Can it actually understand my business?",
@@ -26,7 +26,7 @@ const FAQS = [
   },
   {
     q: "Can it work with the tools we already use?",
-    a: "Codely can connect with the systems and tools your business relies on, so your AI can work as part of your existing workflow rather than sitting separately from it.",
+    a: "Yes. It connects to calendars, CRMs, helpdesks, booking systems, and custom APIs, so it works inside your existing workflow instead of beside it.",
   },
   {
     q: "Can you build something specifically for my business?",
@@ -34,7 +34,7 @@ const FAQS = [
   },
   {
     q: "How long does it take to get started?",
-    a: "It depends on the complexity of the workflow, the systems involved, and what you want the AI to handle. We'll map out the requirements with you before getting started.",
+    a: "A simple receptionist setup can be live within a week. Agents that book into your calendar or update your CRM usually take two to three, depending on the systems involved.",
   },
   {
     q: "Do I need to know anything about AI?",
@@ -94,11 +94,12 @@ export function FaqSection() {
   return (
     <section className="border-b border-border">
       <Container className="py-20 sm:py-28">
-        <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
-          Frequently asked questions
-        </TextReveal>
+        <SectionHeading
+          title="Questions we hear on every first call."
+          subtitle="Straight answers on how it sounds, what it can do, how long setup takes, and what it costs."
+        />
 
-        <div className="mt-10 grid grid-cols-1 border-t border-border sm:grid-cols-2 sm:divide-x sm:divide-border">
+        <div className="mt-12 grid grid-cols-1 border-t border-border sm:grid-cols-2 sm:divide-x sm:divide-border">
           {columns.map((column, colIndex) => (
             <div
               key={colIndex}
@@ -127,20 +128,16 @@ export function FaqSection() {
           <div className="mt-14 flex flex-col items-start justify-between gap-5 rounded-2xl border border-border bg-surface p-6 sm:flex-row sm:items-center sm:p-7">
             <div>
               <p className="text-lg font-medium tracking-tight">
-                Still have questions?
+                Something we didn&apos;t cover?
               </p>
               <p className="mt-1.5 max-w-sm text-sm text-foreground-muted">
-                Can&apos;t find the answer you&apos;re looking for? Our team is
-                happy to walk through your specific use case.
+                Tell us how your front line works today and we&apos;ll show you exactly where
+                an agent fits.
               </p>
             </div>
-            <Link
-              href="/contact"
-              className="group inline-flex h-[50px] shrink-0 items-center gap-2 rounded-full border border-border px-5 text-base font-medium text-foreground transition-colors hover:border-border-strong"
-            >
-              Contact us
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-            </Link>
+            <AgentButton href="/contact" tone="outline">
+              Talk to our team
+            </AgentButton>
           </div>
         </Reveal>
       </Container>

@@ -7,7 +7,7 @@ import { useGsapContext } from "./use-gsap-context";
 /** Pulls its child toward the cursor while hovered, then springs back. */
 export function Magnetic({
   children,
-  strength = 0.35,
+  strength = 0.12,
   className = "",
 }: {
   children: ReactNode;
@@ -19,8 +19,8 @@ export function Magnetic({
       if (reducedMotion) return;
       if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
-      const xTo = gsap.quickTo(el, "x", { duration: 0.8, ease: "elastic.out(1, 0.35)" });
-      const yTo = gsap.quickTo(el, "y", { duration: 0.8, ease: "elastic.out(1, 0.35)" });
+      const xTo = gsap.quickTo(el, "x", { duration: 0.6, ease: "power3.out" });
+      const yTo = gsap.quickTo(el, "y", { duration: 0.6, ease: "power3.out" });
       let rect = el.getBoundingClientRect();
 
       const enter = () => {

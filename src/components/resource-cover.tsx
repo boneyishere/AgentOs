@@ -22,10 +22,9 @@ export function ResourceCover({
     <div className={`relative overflow-hidden bg-surface ${className}`}>
       <div
         aria-hidden="true"
-        className="absolute inset-0 animate-[stat-gradient-sweep_11s_ease-in-out_infinite] opacity-90"
+        className="absolute inset-0 opacity-90"
         style={{
           backgroundImage: `linear-gradient(120deg, ${COVER_GRADIENTS[color]}, transparent 60%)`,
-          backgroundSize: "200% 200%",
         }}
       />
       <div className="absolute inset-0 flex items-center justify-center">

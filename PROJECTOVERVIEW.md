@@ -19,7 +19,7 @@ real actions (book calendars, update CRMs, trigger workflows).
 
 It is a **static marketing site** — there is no backend, no database, no auth, and no API
 routes. All content is hard-coded in TypeScript constants inside components, or in
-[src/content/resources.ts](src/content/resources.ts). The contact form is client-side only
+[src/content/resources.ts](src/content/resources.ts). The lead intake on `/contact` is client-side only
 (sets a `submitted` state, posts nowhere). Client logos, metrics, and case studies are
 illustrative placeholders, not real customer data.
 
@@ -128,7 +128,7 @@ D:/agent/
 | `/pricing` | [src/app/pricing/page.tsx](src/app/pricing/page.tsx) | Nav, PageHeader, PricingTiers, PricingComparisonTable, CtaSection, Footer |
 | `/resources` | [src/app/resources/page.tsx](src/app/resources/page.tsx) | Nav, PageHeader, ResourcesGrid, Footer |
 | `/resources/[slug]` | [src/app/resources/\[slug\]/page.tsx](src/app/resources/[slug]/page.tsx) | Statically generated via `generateStaticParams` from `RESOURCES` |
-| `/contact` | [src/app/contact/page.tsx](src/app/contact/page.tsx) | Nav, PageHeader, ContactFormSection, Footer |
+| `/contact` | [src/app/contact/page.tsx](src/app/contact/page.tsx) | Nav, PageHeader, LeadIntake, Footer |
 | 404 | [src/app/not-found.tsx](src/app/not-found.tsx) | Nav, centred 404 block, Footer |
 
 **Page shell pattern** — every page repeats this exactly:
@@ -146,7 +146,8 @@ metadata, `min-h-full flex flex-col`, and mounts the two global motion singleton
 `<SmoothScroll />` and `<SpotlightTracker />`). Keep it that way when adding routes.
 
 **Metadata** — root layout sets `metadataBase: https://codely.ai`, a title template
-`"%s — Codely"`, plus OpenGraph and Twitter cards. Each route exports its own `metadata`
+`"%s | Codely"` (default "Codely | The AI front desk that never clocks out"), plus
+OpenGraph and Twitter cards. Each route exports its own `metadata`
 with a short `title` (the template adds the brand) and a `description`. `sitemap.ts` and
 `robots.ts` both hard-code `https://codely.ai`.
 
@@ -229,15 +230,17 @@ runtime rather than hard-coding it.
   `--mx`/`--my`. Used on feature cards, stat cards, pricing tiers, resource cards, and
   capability cards.
 
-**Stat highlights — the `StatsSection` proof-stats cards only.** The existing per-card
-animated background gradient, now retuned to the signal hues at low alpha.
+**Soft cover tints: `ResourceCover` only.** Four static low-alpha tints (`--stat-*-soft`,
+named for their original use) give each resource card's placeholder image a hue. They're
+static now: the old sweeping gradient animation was removed as a generic template move.
+Stat cards no longer use them; each stat card just carries its hue as a spotlight and a dot.
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `--stat-indigo-soft` | `rgba(47,105,241,0.12)` | Card 1 gradient |
-| `--stat-violet-soft` | `rgba(116,112,232,0.12)` | Card 2 gradient |
-| `--stat-pink-soft` | `rgba(216,96,126,0.1)` | Card 3 gradient |
-| `--stat-mint-soft` | `rgba(31,165,150,0.12)` | Card 4 gradient |
+| Token | Value |
+| --- | --- |
+| `--stat-indigo-soft` | `rgba(47,105,241,0.12)` |
+| `--stat-violet-soft` | `rgba(116,112,232,0.12)` |
+| `--stat-pink-soft` | `rgba(216,96,126,0.1)` |
+| `--stat-mint-soft` | `rgba(31,165,150,0.12)` |
 
 ### Surfaces and elevation
 
@@ -284,10 +287,12 @@ exposed as CSS variables on `<html>`. There is no monospace font in the system.
 | Role | Classes |
 | --- | --- |
 | Hero `h1` | `text-5xl sm:text-6xl lg:text-[4.25rem]` + `font-medium leading-[1.02] tracking-tight text-balance` + `max-w-xl` |
-| Page `h1` (PageHeader) | `text-4xl sm:text-5xl` + `font-medium tracking-tight` + `max-w-2xl` |
-| Section `h2` | `text-3xl sm:text-4xl` + `font-medium tracking-tight` — always via `<TextReveal>` |
+| Page `h1` (PageHeader, article, 404) | `type-page` (36 → 42 → **48px**, balanced wrap) + `font-medium` + `max-w-3xl` |
+| Section `h2` | `type-section` (28 → 34 → **40px**, balanced wrap) + `font-medium`, always via `<TextReveal>`, rendered by `<SectionHeading>` at `max-w-[36rem]`. Also the CTA headline. |
+| Section subtext | `type-lead` (16 → 17px) + `mt-5 max-w-[32rem] text-foreground-muted` (required, via `<SectionHeading>`) |
+| Large card `h3` (Impact deck) | `text-[1.5rem] sm:text-[1.625rem] xl:text-[1.75rem]`, always below the 40px section headline. Stat numbers are `text-[2.5rem]`. |
 | Card / feature `h3` | `text-base` or `text-lg` + `font-medium` |
-| Lead paragraph | `text-lg text-foreground-muted` (hero adds `leading-8`), `max-w-md` / `max-w-lg` |
+| Lead paragraph (hero / PageHeader) | `text-lg text-foreground-muted` (hero adds `leading-8`), `max-w-md` / `max-w-lg` |
 | Body / UI text | `text-sm` — the workhorse size (~53 uses) |
 | Captions, metadata, in-visual labels | `text-xs text-foreground-muted`, sentence case |
 | Price | `text-4xl font-medium tracking-tight` |
@@ -298,6 +303,14 @@ exposed as CSS variables on `<html>`. There is no monospace font in the system.
   `font-semibold` only for the wordmark and placeholder logos; `font-bold` only inside the
   small "C" logo mark. **Never use `font-bold` on headings.**
 - **Tracking:** `tracking-tight` on every heading and on the wordmark.
+- **Copy voice.** Plain, concrete, specific.
+  - No em or en dashes anywhere in user-facing copy, including metadata; the title template
+    is `%s | Codely`.
+  - No stock SaaS/AI phrasing: "not just X, Y", "seamless", "effortless", "unlock",
+    "trusted by teams…", "put AI to work", "book a demo".
+  - Prefer real details: times, numbers, what the agent actually did.
+- **No generic motion.** No hover lifts (`-translate-y` on hover), no sweeping gradient
+  washes, no elastic magnetic overshoot. Motion must tell part of the product story.
 - **No template micro-texture.** The owner rejected the "generic AI template" look, whose
   signature is a layer of tiny decorative labels. Don't add any of these:
   - eyebrow / kicker text above a headline
@@ -310,9 +323,16 @@ exposed as CSS variables on `<html>`. There is no monospace font in the system.
   Labels that carry real information are sentence case, `text-xs text-foreground-muted`;
   a structural subheading is `text-sm`/`text-base font-medium text-foreground`. Status
   badges that *are* content (e.g. "Answered by AI" in a call log) are fine.
-- **Section heading block** is always `max-w-xl` → `<TextReveal className="text-3xl
-  font-medium tracking-tight sm:text-4xl">` → `<Reveal delay={0.1}><p className="mt-4
-  max-w-lg text-foreground-muted">`, left-aligned, with nothing above the headline.
+- **Section heading block** is always
+  `<SectionHeading title="…" subtitle="…" />`
+  ([section-heading.tsx](src/components/section-heading.tsx)). Never hand-roll it.
+  - Every section's headline shares one container width (`max-w-[36rem]`, `type-section`
+    with balanced wrap), with the subtitle beneath (`type-lead mt-5 max-w-[32rem]`).
+  - `subtitle` is required: no section ships a bare headline.
+  - Left-aligned, with nothing above the headline.
+  - The only exception is the centred headline in the CTA ink card.
+  - The `type-*` utilities live in `globals.css` (`@utility`). Change the scale there,
+    never per section.
 - **Measure:** headings cap at `max-w-xl` / `max-w-2xl`, body at `max-w-md` / `max-w-lg` /
   `max-w-xs`. Long lines are never allowed to run the full 1400px container.
 - **Colour:** headings `text-foreground`, supporting copy `text-foreground-muted`. That
@@ -342,7 +362,7 @@ One container, one max width, one gutter. Every section uses it. Don't hand-roll
 
 - **Standard section padding:** `py-20 sm:py-28` (the dominant rhythm, 10 uses).
 - **Compact:** `py-16 sm:py-20` (PageHeader, article header); `py-14 sm:py-16` (logo strip).
-- **Generous:** `py-24 sm:py-32` (CTA); `py-32 sm:py-40` (404).
+- **Generous:** `py-32 sm:py-40` (404). The CTA uses the standard padding around its contained card.
 - Sections are separated by `border-b border-border`, not margin. The footer uses `border-t`.
 - Visual variety comes from alternating `bg-surface` bands against the default white
   (used by FeatureCards and three other sections), plus the single `bg-ink` Technology band.
@@ -353,7 +373,7 @@ One container, one max width, one gutter. Every section uses it. Don't hand-roll
 | --- | --- |
 | `rounded-full` | Buttons, pills, filter chips, badges, dots, waveform bars (26 uses — the signature) |
 | `rounded-2xl` | Cards, panels, the conversation visual, pricing tiers |
-| `rounded-3xl` | The CTA inner frame |
+| `rounded-3xl` | Technology bento cards |
 | `rounded-xl` | Technology diagram nodes |
 | `rounded-lg` | Form inputs, icon chips, small tooltips, the mobile menu button |
 | `rounded-md` | The tiny "C" logo mark |
@@ -381,29 +401,43 @@ One container, one max width, one gutter. Every section uses it. Don't hand-roll
 industries-section, stats-section, faq-section, cta-section, tech-stack-section,
 agent-capabilities-section, feature-detail-list, deployment-section,
 pricing-tiers, pricing-comparison-table,
-contact-form-section, resources-grid.
+lead-intake, resources-grid.
 
 **Reusable class recipes**
 
 ```
-Primary button   rounded-full bg-foreground px-5 h-[50px] text-base font-medium text-background
-                 transition-opacity hover:opacity-85
-Secondary button rounded-full border border-border px-5 h-[50px] text-base font-medium text-foreground
-Text link + arrow group inline-flex items-center gap-1.5 text-sm font-medium
+Primary CTA      <AgentButton href="…" />                 (dark pill, "Get your agent", no arrow)
+Secondary CTA    <AgentButton href="…" tone="outline">   (bordered pill)
+CTA on ink       <AgentButton href="…" tone="light" />
+Text link + arrow group inline-flex items-center gap-1.5 text-sm font-medium   (secondary text links only)
                  + <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
 Card             rounded-2xl border border-border p-6 sm:p-7 transition-colors hover:border-border-strong
-Form input       rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-accent
+Text field       <SignalField id label value onChange … />   (never a bare <input>; see LeadIntake)
 Small label      text-xs text-foreground-muted            (sentence case — never uppercase-tracked)
 ```
 
-Icon sizing: `h-4 w-4` inline with text, `h-3.5 w-3.5` for small arrows, `h-5 w-5` for the
-mobile menu toggle.
+**Icons.** Feature and section icons come from Codely's own animated set,
+[components/icons/agent-icons.tsx](src/components/icons/agent-icons.tsx): 18 hand-drawn
+icons on a 24px grid at a 1.5 stroke, 18px by default. Each redraws its strokes and plays a
+signature move when an ancestor `.group` is hovered or focused, or carries
+`data-icon-active="true"`. Examples: the phone rings, the globe turns, the calendar ticks,
+the mic radiates, the bot blinks, the sliders slide, and history rewinds. The choreography
+is CSS-only in `globals.css` (`.agent-icon` / `ip-*` keyframes), one-shot, and
+reduced-motion-safe.
+
+The set is used in the Use Cases list (the active item fires via `data-icon-active`), the
+Deployment switchboard (the routed channel and system fire), the capability cards, the
+feature detail list, and the `AgentRun` nodes (fired by a GSAP `attr` set at the moment each
+node ignites). `lucide-react` stays for functional UI glyphs only: chevrons, checkmarks, the
+menu toggle, and small inline arrows. Don't use lucide for feature icons; add to the set
+instead. Inline UI icon sizing: `h-4 w-4`, `h-3.5 w-3.5` for small arrows, `h-5 w-5` for
+the mobile menu toggle.
 
 **Notable components**
 
 - **`Nav`** — sticky, `z-50`. GSAP animates height from `76` to `60`px and fades in a
   translucent white background (`rgba(255,255,255,0.85)` + `blur(10px)`) plus the bottom
-  border once `scrollY > 24`. Active links get a full-width underline that grows from 0 on hover.
+  border once `scrollY > 24`. The active page is a quiet `bg-foreground/[0.06]` pill (no underline); links sit in `px-3.5 py-1.5` pills with `gap-1`. The CTA is `<AgentButton size="sm">`.
 - **`AgentRun`** ([src/lib/motion/agent-run.tsx](src/lib/motion/agent-run.tsx)) — the Use
   Cases stage: a white, softly elevated panel (dot grid + film grain, all text in
   `foreground` / `foreground-muted` for readability — colour lives only in nodes, glows and
@@ -451,11 +485,96 @@ mobile menu toggle.
   caller queue that drains into the agent while the wait clock collapses (4:12 → 0:01); team
   energy bars refilling rose → blue (tickets 128 → 12). Server HTML is each story's *end*
   state; the "before" state is applied on the client.
+- **`DeploymentSection`** (`/features`) — "one agent, every channel", a **live
+  switchboard**. Three channel cards (Phone accent / Website iris / Messaging teal) sit on
+  the left, the agent core (the "C" mark in concentric rings) with a readout card in the
+  centre, and Internal operations / Business systems cards on the right. On `lg` the curved
+  SVG wires are measured from the live layout (ResizeObserver) and draw in via
+  `pathLength=1` dashoffset once the section is in view. The section then cycles
+  `SCENARIOS` every 3.6s: the source channel lights in its hue, both of its wires become a
+  flowing dashed signal (`wire-flow`) with a travelling dot (CSS `offset-path`,
+  `wire-travel`), the core ring flares (`core-pulse`), the readout swaps (`rise-in`: what
+  the customer said and what the agent did), and the exact system item it touched
+  highlights. Hovering a channel routes one of its scenarios immediately and pauses the
+  cycle. Below `lg` it's a stack with no wires; the readout and highlights still cycle.
+  The wire/dot keyframes carry information but are single, un-staggered CSS loops, so they
+  fall under the CSS-only exception in section 9 (reduced motion leaves a static
+  highlighted wire).
 - **`ClientLogos`** — an infinite CSS marquee (list rendered twice, second copy
   `aria-hidden`), edge-faded with `mask-image`, paused on hover.
+- **`CtaSection`** — no longer full-bleed. A contained `rounded-2xl` ink card inside the
+  standard section padding, sized to the viewport (`h-[min(620px,calc(100vh-10rem))]`,
+  `min-h-[440px]`), with the vendored `Orb` WebGL ring behind a centred `type-section`
+  headline, `type-lead` subtext, and the `AgentButton`.
+- **`AgentButton`** ([agent-button.tsx](src/components/agent-button.tsx)): **every CTA on
+  the site** uses it. That covers the nav (desktop and mobile), hero, footer, CTA,
+  industries, pricing tiers, FAQ, and the lead intake's Continue / Send my brief.
+  - **At rest:** a plain pill with just its label. No arrow, no icon.
+  - **On hover or focus:** a GSAP timeline spins and pops an agent avatar (a disc of four
+    voice bars) in at the left edge with a back-ease and an accent ring flare. The bars
+    start talking (fast `repeatRefresh` loop), and the label glides right by `shift`. The
+    pill never changes width, so nothing around it moves. On leave it reverses at 1.6×.
+  - **Props:**
+    - `tone`: `dark` (primary recipe), `light` (white pill on dark), or `outline`
+      (secondary).
+    - `size`: `md` (50px) or `sm` (40px, nav).
+    - Plus `href` (Link) or `type="submit"` (button), and `onClick`.
+  - **Labels:** primary "Get your agent", secondary "Talk to our team", submit "Send
+    message".
+  - **Reduced motion:** label only.
+
+  `<Magnetic>` wraps the hero and CTA instances at a gentle `strength 0.12` with a
+  `power3.out` follow (no elastic overshoot).
+- **`LeadIntake`** ([lead-intake.tsx](src/components/lead-intake.tsx)) (`/contact`, page
+  title "Tell us about your business. We'll build your agent."): the lead capture. Its job
+  is to collect enough about a business to build a first agent for them.
+  - **Layout:** a white `shadow-soft` card with a four-segment step bar (step name on the
+    left, "1 of 4" on the right), beside a sticky live preview.
+  - **Steps:**
+    1. Your business: name, "What do you do?", "How many people talk to customers
+       today?".
+    2. The work: "What would you hand over first?" as six job tiles using the agent icons,
+       multi-select; plus channels and busy-week volume.
+    3. Your tools: "Where should it get the work done?" integration pills, plus an optional
+       "What does a typical call sound like?".
+    4. Where to reach you: name, work email, optional phone, "When should it start
+       answering?".
+  - **Buttons:** "Next" on each step, then "Build my agent".
+  - **Validation:** only business name, industry, at least one job, name, and a valid email
+    are required. Missing answers show a rose message and the card shakes (`useShake`).
+  - **Motion:** each step's children slide in blur-to-sharp, staggered, and the card
+    scrolls back into view on step change.
+  - **Live preview:** `AgentPreview` has the agent **introduce itself** in first person, one
+    line per answer. Examples: "I know how healthcare works." / "I'll pick up every call and
+    book appointments." / "Customers will reach me on the phone." / "I'll work inside
+    Google Calendar and HubSpot." There are deliberately no skeleton rows and no % meter:
+    before any answer it says it will introduce itself here. The status reads "Listening",
+    then "Enough to start building" (the voice-bar avatar speeds up), then "On our build
+    list".
+  - **Below the preview:** "What you get" (a first version within one business day, a
+    call to hear it, and no commitment until it sounds right).
+  - **Finish:** a teal check draws and "Your agent is on the way, {name}." appears.
+  - **Controls:** choices are `Pill` (black when selected, a check slides in) and `JobTile`
+    (accent-tinted when selected, icon fires via `data-icon-active`). Not yet wired to a
+    backend (see Known Gaps).
+- **`SignalField`** ([signal-field.tsx](src/components/signal-field.tsx)): the site's text
+  field. **Never use a bare `<input>`.**
+  - **Focus:** an accent line traces around the border (an SVG `rect` with `pathLength=1`
+    and a dashoffset transition), the global focus outline is suppressed so only the traced border shows, and the label floats up and
+    turns accent.
+  - **Typing:** a tiny four-bar voice waveform at the right edge kicks up on every
+    keystroke and decays (`useTypingPulse`), so the agent looks like it's listening.
+  - **Valid value:** the bars morph into a teal check.
+  - **Error:** the field turns rose.
+  - Supports `multiline`, `optional`, `type`/`inputMode`/`autoComplete`. Styles live in
+    `globals.css` (`.signal-field`), and reduced motion lands on end states.
+- **`ScrambleText`** ([scramble-text.tsx](src/lib/motion/scramble-text.tsx)): the one text
+  effect on the site. The hero's accent word ("AI") decodes out of scrambled glyphs
+  (`ScrambleTextPlugin`, registered in `gsap-setup.ts`) as the headline lands, and
+  re-decodes on hover. Keep it to this one place.
 - **`GhostFibers`** — a 412-line ogl/WebGL fragment shader rendering animated fibre lines,
-  used once as the CTA section background, fully parameterised via props
-  (`lineColor="#140E35"`, `glowColor="#3437A0"`, `dpr={1}`, etc.). Treat as vendored.
+  fully parameterised via props (`lineColor="#140E35"`, `glowColor="#3437A0"`, `dpr={1}`,
+  etc.). Treat as vendored. Not currently used (the CTA uses `Orb`).
 - **`FaqSection`** — controlled accordion via `useState`, `ChevronDown` rotation.
 - **`ResourcesGrid`** — client-side `All | Article | Case Study` filter over `RESOURCES`.
 - **`IndustriesSection`** — a pinned, scroll-driven story (desktop, motion-safe only): the
@@ -595,7 +714,7 @@ export function getResourceBySlug(slug)
 
 ## 12. Known Gaps
 
-- The contact form does not submit anywhere — no action, no endpoint, no validation beyond HTML.
+- The lead intake does not submit anywhere yet: on the last step it shows the success state, but no endpoint receives the brief. Wire `LeadIntake`'s final `next()` to a real destination (API route, form service, CRM) before launch.
 - Privacy and Terms footer links are `href="#"` placeholders.
 - No tests, no CI, no analytics, no error boundary, no `loading.tsx`.
 - `next.config.ts` is empty (no image domains, no redirects, no headers).

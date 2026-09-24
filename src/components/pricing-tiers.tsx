@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Check } from "lucide-react";
 import { Container } from "./container";
+import { AgentButton } from "./agent-button";
 import { Reveal } from "./reveal";
 
 const TIERS = [
@@ -16,7 +16,7 @@ const TIERS = [
       "Appointment booking & calendar sync",
       "Business knowledge base setup",
     ],
-    cta: "Book a Demo",
+    cta: "Get your agent",
     highlighted: false,
   },
   {
@@ -32,7 +32,7 @@ const TIERS = [
       "Automated follow-ups",
       "Multilingual support",
     ],
-    cta: "Book a Demo",
+    cta: "Get your agent",
     highlighted: true,
   },
   {
@@ -48,7 +48,7 @@ const TIERS = [
       "Custom workflows & webhooks",
       "Priority human handoff routing",
     ],
-    cta: "Book a Demo",
+    cta: "Get your agent",
     highlighted: false,
   },
   {
@@ -64,7 +64,7 @@ const TIERS = [
       "Dedicated account manager",
       "White-glove onboarding",
     ],
-    cta: "Book a Demo",
+    cta: "Get your agent",
     highlighted: false,
   },
   {
@@ -79,7 +79,7 @@ const TIERS = [
       "Negotiated pricing based on scope",
       "Direct, ongoing point of contact",
     ],
-    cta: "Contact Us",
+    cta: "Talk to our team",
     highlighted: false,
   },
 ];
@@ -119,16 +119,13 @@ export function PricingTiers() {
                   ))}
                 </ul>
 
-                <Link
+                <AgentButton
                   href="/contact"
-                  className={`mt-8 inline-flex h-[50px] items-center justify-center rounded-full px-5 text-base font-medium transition-opacity hover:opacity-85 ${
-                    tier.highlighted
-                      ? "bg-foreground text-background"
-                      : "border border-border text-foreground"
-                  }`}
+                  tone={tier.highlighted ? "dark" : "outline"}
+                  className="mt-8 w-full"
                 >
                   {tier.cta}
-                </Link>
+                </AgentButton>
               </div>
             </Reveal>
           ))}

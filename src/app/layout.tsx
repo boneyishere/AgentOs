@@ -14,25 +14,26 @@ const stackSansText = Stack_Sans_Text({
   subsets: ["latin"],
 });
 
+const SITE_TITLE = "Codely | The AI front desk that never clocks out";
 const SITE_DESCRIPTION =
-  "Codely is an AI agent platform for real-time voice and chat conversations. Give your business AI agents that understand intent, use your knowledge, remember context, and take real action.";
+  "Codely answers your calls and chats, remembers every customer, and books, updates, and follows up inside the tools your business already uses.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://codely.ai"),
   title: {
-    default: "Codely — Meet the AI that works for you.",
-    template: "%s — Codely",
+    default: SITE_TITLE,
+    template: "%s | Codely",
   },
   description: SITE_DESCRIPTION,
   openGraph: {
     type: "website",
     siteName: "Codely",
-    title: "Codely — Meet the AI that works for you.",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Codely — Meet the AI that works for you.",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
 };

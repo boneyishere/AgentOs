@@ -32,7 +32,7 @@ export function ClientLogos() {
       <Container className="py-14 sm:py-16">
         <Reveal className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:gap-14">
           <p className="shrink-0 text-sm text-foreground-muted lg:max-w-[14rem]">
-            Trusted by teams building better customer experiences
+            Already picking up the phone for teams like these
           </p>
 
           <div className="group relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">

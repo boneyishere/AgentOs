@@ -1,8 +1,16 @@
 import type { ComponentType } from "react";
-import { Bot, BookOpen, History, Mic, SlidersHorizontal, Sparkles, Wand2 } from "lucide-react";
+import {
+  BookIcon,
+  BotIcon,
+  HistoryIcon,
+  MicIcon,
+  SlidersIcon,
+  SparkleIcon,
+  WandIcon,
+} from "./icons/agent-icons";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
-import { TextReveal } from "@/lib/motion/text-reveal";
+import { SectionHeading } from "./section-heading";
 import { VoiceVisual } from "./feature-visuals/voice-visual";
 import { KnowledgeVisual } from "./feature-visuals/knowledge-visual";
 import { MemoryVisual } from "./feature-visuals/memory-visual";
@@ -18,7 +26,7 @@ const FEATURES: {
 }[] = [
   {
     title: "Voice AI",
-    icon: Mic,
+    icon: MicIcon,
     description: "Natural, real-time voice conversations.",
     points: [
       "Speech-to-text",
@@ -33,7 +41,7 @@ const FEATURES: {
   },
   {
     title: "AI Models",
-    icon: Sparkles,
+    icon: SparkleIcon,
     description: "Use the intelligence appropriate for the job.",
     points: [
       "Multiple AI model support",
@@ -45,7 +53,7 @@ const FEATURES: {
   },
   {
     title: "Knowledge Base",
-    icon: BookOpen,
+    icon: BookIcon,
     description: "Give the agent access to the information it needs.",
     points: [
       "Business knowledge",
@@ -60,7 +68,7 @@ const FEATURES: {
   },
   {
     title: "Memory & Context",
-    icon: History,
+    icon: HistoryIcon,
     description: "Keep relevant information across conversations.",
     points: [
       "Conversation history",
@@ -73,7 +81,7 @@ const FEATURES: {
   },
   {
     title: "Tools & Actions",
-    icon: Wand2,
+    icon: WandIcon,
     description: "Connect the agent to real business operations.",
     points: [
       "APIs",
@@ -89,7 +97,7 @@ const FEATURES: {
   },
   {
     title: "Agent Configuration",
-    icon: SlidersHorizontal,
+    icon: SlidersIcon,
     description: "Control how the agent behaves.",
     points: [
       "Custom instructions",
@@ -103,7 +111,7 @@ const FEATURES: {
   },
   {
     title: "Conversation Intelligence",
-    icon: Bot,
+    icon: BotIcon,
     description: "Understand what happens across conversations.",
     points: [
       "Transcripts",
@@ -122,24 +130,18 @@ export function FeatureDetailList() {
   return (
     <section className="border-b border-border">
       <Container className="py-20 sm:py-28">
-        <div className="max-w-xl">
-          <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
-            The technology behind every conversation.
-          </TextReveal>
-          <Reveal delay={0.1}>
-            <p className="mt-4 max-w-lg text-foreground-muted">
-              How Codely makes all of that possible.
-            </p>
-          </Reveal>
-        </div>
+        <SectionHeading
+          title="A closer look at each capability."
+          subtitle="What each part does, and what you can shape to fit your business."
+        />
 
         <div className="mt-4">
           {FEATURES.map(({ title, icon: Icon, description, points, Visual }, i) => (
             <Reveal key={title} delay={(i % 3) * 0.05}>
-              <div className="border-t border-border py-14 first:border-t-0">
+              <div className="group border-t border-border py-14 first:border-t-0">
                 <div className="flex items-center gap-3">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface text-accent">
-                    <Icon className="h-4.5 w-4.5" />
+                    <Icon />
                   </span>
                   <h3 className="text-lg font-medium">{title}</h3>
                 </div>

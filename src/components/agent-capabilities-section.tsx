@@ -1,11 +1,19 @@
-import { CalendarClock, Check, LifeBuoy, MessagesSquare, Repeat2, Target, Workflow } from "lucide-react";
+import { Check } from "lucide-react";
+import {
+  CalendarIcon,
+  LifebuoyIcon,
+  LoopIcon,
+  MessageIcon,
+  TargetIcon,
+  WorkflowIcon,
+} from "./icons/agent-icons";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
 
 const CAPABILITIES = [
   {
     title: "Talk to customers",
-    icon: MessagesSquare,
+    icon: MessageIcon,
     description: "Have natural conversations through voice and chat.",
     points: [
       "Answer questions",
@@ -18,7 +26,7 @@ const CAPABILITIES = [
   },
   {
     title: "Qualify and convert",
-    icon: Target,
+    icon: TargetIcon,
     description: "Turn conversations into opportunities.",
     points: [
       "Qualify leads",
@@ -31,7 +39,7 @@ const CAPABILITIES = [
   },
   {
     title: "Schedule and manage",
-    icon: CalendarClock,
+    icon: CalendarIcon,
     description: "Let the agent handle time-sensitive tasks.",
     points: [
       "Book appointments",
@@ -44,7 +52,7 @@ const CAPABILITIES = [
   },
   {
     title: "Support customers",
-    icon: LifeBuoy,
+    icon: LifebuoyIcon,
     description: "Handle routine customer needs without making them wait.",
     points: [
       "Answer FAQs",
@@ -57,8 +65,8 @@ const CAPABILITIES = [
   },
   {
     title: "Take action",
-    icon: Workflow,
-    description: "The agent should not stop at conversation.",
+    icon: WorkflowIcon,
+    description: "Goes past the conversation and does the follow-through.",
     points: [
       "Create leads",
       "Update records",
@@ -71,7 +79,7 @@ const CAPABILITIES = [
   },
   {
     title: "Follow up",
-    icon: Repeat2,
+    icon: LoopIcon,
     description: "Keep conversations moving after the first interaction.",
     points: [
       "Follow up with leads",
@@ -92,10 +100,10 @@ export function AgentCapabilitiesSection() {
             <Reveal
               key={title}
               delay={(i % 3) * 0.06}
-              className="spotlight h-full rounded-2xl border border-border p-6 transition-colors hover:border-border-strong sm:p-7"
+              className="spotlight group h-full rounded-2xl border border-border p-6 transition-colors hover:border-border-strong sm:p-7"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface text-accent">
-                <Icon className="h-4.5 w-4.5" />
+                <Icon />
               </span>
               <h3 className="mt-4 text-base font-medium">{title}</h3>
               <p className="mt-2 text-sm text-foreground-muted">{description}</p>

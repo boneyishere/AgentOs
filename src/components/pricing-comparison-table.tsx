@@ -1,7 +1,7 @@
 import { Check, Minus } from "lucide-react";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
-import { TextReveal } from "@/lib/motion/text-reveal";
+import { SectionHeading } from "./section-heading";
 
 type CellValue = string | boolean;
 type Row = { label: string; values: [CellValue, CellValue, CellValue, CellValue, CellValue] };
@@ -57,9 +57,10 @@ export function PricingComparisonTable() {
   return (
     <section className="border-b border-border bg-surface">
       <Container className="py-20 sm:py-28">
-        <TextReveal className="max-w-xl text-3xl font-medium tracking-tight sm:text-4xl">
-          Compare plans
-        </TextReveal>
+        <SectionHeading
+          title="Compare every plan, line by line."
+          subtitle="Minutes, conversations, channels, and integrations side by side, so you can see exactly what each tier includes."
+        />
 
         <Reveal delay={0.1} className="mt-12 overflow-x-auto">
           <table className="w-full min-w-[760px] border-collapse text-left">

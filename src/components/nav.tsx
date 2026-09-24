@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Container } from "./container";
+import { AgentButton } from "./agent-button";
 
 const NAV_LINKS = [
   { label: "Features", href: "/features" },
@@ -38,7 +39,7 @@ export function Nav() {
               <span className="text-base font-semibold tracking-tight">Codely</span>
             </Link>
 
-            <nav className="hidden items-center gap-8 md:flex">
+            <nav className="hidden items-center gap-1 md:flex">
               {NAV_LINKS.map((link) => {
                 const isActive =
                   pathname === link.href || pathname.startsWith(`${link.href}/`);
@@ -47,28 +48,18 @@ export function Nav() {
                     key={link.href}
                     href={link.href}
                     aria-current={isActive ? "page" : undefined}
-                    className={`group relative text-sm font-medium transition-colors hover:text-foreground ${
-                      isActive ? "text-foreground" : "text-foreground-muted"
+                    className={`relative rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors duration-300 hover:text-foreground ${
+                      isActive ? "bg-foreground/[0.06] text-foreground" : "text-foreground-muted"
                     }`}
                   >
                     {link.label}
-                    <span
-                      className={`absolute -bottom-1 left-0 h-px bg-foreground transition-all duration-300 group-hover:w-full ${
-                        isActive ? "w-full" : "w-0"
-                      }`}
-                    />
                   </Link>
                 );
               })}
             </nav>
 
             <div className="hidden md:block">
-              <Link
-                href="/contact"
-                className="inline-flex items-center rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-85"
-              >
-                Book a Demo
-              </Link>
+              <AgentButton href="/contact" size="sm" />
             </div>
 
             <button
@@ -101,13 +92,7 @@ export function Nav() {
                       </Link>
                     );
                   })}
-                  <Link
-                    href="/contact"
-                    onClick={() => setOpen(false)}
-                    className="mt-2 rounded-full bg-foreground px-4 py-2.5 text-center text-sm font-medium text-background"
-                  >
-                    Book a Demo
-                  </Link>
+                  <AgentButton href="/contact" size="sm" onClick={() => setOpen(false)} className="mt-2 w-full" />
                 </nav>
               </div>
             )}
