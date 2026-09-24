@@ -17,10 +17,10 @@ export function SectionHeading({
   className?: string;
 }) {
   return (
-    <div className={`max-w-[36rem] ${className}`}>
-      <TextReveal className="type-section font-medium">{title}</TextReveal>
+    <div className={`max-w-[32rem] ${className}`}>
+      <TextReveal className="type-section font-medium [text-wrap:wrap]">{title}</TextReveal>
       <Reveal delay={0.1}>
-        <p className="type-lead mt-5 max-w-[32rem] text-foreground-muted">{subtitle}</p>
+        <p className="type-lead mt-5 text-foreground-muted">{subtitle}</p>
       </Reveal>
     </div>
   );

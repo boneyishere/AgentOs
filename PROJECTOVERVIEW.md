@@ -288,8 +288,8 @@ exposed as CSS variables on `<html>`. There is no monospace font in the system.
 | --- | --- |
 | Hero `h1` | `text-5xl sm:text-6xl lg:text-[4.25rem]` + `font-medium leading-[1.02] tracking-tight text-balance` + `max-w-xl` |
 | Page `h1` (PageHeader, article, 404) | `type-page` (36 → 42 → **48px**, balanced wrap) + `font-medium` + `max-w-3xl` |
-| Section `h2` | `type-section` (28 → 34 → **40px**, balanced wrap) + `font-medium`, always via `<TextReveal>`, rendered by `<SectionHeading>` at `max-w-[36rem]`. Also the CTA headline. |
-| Section subtext | `type-lead` (16 → 17px) + `mt-5 max-w-[32rem] text-foreground-muted` (required, via `<SectionHeading>`) |
+| Section `h2` | `type-section` (28 → 34 → **40px**, balanced wrap) + `font-medium`, always via `<TextReveal>`, rendered by `<SectionHeading>` in a shared `max-w-[32rem]` container with natural (not balanced) wrap. Also the CTA headline. |
+| Section subtext | `type-lead` (16 → 17px) + `mt-5 text-foreground-muted`, same `max-w-[32rem]` container as the headline (required, via `<SectionHeading>`) |
 | Large card `h3` (Impact deck) | `text-[1.5rem] sm:text-[1.625rem] xl:text-[1.75rem]`, always below the 40px section headline. Stat numbers are `text-[2.5rem]`. |
 | Card / feature `h3` | `text-base` or `text-lg` + `font-medium` |
 | Lead paragraph (hero / PageHeader) | `text-lg text-foreground-muted` (hero adds `leading-8`), `max-w-md` / `max-w-lg` |
@@ -326,8 +326,8 @@ exposed as CSS variables on `<html>`. There is no monospace font in the system.
 - **Section heading block** is always
   `<SectionHeading title="…" subtitle="…" />`
   ([section-heading.tsx](src/components/section-heading.tsx)). Never hand-roll it.
-  - Every section's headline shares one container width (`max-w-[36rem]`, `type-section`
-    with balanced wrap), with the subtitle beneath (`type-lead mt-5 max-w-[32rem]`).
+  - Headline and subtitle share **one** container (`max-w-[32rem]`), so both wrap to the
+    same width. The headline overrides `type-section`'s balance with natural wrap so it fills the line.
   - `subtitle` is required: no section ships a bare headline.
   - Left-aligned, with nothing above the headline.
   - The only exception is the centred headline in the CTA ink card.
