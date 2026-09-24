@@ -37,7 +37,7 @@ export function Footer() {
             </p>
             <Link
               href="/contact"
-              className="mt-6 inline-flex w-fit items-center rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition-opacity hover:opacity-85"
+              className="mt-6 inline-flex h-[50px] w-fit items-center rounded-full bg-foreground px-5 text-base font-medium text-background transition-opacity hover:opacity-85"
             >
               Book a Demo
             </Link>

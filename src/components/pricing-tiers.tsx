@@ -121,7 +121,7 @@ export function PricingTiers() {
 
                 <Link
                   href="/contact"
-                  className={`mt-8 inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium transition-opacity hover:opacity-85 ${
+                  className={`mt-8 inline-flex h-[50px] items-center justify-center rounded-full px-5 text-base font-medium transition-opacity hover:opacity-85 ${
                     tier.highlighted
                       ? "bg-foreground text-background"
                       : "border border-border text-foreground"

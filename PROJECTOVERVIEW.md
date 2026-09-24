@@ -354,9 +354,9 @@ contact-form-section, resources-grid.
 **Reusable class recipes**
 
 ```
-Primary button   rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background
+Primary button   rounded-full bg-foreground px-5 h-[50px] text-base font-medium text-background
                  transition-opacity hover:opacity-85
-Secondary button rounded-full border border-border px-5 py-3 text-sm font-medium text-foreground
+Secondary button rounded-full border border-border px-5 h-[50px] text-base font-medium text-foreground
 Text link + arrow group inline-flex items-center gap-1.5 text-sm font-medium
                  + <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
 Card             rounded-2xl border border-border p-6 sm:p-7 transition-colors hover:border-border-strong

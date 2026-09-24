@@ -24,7 +24,7 @@ export function CtaSection() {
             </p>
             <Link
               href="/contact"
-              className="pointer-events-auto mt-9 inline-flex items-center rounded-full bg-white px-6 py-3.5 text-sm font-medium text-foreground transition-opacity hover:opacity-85"
+              className="pointer-events-auto mt-9 inline-flex h-[50px] items-center rounded-full bg-white px-6 text-base font-medium text-foreground transition-opacity hover:opacity-85"
             >
               Book a Demo
             </Link>

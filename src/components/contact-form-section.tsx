@@ -85,7 +85,7 @@ export function ContactFormSection() {
 
               <button
                 type="submit"
-                className="inline-flex items-center rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-opacity hover:opacity-85"
+                className="inline-flex h-[50px] items-center rounded-full bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-85"
               >
                 Send message
               </button>

@@ -17,7 +17,7 @@ export function Hero() {
               as="h1"
               playOn="mount"
               delay={0.1}
-              className="max-w-xl text-5xl font-medium leading-[1.12] tracking-tight text-balance sm:text-6xl lg:text-[4.25rem]"
+              className="max-w-xl text-5xl font-medium leading-[1.12] tracking-[-0.5px] text-balance sm:text-6xl lg:text-[4.25rem] lg:tracking-[-2px]"
             >
               Meet the <span className="text-accent">AI</span> that works for you.
             </TextReveal>
@@ -30,7 +30,7 @@ export function Hero() {
             <div className="mt-9 flex flex-wrap items-center gap-6">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition-opacity hover:opacity-85"
+                className="inline-flex h-[50px] items-center gap-2 rounded-full bg-foreground px-5 text-base font-medium text-background transition-opacity hover:opacity-85"
               >
                 Book a Demo
                 <ArrowRight className="h-4 w-4" />

@@ -136,7 +136,7 @@ export function FaqSection() {
             </div>
             <Link
               href="/contact"
-              className="group inline-flex shrink-0 items-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-medium text-foreground transition-colors hover:border-border-strong"
+              className="group inline-flex h-[50px] shrink-0 items-center gap-2 rounded-full border border-border px-5 text-base font-medium text-foreground transition-colors hover:border-border-strong"
             >
               Contact us
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
