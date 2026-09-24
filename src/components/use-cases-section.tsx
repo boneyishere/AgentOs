@@ -11,17 +11,14 @@ import {
 } from "lucide-react";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
-import {
-  ConversationVisual,
-  type ConversationBeat,
-} from "@/lib/motion/conversation-visual";
+import { AgentRun, getRunSeconds, type RunBeat } from "@/lib/motion/agent-run";
 import { TextReveal } from "@/lib/motion/text-reveal";
 
 const USE_CASES: {
   label: string;
   description: string;
   icon: LucideIcon;
-  script: ConversationBeat[];
+  script: RunBeat[];
 }[] = [
   {
     label: "AI Receptionist",
@@ -30,11 +27,16 @@ const USE_CASES: {
       "Handles incoming calls, understands requests, and routes them where they need to go.",
     script: [
       { kind: "customer", text: "Hi, is this the front desk?" },
-      { kind: "understanding", label: "Incoming call, general inquiry" },
+      { kind: "understanding", tags: ["General inquiry", "Inbound call"], confidence: 0.97 },
       { kind: "agent", text: "Yes it is! How can I help you today?" },
       { kind: "customer", text: "I need to speak to someone in billing." },
-      { kind: "action", label: "Routing to billing department" },
-      { kind: "result", label: "Call transferred, customer info logged" },
+      {
+        kind: "action",
+        label: "Routing the call",
+        system: "Phone system",
+        steps: ["Identify caller", "Find billing queue", "Warm transfer"],
+      },
+      { kind: "result", label: "Call transferred", detail: "Caller details logged" },
     ],
   },
   {
@@ -44,14 +46,16 @@ const USE_CASES: {
       "Qualifies inbound leads with the right questions and scores them automatically.",
     script: [
       { kind: "customer", text: "I'm interested in your enterprise plan." },
-      { kind: "understanding", label: "Qualification questions" },
-      {
-        kind: "agent",
-        text: "Great — how many seats are you looking at, and what's your timeline?",
-      },
+      { kind: "understanding", tags: ["Sales intent", "Enterprise"], confidence: 0.94 },
+      { kind: "agent", text: "Great — how many seats, and what's your timeline?" },
       { kind: "customer", text: "Around 50 seats, ideally live next quarter." },
-      { kind: "action", label: "Scoring lead: budget, timeline, authority" },
-      { kind: "result", label: "Qualified lead pushed to CRM" },
+      {
+        kind: "action",
+        label: "Scoring the lead",
+        system: "CRM",
+        steps: ["Budget · 50 seats", "Timeline · next quarter", "Push to HubSpot"],
+      },
+      { kind: "result", label: "Qualified lead", detail: "Score 92 · assigned to sales" },
     ],
   },
   {
@@ -60,14 +64,15 @@ const USE_CASES: {
     description: "Resolves common questions instantly using your knowledge base.",
     script: [
       { kind: "customer", text: "My order hasn't arrived yet." },
-      { kind: "understanding", label: "Order status request" },
-      { kind: "action", label: "Looking up order in knowledge base" },
+      { kind: "understanding", tags: ["Order status", "Shipping"], confidence: 0.96 },
       {
-        kind: "agent",
-        text: "Your order shipped yesterday — it's due tomorrow by 6 PM.",
+        kind: "action",
+        label: "Looking up the order",
+        system: "Knowledge base",
+        steps: ["Find order #4821", "Check carrier status", "Estimate delivery"],
       },
-      { kind: "customer", text: "Perfect, thank you." },
-      { kind: "result", label: "Issue resolved" },
+      { kind: "agent", text: "Your order shipped yesterday — it's due tomorrow by 6 PM." },
+      { kind: "result", label: "Issue resolved", detail: "No human needed · 38s" },
     ],
   },
   {
@@ -76,14 +81,16 @@ const USE_CASES: {
     description: "Checks availability and confirms bookings without back-and-forth.",
     script: [
       { kind: "customer", text: "Can I book a visit for Friday?" },
-      { kind: "understanding", label: "Booking request" },
-      { kind: "action", label: "Checking availability" },
+      { kind: "understanding", tags: ["Booking", "Friday"], confidence: 0.98 },
       {
-        kind: "agent",
-        text: "Friday's full, but I have Saturday at 11 AM — does that work?",
+        kind: "action",
+        label: "Checking availability",
+        system: "Calendar",
+        steps: ["Friday · fully booked", "Next opening · Sat 11 AM"],
       },
+      { kind: "agent", text: "Friday's full, but I have Saturday at 11 AM — does that work?" },
       { kind: "customer", text: "Saturday works great." },
-      { kind: "result", label: "Appointment confirmed" },
+      { kind: "result", label: "Appointment confirmed", detail: "Sat 11:00 · invite sent" },
     ],
   },
   {
@@ -91,25 +98,26 @@ const USE_CASES: {
     icon: RefreshCw,
     description: "Re-engages missed calls and stale leads automatically.",
     script: [
-      { kind: "understanding", label: "Missed call detected" },
-      { kind: "action", label: "Sending automated follow-up" },
+      { kind: "understanding", tags: ["Missed call", "Warm lead"], confidence: 0.91 },
       {
-        kind: "customer",
-        text: "Thanks for reaching back out — yes, still interested.",
+        kind: "action",
+        label: "Sending a follow-up",
+        system: "SMS",
+        steps: ["Draft message", "Send to caller"],
       },
+      { kind: "customer", text: "Thanks for reaching back out — yes, still interested." },
       { kind: "agent", text: "Great! Want me to schedule a quick call this week?" },
-      { kind: "customer", text: "Sure, Thursday afternoon works." },
-      { kind: "result", label: "Conversation re-engaged, call scheduled" },
+      { kind: "result", label: "Call scheduled", detail: "Thu 2 PM · added to calendar" },
     ],
   },
 ];
 
-// Matches ConversationVisual's internal reveal pace (beats start at 0.2s,
-// stagger 0.45s, 0.5s each) plus a pause so the outcome is readable before
+// The run's own length plus a hold so the outcome is readable before
 // auto-advancing — shared by the advance timer and the progress bar so they
-// can never drift out of sync with each other.
-function getCycleMs(beatCount: number) {
-  return 200 + Math.max(beatCount - 1, 0) * 450 + 500 + 2600;
+// can never drift apart.
+const HOLD_MS = 2800;
+function getCycleMs(script: RunBeat[]) {
+  return getRunSeconds(script) * 1000 + HOLD_MS;
 }
 
 /** Thin, transform-only fill under the active desktop card, showing time
@@ -129,21 +137,29 @@ function AutoAdvanceProgress({ durationMs }: { durationMs: number }) {
 
 export function UseCasesSection() {
   const [active, setActive] = useState(0);
-  // Only the very first card's reveal should wait on scroll position; every
-  // later switch (click or auto-advance) happens while the user is already
-  // looking at this section, so it should play immediately — otherwise a
-  // switch while the card sits just outside the "top 78%" trigger zone
-  // (common on mobile's stacked layout) leaves the new content stuck
-  // invisible. See ConversationVisual's `scrollGated` prop.
-  const [hasSwitched, setHasSwitched] = useState(false);
+  // The first run (and the auto-advance clock) waits until the section is
+  // actually on screen, so visitors never land mid-way through a script.
+  const [started, setStarted] = useState(false);
   const current = USE_CASES[active];
+  const sectionRef = useRef<HTMLElement | null>(null);
   const pillRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const pillScrollerRef = useRef<HTMLDivElement | null>(null);
 
-  const goTo = (i: number) => {
-    setHasSwitched(true);
-    setActive(i);
-  };
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStarted(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // Keep the active pill scrolled into view on mobile, whether it became
   // active from a tap or from auto-advance cycling past what's visible.
@@ -154,21 +170,20 @@ export function UseCasesSection() {
     const scroller = pillScrollerRef.current;
     const pill = pillRefs.current[active];
     if (!scroller || !pill) return;
-    const target =
-      pill.offsetLeft - scroller.clientWidth / 2 + pill.clientWidth / 2;
+    const target = pill.offsetLeft - scroller.clientWidth / 2 + pill.clientWidth / 2;
     scroller.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
   }, [active]);
 
-  // Auto-advance once the current script has fully played out.
   useEffect(() => {
+    if (!started) return;
     const timer = setTimeout(() => {
-      goTo((active + 1) % USE_CASES.length);
-    }, getCycleMs(USE_CASES[active].script.length));
+      setActive((a) => (a + 1) % USE_CASES.length);
+    }, getCycleMs(USE_CASES[active].script));
     return () => clearTimeout(timer);
-  }, [active]);
+  }, [active, started]);
 
   return (
-    <section id="use-cases" className="border-b border-border">
+    <section ref={sectionRef} id="use-cases" className="section-light border-b border-border">
       <Container className="py-20 sm:py-28">
         <div className="max-w-xl">
           <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
@@ -194,7 +209,7 @@ export function UseCasesSection() {
                 pillRefs.current[i] = node;
               }}
               type="button"
-              onClick={() => goTo(i)}
+              onClick={() => setActive(i)}
               className={`shrink-0 snap-start rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                 i === active
                   ? "border-foreground bg-foreground text-background"
@@ -208,14 +223,14 @@ export function UseCasesSection() {
 
         <p className="mt-4 text-sm text-foreground-muted lg:hidden">{current.description}</p>
 
-        <div className="mt-6 grid grid-cols-1 gap-10 lg:mt-14 lg:grid-cols-[minmax(0,440px)_1fr] lg:gap-8">
+        <div className="mt-6 grid grid-cols-1 gap-10 lg:mt-14 lg:grid-cols-[minmax(0,440px)_1fr] lg:items-center lg:gap-16">
           <ul className="hidden flex-col gap-3 lg:flex">
             {USE_CASES.map(({ label, description, icon: Icon }, i) => (
               <li key={label}>
                 <button
                   type="button"
-                  onMouseEnter={() => goTo(i)}
-                  onClick={() => goTo(i)}
+                  onMouseEnter={() => setActive(i)}
+                  onClick={() => setActive(i)}
                   className={`relative flex w-full flex-col gap-1.5 overflow-hidden rounded-2xl px-5 py-4 text-left transition-all duration-200 ${
                     i === active
                       ? "-translate-y-0.5 bg-background shadow-[0_8px_30px_rgba(26,26,26,0.08)]"
@@ -237,22 +252,15 @@ export function UseCasesSection() {
                     </span>
                   </div>
                   <p className="pl-7 text-sm text-foreground-muted">{description}</p>
-                  {i === active && (
-                    <AutoAdvanceProgress durationMs={getCycleMs(USE_CASES[i].script.length)} />
+                  {i === active && started && (
+                    <AutoAdvanceProgress durationMs={getCycleMs(USE_CASES[i].script)} />
                   )}
                 </button>
               </li>
             ))}
           </ul>
 
-          <ConversationVisual
-            key={active}
-            variant="compact"
-            script={current.script}
-            label={current.label.toUpperCase()}
-            scrollGated={!hasSwitched}
-            className="min-h-[360px] w-full sm:min-h-[420px] lg:ml-[175px] lg:max-w-[calc(100%-285px)]"
-          />
+          <AgentRun run={current} play={started} className="w-full lg:max-w-[680px] lg:justify-self-end" />
         </div>
       </Container>
     </section>

@@ -1,272 +1,162 @@
 "use client";
 
-import { useRef } from "react";
-import {
-  CalendarCheck,
-  Clock,
-  HeartHandshake,
-  PhoneMissed,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
+import type { ComponentType } from "react";
 import { Container } from "./container";
 import { Reveal } from "./reveal";
 import { TextReveal } from "@/lib/motion/text-reveal";
 import { gsap } from "@/lib/motion/gsap-setup";
 import { useGsapContext } from "@/lib/motion/use-gsap-context";
+import { MissedCallsVisual } from "./impact-visuals/missed-calls-visual";
+import { OvertimeVisual } from "./impact-visuals/overtime-visual";
+import { SchedulingVisual } from "./impact-visuals/scheduling-visual";
+import { ComplianceVisual } from "./impact-visuals/compliance-visual";
+import { ResponseVisual } from "./impact-visuals/response-visual";
+import { BurnoutVisual } from "./impact-visuals/burnout-visual";
 
-const IMPACTS = [
+const IMPACTS: {
+  headline: string;
+  description: string;
+  hue: string;
+  Visual: ComponentType;
+}[] = [
   {
-    icon: PhoneMissed,
     headline: "Fewer missed calls, fewer lost customers",
-    description:
-      "After-hours and peak-time calls get answered instead of going to voicemail.",
+    description: "After-hours and peak-time calls get answered instead of going to voicemail.",
+    hue: "var(--accent)",
+    Visual: MissedCallsVisual,
   },
   {
-    icon: Clock,
     headline: "Lower overtime and staffing costs",
-    description:
-      "Agents absorb call volume spikes without extra shifts or seasonal hires.",
+    description: "Agents absorb call volume spikes without extra shifts or seasonal hires.",
+    hue: "var(--amber)",
+    Visual: OvertimeVisual,
   },
   {
-    icon: CalendarCheck,
     headline: "Fewer scheduling errors and double-bookings",
-    description:
-      "Appointments sync directly to your calendar, removing manual entry mistakes.",
+    description: "Appointments sync directly to your calendar, removing manual entry mistakes.",
+    hue: "var(--iris)",
+    Visual: SchedulingVisual,
   },
   {
-    icon: ShieldCheck,
     headline: "Reduced compliance and quality risk",
     description:
       "Every conversation follows the same instructions and escalation rules — no inconsistent answers.",
+    hue: "var(--teal)",
+    Visual: ComplianceVisual,
   },
   {
-    icon: Zap,
     headline: "Faster response, lower churn risk",
     description: "Customers get answered immediately instead of waiting in a queue.",
+    hue: "var(--rose)",
+    Visual: ResponseVisual,
   },
   {
-    icon: HeartHandshake,
     headline: "Less burnout on your front-line team",
     description:
       "Repetitive, high-volume questions get handled automatically, freeing staff for complex cases.",
+    hue: "var(--accent)",
+    Visual: BurnoutVisual,
   },
 ];
 
-function ImpactHeading() {
-  return (
-    <div className="max-w-lg">
-      <TextReveal className="text-3xl font-medium tracking-tight text-ink-foreground sm:text-4xl">
-        Take the busywork off your team&apos;s plate.
-      </TextReveal>
-      <Reveal delay={0.1}>
-        <p className="mt-4 max-w-lg text-ink-foreground-muted">
-          Let AI handle the conversations that consume your team&apos;s time,
-          while your people focus on the customers and work that need them
-          most.
-        </p>
-      </Reveal>
-    </div>
-  );
-}
+// Sticky offsets: clear the floating nav, then let each earlier card's top edge peek out.
+const NAV_CLEARANCE = 104;
+const PEEK = 16;
+const FRAME_SHADOW = "0 24px 70px -34px rgba(26, 26, 26, 0.22)";
 
-function ImpactCard({
-  item,
-  className = "",
-}: {
-  item: (typeof IMPACTS)[number];
-  className?: string;
-}) {
-  const Icon = item.icon;
+function ImpactCard({ item }: { item: (typeof IMPACTS)[number] }) {
+  const { Visual } = item;
   return (
-    <div
-      className={`relative flex flex-col overflow-hidden rounded-2xl border border-ink-border-strong bg-white/[0.06] p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16),0_8px_30px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:p-7 ${className}`}
+    <article
+      data-deck-card
+      data-replay
+      className="spotlight relative origin-top overflow-hidden rounded-2xl border border-border bg-background lg:grid lg:h-[min(500px,calc(100vh-13rem))] lg:grid-cols-[1fr_1.1fr]"
+      style={{ "--hue": item.hue, boxShadow: FRAME_SHADOW } as React.CSSProperties}
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent"
-      />
-      <span className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-ink-border bg-white/10 text-ink-foreground backdrop-blur-sm">
-        <Icon className="h-4.5 w-4.5" />
-      </span>
-      <p className="relative mt-5 text-xl font-medium leading-snug text-ink-foreground">
-        {item.headline}
-      </p>
-      <div className="relative mt-6 flex-1 border-t border-ink-border pt-5">
-        <p className="text-sm text-ink-foreground-muted">{item.description}</p>
+      <div className="flex flex-col justify-between gap-10 p-7 sm:p-9 lg:p-11">
+        <h3 className="max-w-md text-3xl font-medium leading-[1.1] tracking-tight text-balance text-foreground xl:text-[2.6rem]">
+          {item.headline}
+        </h3>
+        <p className="max-w-sm text-foreground-muted">{item.description}</p>
       </div>
-    </div>
+
+      <div className="m-3 mt-0 flex items-center justify-center rounded-xl border border-border bg-surface p-6 sm:p-8 lg:mt-3">
+        <Visual />
+      </div>
+
+      {/* Dims as later cards stack over this one. */}
+      <div
+        data-dim
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-10 bg-[rgba(26,26,26,0.05)] opacity-0"
+      />
+    </article>
   );
 }
 
-/** Max width of the fade/blur transition at each edge of the card viewport —
- *  wide enough (roughly half a card) to read as a genuine soft transition
- *  rather than an abrupt cut, once that edge actually has content sliding
- *  past it. */
-const EDGE_MASK_PX = 160;
-
 /**
- * Builds the two edge masks for a given left/right zone width (0–EDGE_MASK_PX
- * each). `black` = fully opaque, `transparent` = fully hidden, with an
- * intermediate 35%/65% stop midway through each zone so the ramp curves in
- * rather than fading linearly. Passing `0` for a side collapses its fade
- * entirely (the "transparent" and "black" stops land on the same point),
- * so that edge renders fully sharp with no transition at all.
+ * A sticky stacking deck (desktop): each card slides up and sticks over the
+ * last, a few px lower, so earlier cards' top edges peek out. While the rest
+ * of the deck deals in, earlier cards scale back and dim — scrubbed straight
+ * off scroll, so it reverses cleanly. Below lg, and under reduced motion's
+ * scrub-free branch, it's a plain stack (sticky is layout, not motion, but tall
+ * mobile cards would hide their own bottoms if they stuck).
  */
-function buildEdgeMasks(leftPx: number, rightPx: number) {
-  const fade = `linear-gradient(to right, transparent 0, rgba(0,0,0,0.35) ${leftPx * 0.5}px, black ${leftPx}px, black calc(100% - ${rightPx}px), rgba(0,0,0,0.35) calc(100% - ${rightPx * 0.5}px), transparent 100%)`;
-  const blur = `linear-gradient(to right, black 0, rgba(0,0,0,0.65) ${leftPx * 0.5}px, transparent ${leftPx}px, transparent calc(100% - ${rightPx}px), rgba(0,0,0,0.65) calc(100% - ${rightPx * 0.5}px), black 100%)`;
-  return { fade, blur };
-}
-
-/**
- * Desktop-only, motion-safe: the section pins in place while vertical scroll
- * drives the card track horizontally, card 1 through card 6. Once the last
- * card is fully in view the pin releases and scroll continues normally; the
- * same tween reverses cleanly on scroll-up since it's scrubbed directly off
- * scroll position rather than played on a click/slide trigger. Pinned to a
- * full `h-screen` box (like IndustriesSection) — this isn't just visual
- * framing, it's load-bearing: `pin: true` reserves `getDistance()` px of
- * *extra* scroll distance in the document no matter how tall this element
- * is, and while pinned the viewport keeps showing this exact box for that
- * whole distance. Size the box to less than the viewport (e.g. to just fit
- * the heading + one card row) and that reserved distance shows up as a
- * growing band of bare section background beneath the box for the length of
- * the scrub — worse than a static empty band, since it visibly grows as you
- * scroll. `h-screen` makes the box itself consume that space instead.
- *
- * The edge fade/blur is a pure CSS mask on the viewport layer itself, not a
- * filter applied to individual cards: a `mask-image` on the overflow stage
- * fades opacity to nothing only within a strip at each edge, and a
- * `backdrop-blur` overlay sharing that same mask adds the blur. A card
- * fully inside the viewport sits entirely in the mask's opaque middle and
- * stays 100% sharp; only the sliver of a card actually crossing the
- * boundary fades/blurs — the card DOM/filter is never touched.
- *
- * Each edge's mask width is itself scroll-driven: it's 0 (no transition at
- * all) whenever that edge has nothing left to reveal — the very first card
- * at rest, and the very last card once fully scrolled into view — and
- * grows to the full `EDGE_MASK_PX` as soon as there's actually content
- * sliding past that boundary.
- */
-function ImpactScrollTrack() {
-  const stageRef = useRef<HTMLDivElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const blurOverlayRef = useRef<HTMLDivElement | null>(null);
-
-  const pinRef = useGsapContext<HTMLDivElement>((_ctx, el, reducedMotion) => {
+export function ImpactSection() {
+  const deckRef = useGsapContext<HTMLDivElement>((_ctx, el, reducedMotion) => {
     if (reducedMotion) return;
-
-    const stage = stageRef.current;
-    const track = trackRef.current;
-    const blurOverlay = blurOverlayRef.current;
-    if (!stage || !track || !blurOverlay) return;
-
     const mm = gsap.matchMedia();
-
     mm.add("(min-width: 1024px)", () => {
-      const getDistance = () => Math.max(0, track.scrollWidth - stage.clientWidth);
-
-      const updateMasks = () => {
-        const distance = getDistance();
-        const scrolled =
-          distance > 0 ? gsap.utils.clamp(0, distance, -(gsap.getProperty(track, "x") as number)) : 0;
-        const leftPx = Math.min(EDGE_MASK_PX, scrolled);
-        const rightPx = Math.min(EDGE_MASK_PX, distance - scrolled);
-        const { fade, blur } = buildEdgeMasks(leftPx, rightPx);
-        stage.style.maskImage = fade;
-        stage.style.webkitMaskImage = fade;
-        blurOverlay.style.maskImage = blur;
-        blurOverlay.style.webkitMaskImage = blur;
-      };
-
-      const tween = gsap.to(track, {
-        x: () => -getDistance(),
-        ease: "none",
-        // Fires every frame the scrub tween is actually interpolating `x`
-        // (including its ease-driven catch-up after scrolling stops) — the
-        // scrollTrigger's own onUpdate only fires on raw scroll events, so
-        // it can read a stale `x` while the scrub is still easing in.
-        onUpdate: updateMasks,
-        scrollTrigger: {
-          trigger: el,
-          start: "top top",
-          end: () => `+=${getDistance()}`,
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onRefresh: updateMasks,
-        },
+      const cards = [...el.querySelectorAll<HTMLElement>("[data-deck-card]")];
+      const last = cards[cards.length - 1]?.parentElement;
+      if (!last) return;
+      cards.slice(0, -1).forEach((card, i) => {
+        const scrollTrigger = {
+          trigger: card.parentElement,
+          start: `top ${NAV_CLEARANCE + i * PEEK}px`,
+          endTrigger: last,
+          end: `top ${NAV_CLEARANCE + (cards.length - 1) * PEEK}px`,
+          scrub: true,
+        };
+        gsap.to(card, { scale: 1 - (cards.length - 1 - i) * 0.03, ease: "none", scrollTrigger });
+        gsap.to(card.querySelector("[data-dim]"), { opacity: 1, ease: "none", scrollTrigger: { ...scrollTrigger } });
       });
-
-      updateMasks();
-
-      return () => {
-        tween.scrollTrigger?.kill();
-        tween.kill();
-      };
     });
-
     return () => mm.revert();
   }, []);
 
   return (
-    <Container ref={pinRef} className="flex h-screen flex-col justify-center">
-      <ImpactHeading />
-
-      {/* Constrained to this Container's own width — cards scroll only
-          within this "card viewport", not across the full browser width. */}
-      <div className="relative mt-14">
-        <div ref={stageRef} className="overflow-hidden">
-          <div ref={trackRef} className="flex w-fit gap-6">
-            {IMPACTS.map((item) => (
-              <ImpactCard key={item.headline} item={item} className="w-[300px] shrink-0 sm:w-[340px]" />
-            ))}
-          </div>
+    <section
+      className="section-light border-b border-border bg-surface"
+      style={{ "--light": "var(--iris)" } as React.CSSProperties}
+    >
+      <Container className="relative py-20 sm:py-28">
+        <div className="max-w-xl">
+          <TextReveal className="text-3xl font-medium tracking-tight sm:text-4xl">
+            Take the busywork off your team&apos;s plate.
+          </TextReveal>
+          <Reveal delay={0.1}>
+            <p className="mt-4 max-w-lg text-foreground-muted">
+              Let AI handle the conversations that consume your team&apos;s time, while your
+              people focus on the customers and work that need them most.
+            </p>
+          </Reveal>
         </div>
 
-        {/* Blur layer masked to the inverse of the fade above, so it's
-            invisible over the sharp center and only shows right where
-            cards are already fading out — the card DOM/filter is never
-            touched. */}
-        <div
-          ref={blurOverlayRef}
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 backdrop-blur-lg"
-        />
-      </div>
-    </Container>
-  );
-}
-
-/** Mobile / reduced-motion fallback: a plain grid, no scroll-jacking. */
-function ImpactGrid() {
-  return (
-    <Container className="py-20 sm:py-28">
-      <ImpactHeading />
-      <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {IMPACTS.map((item) => (
-          <ImpactCard key={item.headline} item={item} className="h-full" />
-        ))}
-      </div>
-    </Container>
-  );
-}
-
-export function ImpactSection() {
-  return (
-    <section className="border-b border-border bg-ink text-ink-foreground">
-      {/* Exactly one of these two is visible at a time, purely via the
-          complementary `motion-safe:lg:` CSS variants below — mirrors the
-          pinned scroll-story pattern used by IndustriesSection and
-          FeaturesImpactSection. */}
-      <div className="hidden motion-safe:lg:block">
-        <ImpactScrollTrack />
-      </div>
-      <div className="block motion-safe:lg:hidden">
-        <ImpactGrid />
-      </div>
+        <div ref={deckRef} className="mt-14 lg:mt-16">
+          {IMPACTS.map((item, i) => (
+            <div
+              key={item.headline}
+              className="mb-6 lg:sticky lg:mb-[12vh] lg:last:mb-0"
+              style={{ top: NAV_CLEARANCE + i * PEEK }}
+            >
+              <ImpactCard item={item} />
+            </div>
+          ))}
+          {/* Holds the finished stack on screen briefly before the section scrolls away. */}
+          <div aria-hidden="true" className="hidden h-[14vh] lg:block" />
+        </div>
+      </Container>
     </section>
   );
 }

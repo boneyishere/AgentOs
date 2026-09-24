@@ -38,7 +38,8 @@ built to degrade gracefully under `prefers-reduced-motion`.
 | UI runtime | React **19.2.8** |
 | Styling | **Tailwind CSS v4** via `@tailwindcss/postcss` — CSS-first config, no `tailwind.config.js` |
 | Animation | **GSAP 3.15** + ScrollTrigger, SplitText, DrawSVGPlugin (premium plugins) |
-| WebGL | **ogl 1.0.11** — used only by `GhostFibers` |
+| WebGL | **three 0.186** — the shared particle stage behind the feature visuals (lazy-loaded); **ogl 1.0.11** — the vendored `Ferrofluid` / `Orb` shader backgrounds |
+| Scroll | **Lenis 1.3** — site-wide inertial scroll, driven from GSAP's ticker |
 | Icons | `lucide-react` (UI icons), `@icons-pack/react-simple-icons` (brand logos) |
 | Fonts | `next/font/google`: Geist, Stack Sans Text |
 | Lint | ESLint 9 flat config + `eslint-config-next` (core-web-vitals + typescript) |
@@ -91,12 +92,14 @@ D:/agent/
         │       ├── page.tsx
         │       └── [slug]/page.tsx
         ├── components/          # flat; one file per section or primitive
-        │   ├── feature-visuals/ # 6 small hover-animated motion graphics
+        │   ├── feature-visuals/ # 6 particle scenes (thin wrappers over <ParticleView>)
+        │   ├── impact-visuals/  # 6 in-card story animations for the Impact deck
         │   ├── GhostFibers.jsx  # WebGL shader background (+ .css)
         │   └── *.tsx            # sections + primitives (see section 8)
         ├── content/
         │   └── resources.ts     # the only content data file
         └── lib/motion/          # the GSAP motion system (see section 9)
+            └── particles/       # three.js particle stage, scenes, shaders
 ```
 
 **Conventions**
@@ -106,7 +109,8 @@ D:/agent/
   The one exception is `GhostFibers.jsx` — a vendored third-party-style component
   (PascalCase filename, JSX, default export). Don't imitate it for new work.
 - The `components/` directory is **flat** — one file per page section. Only
-  `feature-visuals/` is nested, because those six are variations on a single idea.
+  `feature-visuals/` and `impact-visuals/` are nested, because each holds six variations
+  on a single idea.
 - Section components own their own data as a module-level `const` array
   (`FEATURES`, `TIERS`, `FAQS`, `INDUSTRIES`, `IMPACTS`, `STATS`, `USE_CASES`, `LOGOS`, `ROWS`).
   Only `resources.ts` is extracted, because two routes share it.
@@ -138,7 +142,8 @@ D:/agent/
 ```
 
 `Nav` and `Footer` are per-page, **not** in `layout.tsx` (the root layout only sets fonts,
-metadata, and `min-h-full flex flex-col`). Keep it that way when adding routes.
+metadata, `min-h-full flex flex-col`, and mounts the two global motion singletons,
+`<SmoothScroll />` and `<SpotlightTracker />`). Keep it that way when adding routes.
 
 **Metadata** — root layout sets `metadataBase: https://codely.ai`, a title template
 `"%s — Codely"`, plus OpenGraph and Twitter cards. Each route exports its own `metadata`
@@ -168,8 +173,9 @@ Tailwind colour like `text-gray-500`.**
 | `--border` | `#ebebeb` | `border-border` | Default hairline |
 | `--border-strong` | `#d4d4d8` | `border-border-strong` | Hover / emphasis border |
 
-**Ink surface — deliberately rare.** Reserved for the hero conversation visual and the
-Technology section. Do not extend it to other sections without a deliberate decision.
+**Ink surface — deliberately rare.** Reserved for the hero visual panel, the `/features`
+Impact band, and the CTA. Do not extend it to other sections without a
+deliberate decision.
 
 | Token | Value | Utility |
 | --- | --- | --- |
@@ -187,36 +193,51 @@ Technology section. Do not extend it to other sections without a deliberate deci
 | `--accent-foreground` | `#ffffff` | `text-accent-foreground` |
 | `--accent-soft` | `rgba(47,105,241,0.08)` | `bg-accent-soft` |
 
-> `--stat-indigo-soft` and `conversation-visual.tsx`'s `ACCENT_RGB` constant still carry the
-> *previous* accent hue (`73,89,238` / `#4959ee`) rather than the current `--accent` value
-> above — pre-existing drift, not yet reconciled. Don't assume they match `--accent` until
-> they're updated to `47,105,241`. (`--accent-soft` was reconciled to the current hue when
-> it was first put to use, on `IndustryChip`.)
-
 > **Accent rule:** the accent is for *indicators, active states, and a single emphasis
-> point* — never a large fill, with one deliberate exception: `ConversationVisual`'s
-> `compact` variant (the Use Cases card) fills its whole card with `bg-accent` /
-> `text-accent-foreground`, mirroring the scarce-but-present `ink` surface exception below.
-> Don't extend the large-fill treatment beyond that one card without a reason. Elsewhere
-> it still appears only as: the word "AI" in the hero headline, checkmarks, the live-call
-> pulse dot, waveform bars, the conversation progress rail, CTA corner brackets, focus
-> rings, blurred glow orbs at low opacity, and the Use Cases active card's auto-advance
-> progress bar. **Primary buttons are black (`bg-foreground`), not accent.**
+> point* — never a large fill. It appears as: the word "AI" in the hero headline,
+> checkmarks, live-call pulse dots, waveform bars, the agent-reply node in `AgentRun`,
+> particle highlights, focus rings, and the Use Cases active card's auto-advance progress
+> bar. **Primary buttons are black (`bg-foreground`), not accent.**
 
-**Stat highlights — the `StatsSection` proof-stats cards only.** A small 4-colour set used
-solely for that section's per-card animated background gradient (no solid fills — these are
-soft/translucent tones only). Don't reuse outside that component; everywhere else stays on
-the single accent above.
+**Signal hues — "lit surfaces".** Four muted, slightly desaturated companions to the
+accent give the site life without saturation. The governing rule: **colour behaves like
+light, never paint.** Text stays solid (no gradient text — it was tried and rejected as
+dated), and no hue is ever a solid section fill.
+
+| Token | Value | Utility | Owns |
+| --- | --- | --- | --- |
+| `--iris` | `#7470e8` | `text-iris`, `bg-iris` | Memory card, customer beats, stats card 2 |
+| `--teal` | `#1fa596` | `text-teal`, `bg-teal` | Actions card / "Done", result beats + success glow, stats card 4 |
+| `--amber` | `#d99440` | `text-amber`, `bg-amber` | Knowledge card, action beats (spinner, checks, progress) |
+| `--rose` | `#d8607e` | `text-rose`, `bg-rose` | Chat card, understanding beats (confidence), stats card 3 |
+
+Where hues may appear: particle colour ramps, cursor spotlights and border glows,
+section light cones, small status dots / index numbers / eyebrows, `AgentRun` nodes, glows and
+badges. Motion code that needs a hue as rgb reads the CSS variable at
+runtime rather than hard-coding it.
+
+**Lit-surface primitives** (all in `globals.css`):
+
+- **Film grain** — `body::after`, a fixed SVG-noise layer at `opacity 0.035`, `z-30` (under
+  the particle canvas and nav). Keeps white from reading as flat.
+- **`.section-light`** — a faint radial cone from the section's top edge plus a 1px light
+  "seam" along it, in `--light` (default `--accent`). On the hero, features, use cases,
+  stats, and every `PageHeader`.
+- **`.spotlight`** — a cursor-tracked inner glow plus a border that lights up near the
+  cursor, in `--hue` (default `--accent`). Opt in with the class and an inline `--hue`;
+  `<SpotlightTracker>` (one delegated pointer listener, in the root layout) writes
+  `--mx`/`--my`. Used on feature cards, stat cards, pricing tiers, resource cards, and
+  capability cards.
+
+**Stat highlights — the `StatsSection` proof-stats cards only.** The existing per-card
+animated background gradient, now retuned to the signal hues at low alpha.
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--stat-indigo-soft` | `rgba(73,89,238,0.18)` (same hue as `--accent`) | Card 1 gradient |
-| `--stat-violet-soft` | `rgba(167,139,250,0.22)` | Card 2 gradient |
-| `--stat-pink-soft` | `rgba(244,114,182,0.2)` | Card 3 gradient |
-| `--stat-mint-soft` | `rgba(110,231,183,0.22)` | Card 4 gradient |
-
-Referenced via `var(--stat-*-soft)` directly in each card's inline gradient `style` — not
-exposed as Tailwind background-fill utilities, since they're never used as a solid fill.
+| `--stat-indigo-soft` | `rgba(47,105,241,0.12)` | Card 1 gradient |
+| `--stat-violet-soft` | `rgba(116,112,232,0.12)` | Card 2 gradient |
+| `--stat-pink-soft` | `rgba(216,96,126,0.1)` | Card 3 gradient |
+| `--stat-mint-soft` | `rgba(31,165,150,0.12)` | Card 4 gradient |
 
 ### Surfaces and elevation
 
@@ -255,9 +276,7 @@ anywhere else.
 | `--font-stack-sans-text-heading` | **Stack Sans Text**, falling back to Geist | `font-heading` | Applied automatically by `<TextReveal>`; also manual on the 404 `h1` |
 
 Fonts are loaded in [src/app/layout.tsx](src/app/layout.tsx) via `next/font/google` and
-exposed as CSS variables on `<html>`. There is no monospace font in the system — Geist
-Mono was removed; eyebrow/metadata text that used to render in mono now uses the default
-`font-sans` (Geist) with uppercase + wide tracking to keep the same visual texture.
+exposed as CSS variables on `<html>`. There is no monospace font in the system.
 
 ### Scale
 
@@ -269,8 +288,7 @@ Mono was removed; eyebrow/metadata text that used to render in mono now uses the
 | Card / feature `h3` | `text-base` or `text-lg` + `font-medium` |
 | Lead paragraph | `text-lg text-foreground-muted` (hero adds `leading-8`), `max-w-md` / `max-w-lg` |
 | Body / UI text | `text-sm` — the workhorse size (~53 uses) |
-| Captions, metadata | `text-xs text-foreground-muted` |
-| Eyebrow label | `text-[10px]` or `text-[11px]` / `text-xs` + `uppercase tracking-[0.14em]` (or `[0.16em]`) + `text-foreground-muted` (default `font-sans`, no mono) |
+| Captions, metadata, in-visual labels | `text-xs text-foreground-muted`, sentence case |
 | Price | `text-4xl font-medium tracking-tight` |
 
 ### Rules
@@ -278,9 +296,22 @@ Mono was removed; eyebrow/metadata text that used to render in mono now uses the
 - **Weight:** `font-medium` is the default for every heading and button (~51 uses).
   `font-semibold` only for the wordmark and placeholder logos; `font-bold` only inside the
   small "C" logo mark. **Never use `font-bold` on headings.**
-- **Tracking:** `tracking-tight` on every heading and on the wordmark. Uppercase eyebrow
-  labels (set in `font-sans`, no mono font) use wide tracking: `tracking-[0.14em]` (small)
-  or `tracking-[0.16em]` (larger).
+- **Tracking:** `tracking-tight` on every heading and on the wordmark.
+- **No template micro-texture.** The owner rejected the "generic AI template" look, whose
+  signature is a layer of tiny decorative labels. Don't add any of these:
+  - eyebrow / kicker text above a headline
+  - uppercase wide-tracked micro-labels (`uppercase tracking-[0.14em]` etc.)
+  - index numbering (`01`, `01 / 06`)
+  - decorative tag chips (`REALTIME`, `WEB · APP`)
+  - middle-dot captions (`Intent · Sales`)
+  - pinging "Live" status dots
+
+  Labels that carry real information are sentence case, `text-xs text-foreground-muted`;
+  a structural subheading is `text-sm`/`text-base font-medium text-foreground`. Status
+  badges that *are* content (e.g. "Answered by AI" in a call log) are fine.
+- **Section heading block** is always `max-w-xl` → `<TextReveal className="text-3xl
+  font-medium tracking-tight sm:text-4xl">` → `<Reveal delay={0.1}><p className="mt-4
+  max-w-lg text-foreground-muted">`, left-aligned, with nothing above the headline.
 - **Measure:** headings cap at `max-w-xl` / `max-w-2xl`, body at `max-w-md` / `max-w-lg` /
   `max-w-xs`. Long lines are never allowed to run the full 1400px container.
 - **Colour:** headings `text-foreground`, supporting copy `text-foreground-muted`. That
@@ -361,9 +392,7 @@ Text link + arrow group inline-flex items-center gap-1.5 text-sm font-medium
                  + <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
 Card             rounded-2xl border border-border p-6 sm:p-7 transition-colors hover:border-border-strong
 Form input       rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-accent
-Eyebrow          text-xs uppercase tracking-[0.16em] text-foreground-muted
-Badge / pill     rounded-full bg-foreground px-3 py-1
-                 text-[10px] uppercase tracking-[0.14em] text-background
+Small label      text-xs text-foreground-muted            (sentence case — never uppercase-tracked)
 ```
 
 Icon sizing: `h-4 w-4` inline with text, `h-3.5 w-3.5` for small arrows, `h-5 w-5` for the
@@ -374,15 +403,55 @@ mobile menu toggle.
 - **`Nav`** — sticky, `z-50`. GSAP animates height from `76` to `60`px and fades in a
   translucent white background (`rgba(255,255,255,0.85)` + `blur(10px)`) plus the bottom
   border once `scrollY > 24`. Active links get a full-width underline that grows from 0 on hover.
-- **`ConversationVisual`** ([src/lib/motion/conversation-visual.tsx](src/lib/motion/conversation-visual.tsx)) —
-  **the site's recurring motif**, and the thing to reuse rather than reinvent. A minimal
-  transcript stepping through `customer` → `understanding` → `agent` → `action` → `result`
-  beats. `variant="full"` is the ink-surface hero treatment (animated glow orbs, accent
-  progress rail, success pulse); `variant="compact"` is the quiet light-surface echo. The
-  Use Cases selector feeds it different `script` props.
-- **`feature-visuals/*`** — six tiny hover-driven motion graphics (voice waveform, chat,
-  knowledge, memory, actions, intelligence), each about `h-20`, shared by the home bento
-  grid and the `/features` detail list.
+- **`AgentRun`** ([src/lib/motion/agent-run.tsx](src/lib/motion/agent-run.tsx)) — the Use
+  Cases stage: a white, softly elevated panel (dot grid + film grain, all text in
+  `foreground` / `foreground-muted` for readability — colour lives only in nodes, glows and
+  indicators) showing a live agent run as a transcript that assembles beat by
+  beat along a vertical spine. Beats are a discriminated union (`RunBeat`): `customer` /
+  `agent` text, `understanding` (`tags` + `confidence`), `action` (`label`, `system`,
+  `steps[]`), `result` (`label` + `detail`). Each kind has its own choreography: the rail
+  draws to the beat and its node ignites with a ring burst, then customer words resolve
+  from blur, understanding runs a scanner across the confidence bar before tags pop and the
+  % counts up, action steps each spin then tick off while a progress line fills, the agent
+  reply shows typing dots then streams character by character with a caret, and the result
+  badge bursts in while the frame glows. Between beats a glowing signal pulse (in the next
+  beat's hue) rides the rail down to the next node; an amber sheen sweeps the action card
+  once its steps are done; the result node throws a ring of sparks in every signal hue. The header clock ticks and its waveform swells only
+  while someone is speaking; a glow tracks the active node and shifts to its hue (each
+  beat kind owns one signal hue: customer iris, understanding rose, action amber, agent
+  accent, result teal); the transcript
+  "camera" scrolls up as it grows. Changing `run` blurs the old run out before the next one
+  starts; `play` holds the first run until the host is in view. Per-beat durations live in
+  `beatSeconds`, and `getRunSeconds(script)` exposes the total so `UseCasesSection` times
+  its auto-advance and progress bar from the same numbers. Reduced motion renders the
+  finished transcript at full height with no camera.
+- **`feature-visuals/*`** — six particle scenes (voice, chat, knowledge, memory, actions,
+  intelligence), each a `<ParticleView>` (default `h-44 sm:h-52`, overridable via
+  `className`) plus a few eyebrow-style DOM labels. Shared by the home bento grid and the
+  `/features` detail list; their host card carries `data-particle-hover`. See the particle
+  stage in section 9.
+- **`FeatureCards`** — the bento grid. Each card: `0N` index + tag eyebrow row, the
+  particle visual, then title/description pinned to the bottom; a 1px accent line grows
+  across the top edge on hover. The wide Intelligence card goes two-column on `lg`. The
+  card background sits on a wrapper *outside* `<Reveal>` so the grid's `bg-border` gaps
+  never show as a grey slab while cards fade in.
+- **`ImpactSection`** (home) — a **sticky stacking deck** on a `bg-surface` band. Six wide
+  white cards (`spotlight`, each with its own `--hue`), each split into index / label /
+  headline / copy and an inset `bg-surface` panel holding its `impact-visuals/*` story. On
+  `lg` (motion-safe) each card's wrapper is `sticky` at `104px + i × 16px`, so earlier
+  cards' top edges peek out; scrubbed ScrollTriggers scale earlier cards back
+  (`1 − depth × 0.03`, `origin-top`) and fade in a `[data-dim]` overlay while the rest of the
+  deck deals in, and a trailing spacer holds the finished stack briefly. Below `lg` (tall
+  cards would hide their own bottoms if stuck) and under reduced motion it's a plain stack.
+- **`impact-visuals/*`** — six small DOM/SVG stories driven by `usePlayTimeline`: a call log
+  whose "Missed" pills flip to "Answered by AI" (missed count 14 → 0); a week of shifts whose
+  amber overtime drains (23h → 2h); a 10:00 double-booking that shakes, slides to 11:30 and
+  syncs; a rules × conversations grid that ticks teal in one diagonal wave (0 → 100%); a
+  caller queue that drains into the agent while the wait clock collapses (4:12 → 0:01); team
+  energy bars refilling rose → blue (tickets 128 → 12). Server HTML is each story's *end*
+  state; the "before" state is applied on the client.
+- **`ClientLogos`** — an infinite CSS marquee (list rendered twice, second copy
+  `aria-hidden`), edge-faded with `mask-image`, paused on hover.
 - **`GhostFibers`** — a 412-line ogl/WebGL fragment shader rendering animated fibre lines,
   used once as the CTA section background, fully parameterised via props
   (`lineColor="#140E35"`, `glowColor="#3437A0"`, `dpr={1}`, etc.). Treat as vendored.
@@ -410,15 +479,45 @@ Everything lives in [src/lib/motion/](src/lib/motion/). **Use these hooks — do
 | `use-reduced-motion.ts` | `useSyncExternalStore` over `matchMedia`, hydration-safe (server snapshot is `false`). |
 | `use-gsap-context.ts` | **The foundation.** Scopes a `gsap.context()` to a ref, reverts on unmount / dep change, and passes `reducedMotion` into the effect. |
 | `scroll-timeline.ts` | `useScrollTimeline` — a ScrollTrigger-driven timeline; reduced motion collapses scrub/pin into one instant `once` playthrough. |
-| `use-hover-timeline.ts` | Paused timeline played on `pointerenter` / `focusin`, reversed on leave; falls back to play-once on scroll-into-view for touch devices. |
 | `use-draw-lines.ts` | DrawSVG path stroking scrubbed to scroll position (Technology diagram connectors). |
 | `text-reveal.tsx` | `<TextReveal>` — SplitText masked line-by-line headline reveal. `playOn="mount"` above the fold, `playOn="scroll"` everywhere else. Applies `font-heading`. |
-| `reveal.tsx` *(in components/)* | `<Reveal>` — the default fade + 20px rise on scroll-in. `delay` staggers siblings (commonly `(i % 3) * 0.06`). |
+| `reveal.tsx` *(in components/)* | `<Reveal>` — the default fade + 20px rise + `blur(8px) → 0` on scroll-in. `delay` staggers siblings (commonly `(i % 3) * 0.06`). |
+| `smooth-scroll.tsx` | `<SmoothScroll>` — Lenis on GSAP's ticker (prioritised, so ScrollTrigger and the particle stage read post-scroll positions), `ScrollTrigger.update` on scroll, honours `scroll-padding-top` for anchors. Not created under reduced motion. Mounted once in the root layout. |
+| `use-play-timeline.ts` | `usePlayTimeline(build)` — a paused story timeline (its `fromTo`s set the "before" state) played once at `"top 70%"` and replayed from the start when the pointer enters the nearest `[data-replay]` host (if not mid-play). `build` receives `reducedMotion`; reduced motion jumps to the end state. Used by `impact-visuals/*`. |
+| `spotlight.tsx` | `<SpotlightTracker>` — one delegated `pointermove` listener that writes `--mx`/`--my` onto whichever `.spotlight` element is under the cursor (rAF-throttled). Fine pointers only. Mounted once in the root layout. |
+| `magnetic.tsx` | `<Magnetic>` — wraps a CTA so it pulls toward the cursor and springs back (elastic). Used on the hero and CTA-section "Book a Demo" buttons. |
+| `use-tilt.ts` | `useTilt(maxDeg)` — 3D tilts `[data-tilt]` children toward the cursor (hero robot image). |
+| `count-up.tsx` | `<CountUp value="−60%">` — counts the numeric part up on scroll-in, keeping prefix/suffix. SSR and reduced motion show the final value. |
+| `particles/` | The shared three.js particle stage — see below. |
 
-**Standard values:** `Reveal` uses `duration 0.7`, `ease power2.out`, `start "top 85%"`,
+**Standard values:** `Reveal` uses `duration 0.9`, `ease power3.out`, `start "top 85%"`,
 `once: true`. `TextReveal` uses `yPercent 110 -> 0`, `duration 0.8`, `stagger 0.1`,
-`ease power3.out`. Hover timelines trigger at `"top 75%"`; draw-lines scrub from
-`"top 65%"` to `"bottom 35%"`.
+`ease power3.out`. Draw-lines scrub from `"top 65%"` to `"bottom 35%"`. The hero's scroll
+exit scrubs `top top → bottom top` (copy drifts up and fades, visual sinks and scales to 0.92).
+
+**Particle stage (`lib/motion/particles/`).** One fixed, `pointer-events-none`, `z-40`
+canvas (below the `z-50` nav) and **one** WebGL context render every particle scene on the
+page: each `<ParticleView mode="…">` registers a DOM slot, and every frame the stage
+scissors a viewport to that slot's `getBoundingClientRect()`. Three.js is dynamically
+imported on first registration, so it never lands in the initial bundle.
+
+- `scenes.ts` builds per-mode geometry (seeded, rebuilt when a slot's aspect changes >4%).
+- `shaders.ts` holds one vertex shader with a `#if MODE == n` branch per scene. All scene
+  motion is computed on the GPU from `uTime`; shared tail logic handles cursor parallax,
+  cursor repulsion, and the scatter → formed intro.
+- Colours come from CSS variables at runtime (passed as raw sRGB): `--foreground` for the base particles, plus a per-scene three-stop ramp of signal hues (`PALETTES` in `particle-stage.ts`) sampled by x position, ring, lane, or chain step. Feature-visual DOM labels use the matching hue.
+- Hover/cursor input comes from the nearest `[data-particle-hover]` ancestor (the whole
+  card). Hover speeds up scene time (1.9×) and raises amplitude; touch devices get a
+  constant 0.35 "alive" level instead.
+- Scenes only render while intersecting the viewport; the ticker is removed when none are.
+- Reduced motion: intro skipped, scene time frozen per mode at a frame showing the scene's
+  end state (`REDUCED_TIME` — e.g. the chat reply fully formed), cursor input ignored.
+- The six modes: `voice` (tilted terrain waveform), `chat` (customer message particles
+  lift off and re-form as the agent reply), `knowledge` (doc sheets stream into a rotating
+  core), `memory` (comet-trail orbits around a core), `actions` (a pulse lights each node
+  in an Agent → Calendar → CRM → Done chain), `intelligence` (noise sorts into three
+  labelled lanes). DOM labels in each `feature-visuals/*` file are positioned to match the
+  scene coordinates noted there — keep them in sync if you move scene geometry.
 
 **Reduced-motion contract:** every animation must have a reduced-motion branch that jumps
 straight to the **end state** — content must never be left invisible. State changes that
@@ -429,7 +528,8 @@ goes in a `<Reveal delay={0.1}>`.
 
 **Ambient CSS-only loops (exception to "animate through `lib/motion` hooks"):** a purely
 decorative, indefinitely-looping effect with no scroll trigger and no state to preserve —
-e.g. `StatsSection`'s per-card background gradients — is done as a plain CSS `@keyframes`
+e.g. `StatsSection`'s per-card background gradients, or the `ClientLogos` `marquee` (which
+ends on an identical frame at `-50%`, so the clamp leaves it visually unchanged) — is done as a plain CSS `@keyframes`
 animation (defined in `globals.css`, applied via an arbitrary `animate-[name_Ns_ease_infinite]`
 class) instead of a GSAP timeline. The global `prefers-reduced-motion` block already clamps
 all CSS `animation-duration` to `0.01ms`, so this still satisfies the reduced-motion contract
@@ -481,7 +581,7 @@ export function getResourceBySlug(slug)
 2. **Tokens only.** No raw hex, no stock Tailwind palette colours. If a colour is missing,
    add a token in `globals.css` *and* to the `@theme inline` block, then document it here.
 3. **Keep the accent scarce.** Indicators and single emphasis points only. Primary CTAs stay black.
-4. **Keep the ink surface scarce.** Hero visual and Technology section only.
+4. **Keep the ink surface scarce.** Only the surfaces listed in section 5.
 5. **Reuse the recipes** in section 8 instead of inventing new button / card / eyebrow styling.
 6. **Every animation needs a reduced-motion branch** that lands on the visible end state.
 7. **Animate through `lib/motion` hooks**, never raw `gsap` in a component body.

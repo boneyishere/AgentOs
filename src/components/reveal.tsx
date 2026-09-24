@@ -23,13 +23,15 @@ export function Reveal({
 
       gsap.fromTo(
         el,
-        { autoAlpha: 0, y },
+        { autoAlpha: 0, y, filter: "blur(8px)" },
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.7,
+          filter: "blur(0px)",
+          duration: 0.9,
           delay,
-          ease: "power2.out",
+          ease: "power3.out",
+          clearProps: "filter",
           scrollTrigger: { trigger: el, start: "top 85%", once: true },
         }
       );

@@ -147,7 +147,7 @@ export function FeatureDetailList() {
 
                 <div
                   className={`mt-8 grid grid-cols-1 gap-8 ${
-                    Visual ? "lg:grid-cols-[1fr_320px] lg:items-center" : ""
+                    Visual ? "lg:grid-cols-[1fr_440px] lg:items-center" : ""
                   }`}
                 >
                   <ul className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
@@ -163,7 +163,7 @@ export function FeatureDetailList() {
                   </ul>
 
                   {Visual && (
-                    <div className="rounded-2xl border border-border bg-surface p-6 sm:p-7">
+                    <div data-particle-hover className="rounded-2xl border border-border bg-surface p-6 sm:p-7">
                       <Visual />
                     </div>
                   )}

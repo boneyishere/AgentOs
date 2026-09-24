@@ -92,7 +92,7 @@ export function AgentCapabilitiesSection() {
             <Reveal
               key={title}
               delay={(i % 3) * 0.06}
-              className="h-full rounded-2xl border border-border p-6 transition-colors hover:border-border-strong sm:p-7"
+              className="spotlight h-full rounded-2xl border border-border p-6 transition-colors hover:border-border-strong sm:p-7"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface text-accent">
                 <Icon className="h-4.5 w-4.5" />

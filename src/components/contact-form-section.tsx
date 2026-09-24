@@ -94,9 +94,7 @@ export function ContactFormSection() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <p className="text-xs uppercase tracking-[0.14em] text-foreground-muted">
-            What happens next
-          </p>
+          <p className="text-base font-medium text-foreground">What happens next</p>
           <ol className="mt-5 space-y-5">
             {STEPS.map((step, i) => (
               <li key={step} className="flex gap-4">

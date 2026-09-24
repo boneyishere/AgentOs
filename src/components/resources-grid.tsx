@@ -49,7 +49,7 @@ export function ResourcesGrid() {
             <Reveal key={item.slug} delay={(i % 3) * 0.06}>
               <Link
                 href={`/resources/${item.slug}`}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border transition-colors hover:border-border-strong"
+                className="spotlight group flex h-full flex-col overflow-hidden rounded-2xl border border-border transition-colors hover:border-border-strong"
               >
                 <ResourceCover
                   color={item.image.color}
@@ -57,9 +57,7 @@ export function ResourcesGrid() {
                   className="aspect-[16/10] w-full transition-transform duration-300 group-hover:scale-[1.03]"
                 />
                 <div className="flex flex-1 flex-col p-6">
-                  <span className="w-fit rounded-full bg-surface px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
-                    {item.category}
-                  </span>
+                  <span className="text-xs text-foreground-muted">{item.category}</span>
                   <h3 className="mt-4 text-lg font-medium tracking-tight">
                     {item.title}
                   </h3>

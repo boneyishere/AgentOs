@@ -5,14 +5,27 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Container } from "./container";
 import { TextReveal } from "@/lib/motion/text-reveal";
+import { useScrollTimeline } from "@/lib/motion/scroll-timeline";
+import { useTilt } from "@/lib/motion/use-tilt";
+import { Magnetic } from "@/lib/motion/magnetic";
 import Ferrofluid from "./Ferrofluid";
 
 export function Hero() {
+  const sectionRef = useScrollTimeline<HTMLElement>(
+    { start: "top top", end: "bottom top", scrub: 0.6 },
+    (tl, el, reducedMotion) => {
+      if (reducedMotion) return;
+      tl.to(el.querySelector("[data-hero-copy]"), { yPercent: -22, autoAlpha: 0.15, ease: "none" }, 0);
+      tl.to(el.querySelector("[data-hero-visual]"), { y: 90, scale: 0.92, ease: "none" }, 0);
+    }
+  );
+  const visualRef = useTilt<HTMLDivElement>(7);
+
   return (
-    <section className="border-b border-border">
-      <Container className="py-20 sm:py-28">
+    <section ref={sectionRef} className="section-light overflow-hidden border-b border-border">
+      <Container className="relative py-20 sm:py-28">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-10">
-          <div>
+          <div data-hero-copy>
             <TextReveal
               as="h1"
               playOn="mount"
@@ -28,13 +41,15 @@ export function Hero() {
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-6">
-              <Link
-                href="/contact"
-                className="inline-flex h-[50px] items-center gap-2 rounded-full bg-foreground px-5 text-base font-medium text-background transition-opacity hover:opacity-85"
-              >
-                Book a Demo
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              <Magnetic>
+                <Link
+                  href="/contact"
+                  className="inline-flex h-[50px] items-center gap-2 rounded-full bg-foreground px-5 text-base font-medium text-background transition-opacity hover:opacity-85"
+                >
+                  Book a Demo
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Magnetic>
               <Link
                 href="/features"
                 className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground"
@@ -44,10 +59,14 @@ export function Hero() {
               </Link>
             </div>
           </div>
-          <div className="relative ml-auto flex h-[550px] w-full max-w-[600px] items-center justify-center overflow-hidden rounded-2xl bg-ink">
+          <div
+            ref={visualRef}
+            data-hero-visual
+            className="relative ml-auto flex h-[550px] w-full max-w-[600px] items-center justify-center overflow-hidden rounded-2xl bg-ink"
+          >
             <div className="pointer-events-none absolute inset-0" aria-hidden="true">
               <Ferrofluid
-                colors={["#2F69F1", "#2F69F1", "#2F69F1"]}
+                colors={["#2F69F1", "#7470E8", "#2F69F1"]}
                 speed={0.4}
                 scale={1.4}
                 turbulence={0.9}
@@ -69,6 +88,7 @@ export function Hero() {
               width={722}
               height={827}
               priority
+              data-tilt="1"
               className="relative h-[60%] w-auto object-contain"
             />
           </div>

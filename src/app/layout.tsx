@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Stack_Sans_Text } from "next/font/google";
+import { SmoothScroll } from "@/lib/motion/smooth-scroll";
+import { SpotlightTracker } from "@/lib/motion/spotlight";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -46,6 +48,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className="min-h-full flex flex-col bg-background text-foreground"
         suppressHydrationWarning
       >
+        <SmoothScroll />
+        <SpotlightTracker />
         {children}
       </body>
     </html>

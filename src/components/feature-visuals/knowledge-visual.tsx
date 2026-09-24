@@ -1,40 +1,12 @@
-"use client";
+import { ParticleView } from "@/lib/motion/particles/particle-view";
 
-import { useHoverTimeline } from "@/lib/motion/use-hover-timeline";
+const LABEL = "absolute bottom-0 -translate-x-1/2 whitespace-nowrap text-xs text-foreground-muted";
 
-const SOURCES = ["Docs", "FAQs", "Policies"];
-
-export function KnowledgeVisual() {
-  const ref = useHoverTimeline<HTMLDivElement>((tl, el) => {
-    const docs = el.querySelectorAll<HTMLElement>("[data-doc]");
-    const node = el.querySelector<HTMLElement>("[data-node]");
-
-    tl.to(docs, { x: 0, autoAlpha: 1, duration: 0.4, stagger: 0.08, ease: "power2.out" });
-    if (node) {
-      tl.to(node, { scale: 1.1, duration: 0.2, yoyo: true, repeat: 1 }, "-=0.1");
-    }
-  }, []);
-
+export function KnowledgeVisual({ className = "h-44 sm:h-52" }: { className?: string }) {
   return (
-    <div ref={ref} className="flex h-20 items-center justify-between gap-2">
-      <div className="flex flex-col gap-1.5">
-        {SOURCES.map((label) => (
-          <span
-            key={label}
-            data-doc
-            className="w-fit -translate-x-2 rounded border border-border bg-surface px-2 py-1 text-[10px] font-medium text-foreground-muted opacity-0"
-          >
-            {label}
-          </span>
-        ))}
-      </div>
-      <div className="h-px flex-1 border-t border-dashed border-border" />
-      <div
-        data-node
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground text-[10px] text-background"
-      >
-        AI
-      </div>
-    </div>
+    <ParticleView mode="knowledge" className={className}>
+      <span className={`${LABEL} left-1/4`}>Your docs</span>
+      <span className={`${LABEL} left-[76%]`}>Agent</span>
+    </ParticleView>
   );
 }

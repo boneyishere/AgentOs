@@ -26,11 +26,19 @@
   --accent-foreground: #ffffff;
   --accent-soft: rgba(47, 105, 241, 0.08);
 
+  /* signal hues — muted, slightly desaturated companions to --accent. They behave
+     like light, never paint: particle colour, cursor spotlights, border glows,
+     status dots, faint light cones. Never gradient text, never solid section fills. */
+  --iris: #7470e8;
+  --teal: #1fa596;
+  --amber: #d99440;
+  --rose: #d8607e;
+
   /* stat highlights — the per-card background gradient in the proof-stats section only */
-  --stat-indigo-soft: rgba(73, 89, 238, 0.18);
-  --stat-violet-soft: rgba(167, 139, 250, 0.22);
-  --stat-pink-soft: rgba(244, 114, 182, 0.2);
-  --stat-mint-soft: rgba(110, 231, 183, 0.22);
+  --stat-indigo-soft: rgba(47, 105, 241, 0.12);
+  --stat-violet-soft: rgba(116, 112, 232, 0.12);
+  --stat-pink-soft: rgba(216, 96, 126, 0.1);
+  --stat-mint-soft: rgba(31, 165, 150, 0.12);
 }
 
 @theme inline {
@@ -52,6 +60,11 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-soft: var(--accent-soft);
 
+  --color-iris: var(--iris);
+  --color-teal: var(--teal);
+  --color-amber: var(--amber);
+  --color-rose: var(--rose);
+
   --color-stat-indigo-soft: var(--stat-indigo-soft);
   --color-stat-violet-soft: var(--stat-violet-soft);
   --color-stat-pink-soft: var(--stat-pink-soft);
@@ -65,6 +78,16 @@ html {
   scroll-behavior: smooth;
   /* Keeps anchor-linked sections clear of the sticky nav on landing. */
   scroll-padding-top: 6rem;
+}
+
+/* Lenis animates scroll itself; native smooth scrolling would fight it. */
+html.lenis {
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
 body {
@@ -98,6 +121,121 @@ body {
   }
   to {
     transform: scaleX(1);
+  }
+}
+
+/* Impact stage "Now handling" chip — pops in each time the handled impact changes. */
+@keyframes impact-chip {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- Lit surfaces: colour behaves like light, never paint. ---- */
+
+/* Film grain — a fixed, barely-there noise layer so white never reads as flat.
+   Sits under the particle canvas (z-40) and the nav (z-50). */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Section light — a faint cone falling from the section's top edge, plus a
+   hairline "seam" of light along it. Hue from --light (defaults to --accent). */
+.section-light {
+  position: relative;
+  isolation: isolate;
+}
+.section-light::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: min(75%, 560px);
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    46% 100% at 50% 0%,
+    color-mix(in srgb, var(--light, var(--accent)) 10%, transparent),
+    transparent 72%
+  );
+}
+.section-light::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 18%;
+  right: 18%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--light, var(--accent)) 50%, transparent),
+    transparent
+  );
+}
+
+/* Cursor spotlight — <SpotlightTracker> writes --mx/--my on whichever
+   .spotlight element the pointer is over. A soft inner glow plus a border that
+   lights up near the cursor, both in the element's --hue. */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before,
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.spotlight::before {
+  z-index: -1;
+  background: radial-gradient(
+    440px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in srgb, var(--hue, var(--accent)) 9%, transparent),
+    transparent 65%
+  );
+}
+.spotlight::after {
+  padding: 1px;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in srgb, var(--hue, var(--accent)) 75%, transparent),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.spotlight:hover::before,
+.spotlight:hover::after {
+  opacity: 1;
+}
+
+/* client-logo marquee — the list is duplicated, so -50% lands on an identical frame
+   (which is also where reduced motion's duration clamp leaves it). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 

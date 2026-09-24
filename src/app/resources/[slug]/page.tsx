@@ -97,25 +97,19 @@ export default async function ResourceDetailPage({
               {resource.category === "Case Study" ? (
                 <Reveal delay={0.2} className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3">
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
-                      Problem
-                    </p>
+                    <p className="text-sm font-medium text-foreground">Problem</p>
                     <p className="mt-2 text-sm text-foreground-muted">
                       {resource.problem}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
-                      Codely
-                    </p>
+                    <p className="text-sm font-medium text-foreground">What Codely did</p>
                     <p className="mt-2 text-sm text-foreground-muted">
                       {resource.implementation}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.14em] text-accent">
-                      Outcome
-                    </p>
+                    <p className="text-sm font-medium text-foreground">Outcome</p>
                     <p className="mt-2 text-sm text-foreground">{resource.outcome}</p>
                   </div>
                 </Reveal>
@@ -151,9 +145,7 @@ export default async function ResourceDetailPage({
                       className="aspect-[16/10] w-full transition-transform duration-300 group-hover:scale-[1.03]"
                     />
                     <div className="flex flex-1 flex-col p-6">
-                      <span className="w-fit rounded-full bg-surface px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-foreground-muted">
-                        {item.category}
-                      </span>
+                      <span className="text-xs text-foreground-muted">{item.category}</span>
                       <h3 className="mt-4 text-lg font-medium tracking-tight">
                         {item.title}
                       </h3>

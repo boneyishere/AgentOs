@@ -11,8 +11,8 @@ export function PageHeader({
   description?: string;
 }) {
   return (
-    <section className="border-b border-border">
-      <Container className="py-16 sm:py-20">
+    <section className="section-light border-b border-border">
+      <Container className="relative py-16 sm:py-20">
         <TextReveal
           as="h1"
           playOn="mount"

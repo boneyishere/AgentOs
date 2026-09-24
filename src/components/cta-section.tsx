@@ -5,6 +5,7 @@ import { Container } from "./container";
 import { Reveal } from "./reveal";
 import { TextReveal } from "@/lib/motion/text-reveal";
 import Orb from "./Orb";
+import { Magnetic } from "@/lib/motion/magnetic";
 
 export function CtaSection() {
   return (
@@ -22,12 +23,14 @@ export function CtaSection() {
               Tell us what your business handles today. We&apos;ll show you where
               Codely can help.
             </p>
-            <Link
-              href="/contact"
-              className="pointer-events-auto mt-9 inline-flex h-[50px] items-center rounded-full bg-white px-6 text-base font-medium text-foreground transition-opacity hover:opacity-85"
-            >
-              Book a Demo
-            </Link>
+            <Magnetic className="pointer-events-auto mt-9">
+              <Link
+                href="/contact"
+                className="inline-flex h-[50px] items-center rounded-full bg-white px-6 text-base font-medium text-foreground transition-opacity hover:opacity-85"
+              >
+                Book a Demo
+              </Link>
+            </Magnetic>
           </Reveal>
         </div>
       </Container>

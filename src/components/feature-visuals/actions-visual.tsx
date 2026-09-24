@@ -1,54 +1,27 @@
-"use client";
+import { ParticleView } from "@/lib/motion/particles/particle-view";
 
-import { Calendar, CheckCircle2, Database } from "lucide-react";
-import { useHoverTimeline } from "@/lib/motion/use-hover-timeline";
+// Node centres match the scene's layout: evenly spaced across 78% of each half-width.
+const NODES = [
+  { label: "Agent", left: "10%" },
+  { label: "Calendar", left: "36.67%" },
+  { label: "CRM", left: "63.33%" },
+  { label: "Done", left: "90%" },
+];
 
-export function ActionsVisual() {
-  const ref = useHoverTimeline<HTMLDivElement>((tl, el) => {
-    const icons = el.querySelectorAll<HTMLElement>("[data-icon]");
-    const check = el.querySelector<HTMLElement>("[data-check]");
-
-    tl.fromTo(
-      icons,
-      { autoAlpha: 0.35, scale: 0.9 },
-      { autoAlpha: 1, scale: 1, duration: 0.3, stagger: 0.15 }
-    );
-    if (check) {
-      tl.fromTo(
-        check,
-        { autoAlpha: 0, scale: 0.6 },
-        { autoAlpha: 1, scale: 1, duration: 0.3, ease: "back.out(2)" },
-        "-=0.1"
-      );
-    }
-  }, []);
-
+export function ActionsVisual({ className = "h-44 sm:h-52" }: { className?: string }) {
   return (
-    <div ref={ref} className="flex h-20 items-center justify-between">
-      <div
-        data-icon
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground text-[10px] text-background opacity-35"
-      >
-        AI
-      </div>
-      <div className="mx-1 h-px flex-1 border-t border-dashed border-border" />
-      <div
-        data-icon
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-foreground-muted opacity-35"
-      >
-        <Calendar className="h-4 w-4" />
-      </div>
-      <div className="mx-1 h-px flex-1 border-t border-dashed border-border" />
-      <div
-        data-icon
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-foreground-muted opacity-35"
-      >
-        <Database className="h-4 w-4" />
-      </div>
-      <div className="mx-1 h-px flex-1 border-t border-dashed border-border" />
-      <div data-check className="opacity-0">
-        <CheckCircle2 className="h-5 w-5 text-accent" />
-      </div>
-    </div>
+    <ParticleView mode="actions" className={className}>
+      {NODES.map(({ label, left }, i) => (
+        <span
+          key={label}
+          className={`absolute top-[calc(50%+2rem)] -translate-x-1/2 whitespace-nowrap text-xs ${
+            i === NODES.length - 1 ? "text-foreground" : "text-foreground-muted"
+          }`}
+          style={{ left }}
+        >
+          {label}
+        </span>
+      ))}
+    </ParticleView>
   );
 }

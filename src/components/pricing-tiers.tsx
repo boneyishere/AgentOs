@@ -92,7 +92,7 @@ export function PricingTiers() {
           {TIERS.map((tier, i) => (
             <Reveal key={tier.name} delay={(i % 3) * 0.08} className="h-full">
               <div
-                className={`flex h-full flex-col rounded-2xl border p-8 ${
+                className={`spotlight flex h-full flex-col rounded-2xl border p-8 ${
                   tier.highlighted ? "border-foreground" : "border-border"
                 }`}
               >
