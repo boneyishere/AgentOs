@@ -3,9 +3,12 @@
 import { Container } from "./container";
 import { Reveal } from "./reveal";
 import { TextReveal } from "@/lib/motion/text-reveal";
-import Orb from "./Orb";
 import { Magnetic } from "@/lib/motion/magnetic";
+import dynamic from "next/dynamic";
 import { AgentButton } from "./agent-button";
+
+// WebGL ring: loaded on the client only, in its own chunk (the card is ink until it mounts).
+const Orb = dynamic(() => import("./Orb"), { ssr: false });
 
 export function CtaSection() {
   return (

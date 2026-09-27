@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
 import './Ferrofluid.css';
+import { renderWhenVisible, shaderDpr } from '@/lib/motion/use-render-when-visible';
 
 const MAX_COLORS = 8;
 
@@ -209,7 +210,6 @@ const Ferrofluid = ({
   mixBlendMode = undefined
 }) => {
   const containerRef = useRef(null);
-  const rafRef = useRef(null);
   const programRef = useRef(null);
   const meshRef = useRef(null);
   const geometryRef = useRef(null);
@@ -222,9 +222,9 @@ const Ferrofluid = ({
     if (!container) return;
 
     const renderer = new Renderer({
-      dpr: dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1),
+      dpr: dpr ?? shaderDpr(),
       alpha: true,
-      antialias: true
+      antialias: false
     });
     rendererRef.current = renderer;
     const gl = renderer.gl;
@@ -299,7 +299,6 @@ const Ferrofluid = ({
     }
 
     const loop = t => {
-      rafRef.current = requestAnimationFrame(loop);
       uniforms.iTime.value = t * 0.001;
       if (mouseDampening > 0) {
         if (!lastTimeRef.current) lastTimeRef.current = t;
@@ -323,10 +322,10 @@ const Ferrofluid = ({
         }
       }
     };
-    rafRef.current = requestAnimationFrame(loop);
+    const stopLoop = renderWhenVisible(container, loop);
 
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      stopLoop();
       if (mouseInteraction) canvas.removeEventListener('pointermove', onPointerMove);
       ro.disconnect();
       if (canvas.parentElement === container) {

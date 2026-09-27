@@ -37,7 +37,7 @@ built to degrade gracefully under `prefers-reduced-motion`.
 | Language | TypeScript 5 (`strict: true`) |
 | UI runtime | React **19.2.8** |
 | Styling | **Tailwind CSS v4** via `@tailwindcss/postcss` — CSS-first config, no `tailwind.config.js` |
-| Animation | **GSAP 3.15** + ScrollTrigger, SplitText, DrawSVGPlugin (premium plugins) |
+| Animation | **GSAP 3.15** + ScrollTrigger, SplitText, ScrambleTextPlugin |
 | WebGL | **three 0.186** — the shared particle stage behind the feature visuals (lazy-loaded); **ogl 1.0.11** — the vendored `Ferrofluid` / `Orb` shader backgrounds |
 | Scroll | **Lenis 1.3** — site-wide inertial scroll, driven from GSAP's ticker |
 | Icons | `lucide-react` (UI icons), `@icons-pack/react-simple-icons` (brand logos) |
@@ -70,12 +70,12 @@ D:/agent/
     ├── CLAUDE.md                # imports AGENTS.md + this file
     ├── PROJECTOVERVIEW.md       # <- this file
     ├── README.md
-    ├── next.config.ts           # empty config
+    ├── next.config.ts           # AVIF/WebP images, optimizePackageImports
     ├── postcss.config.mjs       # @tailwindcss/postcss only
     ├── eslint.config.mjs
     ├── tsconfig.json            # strict, @/* -> ./src/*
     ├── public/
-    │   └── images/industries/   # 8 .jpg photos, one per industry card
+    │   └── images/              # robot-agent.png + industries/ (9 compressed .jpg photos)
     └── src/
         ├── app/                 # App Router — routes, metadata, global CSS
         │   ├── globals.css      # ALL design tokens live here
@@ -94,7 +94,7 @@ D:/agent/
         ├── components/          # flat; one file per section or primitive
         │   ├── feature-visuals/ # 6 particle scenes (thin wrappers over <ParticleView>)
         │   ├── impact-visuals/  # 6 in-card story animations for the Impact deck
-        │   ├── GhostFibers.jsx  # WebGL shader background (+ .css)
+        │   ├── Ferrofluid.jsx, Orb.jsx  # vendored ogl shaders (lazy-loaded)
         │   └── *.tsx            # sections + primitives (see section 8)
         ├── content/
         │   └── resources.ts     # the only content data file
@@ -106,7 +106,7 @@ D:/agent/
 
 - Components are **kebab-case** files exporting a **PascalCase** named function
   (`feature-cards.tsx` -> `export function FeatureCards()`). No default exports except pages.
-  The one exception is `GhostFibers.jsx` — a vendored third-party-style component
+  The exceptions are `Ferrofluid.jsx` and `Orb.jsx`, vendored third-party-style components
   (PascalCase filename, JSX, default export). Don't imitate it for new work.
 - The `components/` directory is **flat** — one file per page section. Only
   `feature-visuals/` and `impact-visuals/` are nested, because each holds six variations
@@ -166,10 +166,9 @@ Tailwind colour like `text-gray-500`.**
 
 | Token | Value | Tailwind utility | Use |
 | --- | --- | --- | --- |
-| `--background` | `#ffffff` | `bg-background` | Page and card background |
-| `--surface` | `#fafafa` | `bg-surface` | Alternating section bands, input wells |
-| `--surface-raised` | `#ffffff` | `bg-surface-raised` | Cards sitting on a `surface` band |
-| `--foreground` | `#0a0a0a` | `text-foreground` | Headings, primary text, primary button fill |
+| `--background` | `#fdffff` | `bg-background` | Page and card background |
+| `--surface` | `#fafafa` | `bg-surface` | Alternating section bands, input wells, inset panels |
+| `--foreground` | `#1a1a1a` | `text-foreground` | Headings, primary text, primary button fill |
 | `--foreground-muted` | `#6b6b70` | `text-foreground-muted` | Body copy, captions, inactive nav |
 | `--border` | `#ebebeb` | `border-border` | Default hairline |
 | `--border-strong` | `#d4d4d8` | `border-border-strong` | Hover / emphasis border |
@@ -180,18 +179,15 @@ deliberate decision.
 
 | Token | Value | Utility |
 | --- | --- | --- |
-| `--ink` | `#0a0a0a` | `bg-ink` |
-| `--ink-foreground` | `#fafafa` | `text-ink-foreground` |
-| `--ink-foreground-muted` | `#a1a1aa` | `text-ink-foreground-muted` |
-| `--ink-border` | `rgba(255,255,255,0.12)` | `border-ink-border` |
-| `--ink-border-strong` | `rgba(255,255,255,0.2)` | `border-ink-border-strong` |
+| `--ink` | `#1a1a1a` | `bg-ink` |
+
+Text on ink uses plain `text-white` / `text-white/70` (only two ink surfaces exist).
 
 **Accent — blue `#2f69f1`.**
 
 | Token | Value | Utility |
 | --- | --- | --- |
 | `--accent` | `#2f69f1` | `text-accent`, `bg-accent`, `border-accent` |
-| `--accent-foreground` | `#ffffff` | `text-accent-foreground` |
 | `--accent-soft` | `rgba(47,105,241,0.08)` | `bg-accent-soft` |
 
 > **Accent rule:** the accent is for *indicators, active states, and a single emphasis
@@ -222,8 +218,9 @@ runtime rather than hard-coding it.
 - **Film grain** — `body::after`, a fixed SVG-noise layer at `opacity 0.035`, `z-30` (under
   the particle canvas and nav). Keeps white from reading as flat.
 - **`.section-light`** — a faint radial cone from the section's top edge plus a 1px light
-  "seam" along it, in `--light` (default `--accent`). On the hero, features, use cases,
-  stats, and every `PageHeader`.
+  "seam" along it, in `--light` (default `--accent`). On features, use cases, and stats.
+  Not on the hero or `PageHeader`: as each page's starting section, sitting right under the
+  floating nav's gap made the cone's top edge read as a hard line rather than a glow.
 - **`.spotlight`** — a cursor-tracked inner glow plus a border that lights up near the
   cursor, in `--hue` (default `--accent`). Opt in with the class and an inline `--hue`;
   `<SpotlightTracker>` (one delegated pointer listener, in the root layout) writes
@@ -290,7 +287,7 @@ exposed as CSS variables on `<html>`. There is no monospace font in the system.
 | Page `h1` (PageHeader, article, 404) | `type-page` (36 → 42 → **48px**, balanced wrap) + `font-medium` + `max-w-3xl` |
 | Section `h2` | `type-section` (28 → 34 → **40px**, balanced wrap) + `font-medium`, always via `<TextReveal>`, rendered by `<SectionHeading>` in a shared `max-w-[32rem]` container with natural (not balanced) wrap. Also the CTA headline. |
 | Section subtext | `type-lead` (16 → 17px) + `mt-5 text-foreground-muted`, same `max-w-[32rem]` container as the headline (required, via `<SectionHeading>`) |
-| Large card `h3` (Impact deck) | `text-[1.5rem] sm:text-[1.625rem] xl:text-[1.75rem]`, always below the 40px section headline. Stat numbers are `text-[2.5rem]`. |
+| Large card `h3` (Impact deck) | `max-w-[24rem] text-balance text-[1.5rem] sm:text-[1.625rem] xl:text-[1.75rem]` (always two lines), always below the 40px section headline. Stat numbers are `text-[2.5rem]`. |
 | Card / feature `h3` | `text-base` or `text-lg` + `font-medium` |
 | Lead paragraph (hero / PageHeader) | `text-lg text-foreground-muted` (hero adds `leading-8`), `max-w-md` / `max-w-lg` |
 | Body / UI text | `text-sm` — the workhorse size (~53 uses) |
@@ -572,9 +569,11 @@ the mobile menu toggle.
   effect on the site. The hero's accent word ("AI") decodes out of scrambled glyphs
   (`ScrambleTextPlugin`, registered in `gsap-setup.ts`) as the headline lands, and
   re-decodes on hover. Keep it to this one place.
-- **`GhostFibers`** — a 412-line ogl/WebGL fragment shader rendering animated fibre lines,
-  fully parameterised via props (`lineColor="#140E35"`, `glowColor="#3437A0"`, `dpr={1}`,
-  etc.). Treat as vendored. Not currently used (the CTA uses `Orb`).
+- **`Ferrofluid` / `Orb`** (vendored ogl shaders, hero panel and CTA ring): loaded with
+  `next/dynamic({ ssr: false })` so `ogl` and both shaders sit outside the initial bundle.
+  They render through `renderWhenVisible` ([use-render-when-visible.ts](src/lib/motion/use-render-when-visible.ts)),
+  which runs their rAF loop only while on screen (the shader clock is the rAF timestamp, so
+  nothing visibly changes), at `shaderDpr()` (2x desktop, 1.5x touch).
 - **`FaqSection`** — controlled accordion via `useState`, `ChevronDown` rotation.
 - **`ResourcesGrid`** — client-side `All | Article | Case Study` filter over `RESOURCES`.
 - **`IndustriesSection`** — a pinned, scroll-driven story (desktop, motion-safe only): the
@@ -595,11 +594,10 @@ Everything lives in [src/lib/motion/](src/lib/motion/). **Use these hooks — do
 
 | File | Purpose |
 | --- | --- |
-| `gsap-setup.ts` | Single registration point for ScrollTrigger, SplitText, DrawSVGPlugin (guarded by `typeof window`). Always import `gsap` from here. |
+| `gsap-setup.ts` | Single registration point for ScrollTrigger, SplitText, ScrambleTextPlugin (guarded by `typeof window`). Always import `gsap` from here. |
 | `use-reduced-motion.ts` | `useSyncExternalStore` over `matchMedia`, hydration-safe (server snapshot is `false`). |
 | `use-gsap-context.ts` | **The foundation.** Scopes a `gsap.context()` to a ref, reverts on unmount / dep change, and passes `reducedMotion` into the effect. |
 | `scroll-timeline.ts` | `useScrollTimeline` — a ScrollTrigger-driven timeline; reduced motion collapses scrub/pin into one instant `once` playthrough. |
-| `use-draw-lines.ts` | DrawSVG path stroking scrubbed to scroll position (Technology diagram connectors). |
 | `text-reveal.tsx` | `<TextReveal>` — SplitText masked line-by-line headline reveal. `playOn="mount"` above the fold, `playOn="scroll"` everywhere else. Applies `font-heading`. |
 | `reveal.tsx` *(in components/)* | `<Reveal>` — the default fade + 20px rise + `blur(8px) → 0` on scroll-in. `delay` staggers siblings (commonly `(i % 3) * 0.06`). |
 | `smooth-scroll.tsx` | `<SmoothScroll>` — Lenis on GSAP's ticker (prioritised, so ScrollTrigger and the particle stage read post-scroll positions), `ScrollTrigger.update` on scroll, honours `scroll-padding-top` for anchors. Not created under reduced motion. Mounted once in the root layout. |
@@ -612,7 +610,7 @@ Everything lives in [src/lib/motion/](src/lib/motion/). **Use these hooks — do
 
 **Standard values:** `Reveal` uses `duration 0.9`, `ease power3.out`, `start "top 85%"`,
 `once: true`. `TextReveal` uses `yPercent 110 -> 0`, `duration 0.8`, `stagger 0.1`,
-`ease power3.out`. Draw-lines scrub from `"top 65%"` to `"bottom 35%"`. The hero's scroll
+`ease power3.out`. The hero's scroll
 exit scrubs `top top → bottom top` (copy drifts up and fades, visual sinks and scales to 0.92).
 
 **Particle stage (`lib/motion/particles/`).** One fixed, `pointer-events-none`, `z-40`
@@ -729,15 +727,31 @@ export function getResourceBySlug(slug)
 
 ---
 
-## 12. Known Gaps
+## 12. Performance
+
+- **Every route is static** (`○` / `●` in `next build`): prerendered HTML, no server work
+  per request.
+- **Images:** `next.config.ts` serves AVIF first, then WebP. Source JPGs in
+  `public/images/industries/` are pre-compressed (mozjpeg q80, ≤1600px, about 60KB each).
+  Re-compress new photos the same way before adding them. The robot PNG ships as about 23KB
+  AVIF via `next/image`.
+- **Code splitting:**
+  - `three` loads only when the first particle view registers.
+  - `ogl` plus the Ferrofluid/Orb shaders load via `next/dynamic` after hydration.
+  - `optimizePackageImports` trims the lucide and simple-icons barrels.
+- **Off-screen work stops:**
+  - The particle stage removes its ticker when no view is visible.
+  - Ferrofluid/Orb run through `renderWhenVisible`.
+  - rAF already pauses in background tabs.
+- **Touch devices:** the WebGL backing-store ratio caps at 1.5x, and `Reveal` skips blur.
+- **Keep it lean:** delete unused components, hooks, and assets rather than leaving them
+  (a 5MB unused SVG once sat in `public/`).
+
+## 13. Known Gaps
 
 - The lead intake does not submit anywhere yet: on the last step it shows the success state, but no endpoint receives the brief. Wire `LeadIntake`'s final `next()` to a real destination (API route, form service, CRM) before launch.
 - Privacy and Terms footer links are `href="#"` placeholders.
 - No tests, no CI, no analytics, no error boundary, no `loading.tsx`.
-- `next.config.ts` is empty (no image domains, no redirects, no headers).
-- Industry images are unoptimised JPGs served through `next/image` from `public/`. All 9
-  industries (including ISP Providers) now have real photography — `Industry.image` is a
-  required `string`, and the old null-image placeholder path has been removed.
-- GSAP SplitText and DrawSVGPlugin are paid plugins — a build needs valid access to them.
+- GSAP SplitText and ScrambleTextPlugin are Club plugins, so a build needs valid access to them.
 - There is a stray `package-lock.json` in the parent `D:/agent/` directory; the real project
   root is `D:/agent/AgentOs/`.

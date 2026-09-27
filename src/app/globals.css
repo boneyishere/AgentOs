@@ -8,22 +8,16 @@
   /* light surface (default) */
   --background: #fdffff;
   --surface: #fafafa;
-  --surface-raised: #ffffff;
   --foreground: #1a1a1a;
   --foreground-muted: #6b6b70;
   --border: #ebebeb;
   --border-strong: #d4d4d8;
 
-  /* ink surface — used deliberately for the hero visual + technology section only */
+  /* ink surface: the hero visual panel and the CTA card only */
   --ink: #1a1a1a;
-  --ink-foreground: #fafafa;
-  --ink-foreground-muted: #a1a1aa;
-  --ink-border: rgba(255, 255, 255, 0.12);
-  --ink-border-strong: rgba(255, 255, 255, 0.2);
 
-  /* accent — reserved for indicators, active states, and single emphasis points, never large fills */
+  /* accent: indicators, active states, and single emphasis points, never large fills */
   --accent: #2f69f1;
-  --accent-foreground: #ffffff;
   --accent-soft: rgba(47, 105, 241, 0.08);
 
   /* signal hues — muted, slightly desaturated companions to --accent. They behave
@@ -34,7 +28,7 @@
   --amber: #d99440;
   --rose: #d8607e;
 
-  /* stat highlights — the per-card background gradient in the proof-stats section only */
+  /* soft cover tints: ResourceCover placeholder images only */
   --stat-indigo-soft: rgba(47, 105, 241, 0.12);
   --stat-violet-soft: rgba(116, 112, 232, 0.12);
   --stat-pink-soft: rgba(216, 96, 126, 0.1);
@@ -47,31 +41,20 @@
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
-  --color-surface-raised: var(--surface-raised);
   --color-foreground: var(--foreground);
   --color-foreground-muted: var(--foreground-muted);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
 
   --color-ink: var(--ink);
-  --color-ink-foreground: var(--ink-foreground);
-  --color-ink-foreground-muted: var(--ink-foreground-muted);
-  --color-ink-border: var(--ink-border);
-  --color-ink-border-strong: var(--ink-border-strong);
 
   --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
   --color-accent-soft: var(--accent-soft);
 
   --color-iris: var(--iris);
   --color-teal: var(--teal);
   --color-amber: var(--amber);
   --color-rose: var(--rose);
-
-  --color-stat-indigo-soft: var(--stat-indigo-soft);
-  --color-stat-violet-soft: var(--stat-violet-soft);
-  --color-stat-pink-soft: var(--stat-pink-soft);
-  --color-stat-mint-soft: var(--stat-mint-soft);
 
   --shadow-soft: var(--elevation);
 
@@ -570,7 +553,8 @@ body::after {
   pointer-events: none;
   background: radial-gradient(
     46% 100% at 50% 0%,
-    color-mix(in srgb, var(--light, var(--accent)) 10%, transparent),
+    transparent,
+    color-mix(in srgb, var(--light, var(--accent)) 10%, transparent) 26%,
     transparent 72%
   );
 }
@@ -589,6 +573,7 @@ body::after {
     transparent
   );
 }
+
 
 /* Cursor spotlight — <SpotlightTracker> writes --mx/--my on whichever
    .spotlight element the pointer is over. A soft inner glow plus a border that

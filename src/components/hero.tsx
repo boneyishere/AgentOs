@@ -8,9 +8,13 @@ import { TextReveal } from "@/lib/motion/text-reveal";
 import { useScrollTimeline } from "@/lib/motion/scroll-timeline";
 import { useTilt } from "@/lib/motion/use-tilt";
 import { Magnetic } from "@/lib/motion/magnetic";
-import Ferrofluid from "./Ferrofluid";
-import { AgentButton } from "./agent-button";
 import { ScrambleText } from "@/lib/motion/scramble-text";
+import dynamic from "next/dynamic";
+import { AgentButton } from "./agent-button";
+
+// WebGL background: split out of the initial bundle and never prerendered.
+// The panel's bg-ink shows until it mounts, so there's no layout or colour shift.
+const Ferrofluid = dynamic(() => import("./Ferrofluid"), { ssr: false });
 
 export function Hero() {
   const sectionRef = useScrollTimeline<HTMLElement>(
@@ -26,7 +30,7 @@ export function Hero() {
   const visualRef = useTilt<HTMLDivElement>(7);
 
   return (
-    <section ref={sectionRef} className="section-light overflow-hidden border-b border-border">
+    <section ref={sectionRef} className="overflow-hidden border-b border-border">
       <Container className="relative py-20 sm:py-28">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-10">
           <div data-hero-copy>

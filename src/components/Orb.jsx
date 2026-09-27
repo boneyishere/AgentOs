@@ -1,6 +1,7 @@
 import { Mesh, Program, Renderer, Triangle, Vec3 } from 'ogl';
 import { useEffect, useRef } from 'react';
 import './Orb.css';
+import { renderWhenVisible, shaderDpr } from '@/lib/motion/use-render-when-visible';
 
 export default function Orb({
   hue = 0,
@@ -213,7 +214,7 @@ export default function Orb({
 
     function resize() {
       if (!container) return;
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = shaderDpr();
       const width = container.clientWidth;
       const height = container.clientHeight;
       renderer.setSize(width * dpr, height * dpr);
@@ -255,15 +256,11 @@ export default function Orb({
     container.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('mouseleave', handleMouseLeave);
 
-    let rafId;
     const update = t => {
-      rafId = requestAnimationFrame(update);
-      const dt = (t - lastTime) * 0.001;
+      // Clamp so a resume after being off screen doesn't jump the hover rotation.
+      const dt = Math.min((t - lastTime) * 0.001, 0.05);
       lastTime = t;
       program.uniforms.iTime.value = t * 0.001;
-      program.uniforms.hue.value = hue;
-      program.uniforms.hoverIntensity.value = hoverIntensity;
-      program.uniforms.backgroundColor.value = hexToVec3(backgroundColor);
 
       const effectiveHover = forceHoverState ? 1 : targetHover;
       program.uniforms.hover.value += (effectiveHover - program.uniforms.hover.value) * 0.1;
@@ -275,10 +272,10 @@ export default function Orb({
 
       renderer.render({ scene: mesh });
     };
-    rafId = requestAnimationFrame(update);
+    const stopLoop = renderWhenVisible(container, update);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      stopLoop();
       window.removeEventListener('resize', resize);
       container.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('mouseleave', handleMouseLeave);

@@ -72,7 +72,7 @@ function ImpactCard({ item }: { item: (typeof IMPACTS)[number] }) {
       style={{ "--hue": item.hue } as React.CSSProperties}
     >
       <div className="flex flex-col gap-4 p-6 sm:p-9 lg:justify-between lg:gap-10 lg:p-11">
-        <h3 className="max-w-md text-[1.5rem] font-medium leading-[1.18] tracking-tight text-balance text-foreground sm:text-[1.625rem] xl:text-[1.75rem]">
+        <h3 className="max-w-[24rem] text-[1.5rem] font-medium leading-[1.18] tracking-tight text-balance text-foreground sm:text-[1.625rem] xl:text-[1.75rem]">
           {item.headline}
         </h3>
         <p className="max-w-sm text-[15px] text-foreground-muted sm:text-base">{item.description}</p>
