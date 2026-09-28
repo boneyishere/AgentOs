@@ -440,7 +440,7 @@ the mobile menu toggle.
   translucent white background (`rgba(255,255,255,0.85)` + `blur(10px)`) plus the bottom
   border once `scrollY > 24`. The active page is a quiet `bg-foreground/[0.06]` pill (no underline); links sit in `px-3.5 py-1.5` pills with `gap-1`. The CTA is `<AgentButton size="sm">`.
 - **`AgentRun`** ([src/lib/motion/agent-run.tsx](src/lib/motion/agent-run.tsx)) — the Use
-  Cases stage: a white, softly elevated panel (dot grid + film grain, all text in
+  Cases stage: a white, softly elevated panel (film grain, all text in
   `foreground` / `foreground-muted` for readability — colour lives only in nodes, glows and
   indicators) showing a live agent run as a transcript that assembles beat by
   beat along a vertical spine. Beats are a discriminated union (`RunBeat`): `customer` /

@@ -418,10 +418,6 @@ export function AgentRun({
       style={{ boxShadow: FRAME_SHADOW }}
     >
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 [background-image:radial-gradient(rgba(26,26,26,0.07)_1px,transparent_1px)] [background-size:18px_18px] [mask-image:radial-gradient(ellipse_at_30%_45%,black_15%,transparent_72%)]"
-      />
-      <div
         data-glow
         aria-hidden="true"
         className="pointer-events-none absolute -left-24 top-0 -z-10 h-56 w-56 rounded-full bg-accent/10 blur-3xl"
