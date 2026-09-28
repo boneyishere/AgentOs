@@ -93,13 +93,32 @@ export function PricingTiers() {
             <Reveal key={tier.name} delay={(i % 3) * 0.08} className="h-full">
               <div
                 className={`spotlight flex h-full flex-col rounded-2xl border p-8 ${
-                  tier.highlighted ? "border-foreground" : "border-border"
+                  tier.highlighted ? "border-transparent" : "border-border"
                 }`}
               >
+                {tier.highlighted && (
+                  <>
+                    <span aria-hidden="true" className="tier-glow-haze">
+                      <span className="tier-glow" />
+                    </span>
+                    <span aria-hidden="true" className="tier-glow" />
+                  </>
+                )}
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="text-lg font-medium">{tier.name}</h3>
                   {tier.highlighted && (
-                    <span className="shrink-0 text-sm font-medium text-accent">Most popular</span>
+                    <span className="flex shrink-0 items-center gap-2 text-xs font-medium text-foreground">
+                      <span aria-hidden="true" className="flex h-3.5 items-center gap-[2px]">
+                        {[0.9, 1.15, 0.8, 1.05].map((s, j) => (
+                          <span
+                            key={j}
+                            className="tier-voice-bar h-full w-[2px] rounded-full bg-accent"
+                            style={{ animationDuration: `${s}s` }}
+                          />
+                        ))}
+                      </span>
+                      Most popular
+                    </span>
                   )}
                 </div>
                 <p className="mt-2 text-sm text-foreground-muted">{tier.description}</p>
@@ -130,13 +149,6 @@ export function PricingTiers() {
             </Reveal>
           ))}
         </div>
-
-        <Reveal delay={0.2}>
-          <p className="mt-10 text-center text-sm text-foreground-muted">
-            All plans: no setup fee, cancel anytime, dedicated onboarding call included. Minutes
-            and conversations beyond a plan&apos;s included volume are billed at a flat overage rate.
-          </p>
-        </Reveal>
       </Container>
     </section>
   );

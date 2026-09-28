@@ -618,6 +618,64 @@ body::after {
   opacity: 1;
 }
 
+/* Highlighted pricing tier: an accent border with a slow light orbiting it, plus
+   a blurred copy as a faint halo. Filter runs before mask, so the haze stays a ring. */
+@property --tier-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.tier-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--tier-angle),
+    color-mix(in srgb, var(--accent) 18%, transparent),
+    color-mix(in srgb, var(--accent) 65%, transparent) 70deg,
+    color-mix(in srgb, var(--iris) 35%, transparent) 130deg,
+    color-mix(in srgb, var(--accent) 18%, transparent) 200deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: tier-orbit 6s linear infinite;
+}
+.tier-glow-haze {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  filter: blur(6px);
+  opacity: 0.2;
+}
+.tier-glow-haze .tier-glow {
+  padding: 2px;
+}
+@keyframes tier-orbit {
+  to {
+    --tier-angle: 360deg;
+  }
+}
+.tier-voice-bar {
+  transform-origin: center;
+  animation: tier-voice 1s ease-in-out infinite;
+}
+@keyframes tier-voice {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
 /* client-logo marquee — the list is duplicated, so -50% lands on an identical frame
    (which is also where reduced motion's duration clamp leaves it). */
 @keyframes marquee {

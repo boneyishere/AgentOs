@@ -8,6 +8,7 @@ type Row = { label: string; values: [CellValue, CellValue, CellValue, CellValue,
 
 const ROWS: Row[] = [
   { label: "Price / month", values: ["$49", "$399", "$799", "$1,499", "Contact Us"] },
+  { label: "Setup fee", values: ["None", "None", "None", "None", "None"] },
   {
     label: "AI call minutes",
     values: ["Up to 100", "Up to 1,200", "Up to 2,500", "Up to 5,000", "Scoped to you"],
@@ -20,6 +21,12 @@ const ROWS: Row[] = [
     label: "Concurrent voice channels",
     values: ["1", "2", "4", "8", "Scoped to you"],
   },
+  {
+    label: "Usage beyond your plan",
+    values: ["Flat overage rate", "Flat overage rate", "Flat overage rate", "Flat overage rate", "No caps"],
+  },
+  { label: "Onboarding call", values: [true, true, true, true, true] },
+  { label: "Cancel anytime", values: [true, true, true, true, true] },
   {
     label: "Appointment booking & calendar sync",
     values: [true, true, true, true, true],

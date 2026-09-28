@@ -226,6 +226,10 @@ runtime rather than hard-coding it.
   `<SpotlightTracker>` (one delegated pointer listener, in the root layout) writes
   `--mx`/`--my`. Used on feature cards, stat cards, pricing tiers, resource cards, and
   capability cards.
+- **Glowing pricing tier** — the highlighted plan (Growth) is marked by light, not a chip:
+  `.tier-glow`, an accent border with a slow accent/iris light orbiting it (6s, ambient CSS
+  loop) plus a blurred halo copy, and "Most popular" in `text-xs` beside four talking accent
+  voice bars (`.tier-voice-bar`). Reduced motion leaves a static ring and short bars.
 
 **Soft cover tints: `ResourceCover` only.** Four static low-alpha tints (`--stat-*-soft`,
 named for their original use) give each resource card's placeholder image a hue. They're
