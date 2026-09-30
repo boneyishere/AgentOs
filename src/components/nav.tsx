@@ -23,80 +23,80 @@ export function Nav() {
           covered by it. Kept separate from the header instead of using
           `position: sticky`, since sticky + backdrop-filter is a known
           source of compositing glitches on some mobile GPUs. */}
-      <div aria-hidden="true" className="h-[88px]" />
+      <div aria-hidden="true" className="h-[76px]" />
 
-      <header className="fixed inset-x-0 top-4 z-50">
-        <Container>
-          {/* Glass effect (translucency + blur + saturation) is applied at
-              all widths, including mobile — accepted tradeoff: this can
-              cause ghosting on some mobile GPUs while the browser's own
-              toolbar is animating (see the fixed-vs-sticky note above). */}
-          <div className="relative flex items-center justify-between rounded-full border border-white/50 bg-white/70 px-6 py-2.5 shadow-soft backdrop-blur-xl backdrop-saturate-150">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-xs font-bold text-background">
-                C
-              </span>
-              <span className="text-base font-semibold tracking-tight">Codely</span>
-            </Link>
+      {/* Glass effect (translucency + blur + saturation) is applied at
+          all widths, including mobile — accepted tradeoff: this can
+          cause ghosting on some mobile GPUs while the browser's own
+          toolbar is animating (see the fixed-vs-sticky note above). The bar
+          itself runs edge to edge; only the content inside keeps the
+          page's container width. */}
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/50 bg-white/70 backdrop-blur-xl backdrop-saturate-150">
+        <Container className="relative flex items-center justify-between py-2.5">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-xs font-bold text-background">
+              C
+            </span>
+            <span className="text-base font-semibold tracking-tight">Codely</span>
+          </Link>
 
-            <nav className="hidden items-center gap-1 md:flex">
-              {NAV_LINKS.map((link) => {
-                const isActive =
-                  pathname === link.href || pathname.startsWith(`${link.href}/`);
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    aria-current={isActive ? "page" : undefined}
-                    className={`relative rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors duration-300 hover:text-foreground ${
-                      isActive ? "bg-foreground/[0.06] text-foreground" : "text-foreground-muted"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
+          <nav className="hidden items-center gap-1 md:flex">
+            {NAV_LINKS.map((link) => {
+              const isActive =
+                pathname === link.href || pathname.startsWith(`${link.href}/`);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`relative rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors duration-300 hover:text-foreground ${
+                    isActive ? "bg-foreground/[0.06] text-foreground" : "text-foreground-muted"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
 
-            <div className="hidden md:block">
-              <AgentButton href="/contact" size="sm" />
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border md:hidden"
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-            >
-              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-
-            {open && (
-              <div className="absolute inset-x-0 top-full mt-2 rounded-3xl border border-white/50 bg-white px-4 py-4 shadow-soft md:hidden">
-                <nav className="flex flex-col gap-1">
-                  {NAV_LINKS.map((link) => {
-                    const isActive =
-                      pathname === link.href || pathname.startsWith(`${link.href}/`);
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setOpen(false)}
-                        aria-current={isActive ? "page" : undefined}
-                        className={`rounded-md px-3 py-2.5 text-sm font-medium hover:bg-surface hover:text-foreground ${
-                          isActive ? "text-foreground" : "text-foreground-muted"
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    );
-                  })}
-                  <AgentButton href="/contact" size="sm" onClick={() => setOpen(false)} className="mt-2 w-full" />
-                </nav>
-              </div>
-            )}
+          <div className="hidden md:block">
+            <AgentButton href="/contact" size="sm" />
           </div>
+
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-border md:hidden"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+
+          {open && (
+            <div className="absolute inset-x-0 top-full mt-2 rounded-3xl border border-white/50 bg-white px-4 py-4 shadow-soft md:hidden">
+              <nav className="flex flex-col gap-1">
+                {NAV_LINKS.map((link) => {
+                  const isActive =
+                    pathname === link.href || pathname.startsWith(`${link.href}/`);
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      aria-current={isActive ? "page" : undefined}
+                      className={`rounded-md px-3 py-2.5 text-sm font-medium hover:bg-surface hover:text-foreground ${
+                        isActive ? "text-foreground" : "text-foreground-muted"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
+                <AgentButton href="/contact" size="sm" onClick={() => setOpen(false)} className="mt-2 w-full" />
+              </nav>
+            </div>
+          )}
         </Container>
       </header>
     </>
