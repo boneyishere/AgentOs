@@ -131,6 +131,7 @@ function IndustryVisual({
   active,
   direction = 1,
   animated = false,
+  zIndex = active ? 2 : 1,
 }: {
   item: Industry;
   active: boolean;
@@ -138,6 +139,10 @@ function IndustryVisual({
   direction?: 1 | -1;
   /** Only the pinned desktop story drives a GSAP reveal; the static mobile list stays plain. */
   animated?: boolean;
+  /** Paint order within the stack. Defaults to active-on-top; the pinned
+      story overrides this so the outgoing slide (not just whichever item
+      happens to be last in the array) shows through mid-wipe. */
+  zIndex?: number;
 }) {
   const maskRef = useRef<HTMLDivElement | null>(null);
   const scaleRef = useRef<HTMLDivElement | null>(null);
@@ -172,14 +177,15 @@ function IndustryVisual({
   }, [active, direction, animated, reducedMotion]);
 
   return (
-    <div className="absolute inset-0" style={{ zIndex: active ? 2 : 1 }}>
+    <div className="absolute inset-0" style={{ zIndex }}>
       <div ref={maskRef} className="absolute inset-0 overflow-hidden">
         <div ref={scaleRef} className="absolute inset-0">
           <Image
             src={item.image}
             alt={item.eyebrow}
             fill
-            sizes="(min-width: 1024px) 700px, 100vw"
+            sizes="(min-width: 1024px) 730px, 100vw"
+            quality={90}
             priority={item.slug === "healthcare"}
             className="object-cover"
           />
@@ -219,6 +225,7 @@ function IndustryChip({ eyebrow }: { eyebrow: string }) {
 /** Desktop-only, motion-safe: the pinned scroll-driven story. */
 function IndustriesStory() {
   const [index, setIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const prevIndexRef = useRef(0);
   const textRef = useRef<HTMLDivElement | null>(null);
@@ -240,6 +247,7 @@ function IndustriesStory() {
           const next = Math.min(TOTAL - 1, Math.floor(self.progress * TOTAL));
           if (next === prevIndexRef.current) return;
           setDirection(next > prevIndexRef.current ? 1 : -1);
+          setPrevIndex(prevIndexRef.current);
           prevIndexRef.current = next;
           setIndex(next);
         },
@@ -290,6 +298,7 @@ function IndustriesStory() {
               active={i === index}
               direction={direction}
               animated
+              zIndex={i === index ? 3 : i === prevIndex ? 2 : 1}
             />
           ))}
         </div>

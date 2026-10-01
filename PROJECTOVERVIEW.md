@@ -508,8 +508,9 @@ the mobile menu toggle.
   `min-h-[440px]`), with the vendored `Orb` WebGL ring behind a centred `type-section`
   headline, `type-lead` subtext, and the `AgentButton`.
 - **`AgentButton`** ([agent-button.tsx](src/components/agent-button.tsx)): **every CTA on
-  the site** uses it. That covers the nav (desktop and mobile), hero, footer, CTA,
+  the site** uses it. That covers the nav (desktop and mobile), hero, CTA,
   industries, pricing tiers, FAQ, and the lead intake's Continue / Send my brief.
+  The footer carries no CTA.
   - **At rest:** a plain pill with just its label. No arrow, no icon.
   - **On hover or focus:** a GSAP timeline spins and pops an agent avatar (a disc of four
     voice bars) in at the left edge with a back-ease and an accent ring flare. The bars
@@ -735,10 +736,16 @@ export function getResourceBySlug(slug)
 
 - **Every route is static** (`○` / `●` in `next build`): prerendered HTML, no server work
   per request.
-- **Images:** `next.config.ts` serves AVIF first, then WebP. Source JPGs in
-  `public/images/industries/` are pre-compressed (mozjpeg q80, ≤1600px, about 60KB each).
-  Re-compress new photos the same way before adding them. The robot PNG ships as about 23KB
-  AVIF via `next/image`.
+- **Images:** `next.config.ts` serves AVIF first, then WebP, and allowlists
+  `qualities: [75, 90]` (Next 16 defaults to `[75]` and 400s on anything else).
+  Do **not** pre-compress source JPGs: `next/image` re-encodes them per request, so a
+  crushed source just stacks two lossy passes. Ship the highest-resolution original you
+  have and let the optimizer do the work. The robot PNG ships as about 23KB AVIF.
+  - **The `public/images/industries/` photos are only 710x590.** The desktop slot renders
+    them at about 730x600 CSS px, so on a 2x display they upscale about 2x and look soft.
+    `next/image` never upscales past the source, so no quality setting fixes this; they
+    opt into `quality={90}` to at least avoid adding AVIF loss on top. Replacing them with
+    roughly 1500x1250 or larger sources is the only real fix.
 - **Code splitting:**
   - `three` loads only when the first particle view registers.
   - `ogl` plus the Ferrofluid/Orb shaders load via `next/dynamic` after hydration.
