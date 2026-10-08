@@ -38,9 +38,9 @@ export function Footer() {
         <div className="col-span-2">
           <Link href="/" className="flex items-center gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground text-sm font-bold text-background">
-              C
+              B
             </span>
-            <span className="text-lg font-semibold tracking-tight">Codely</span>
+            <span className="text-lg font-semibold tracking-tight">Bonie</span>
           </Link>
           <p className="mt-3 max-w-xs text-sm text-foreground-muted">
             Voice and chat agents that pick up, look things up, and get the job done for
@@ -84,7 +84,7 @@ export function Footer() {
 
       <Container className="flex flex-col items-start gap-3 py-8 sm:flex-row sm:items-center sm:justify-between">
         <span className="text-xs text-foreground-muted">
-          &copy; {new Date().getFullYear()} Codely. All rights reserved.
+          &copy; {new Date().getFullYear()} Bonie. All rights reserved.
         </span>
 
         <a

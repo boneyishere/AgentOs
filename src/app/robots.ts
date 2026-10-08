@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://codely.ai/sitemap.xml",
+    sitemap: "https://bonie.ai/sitemap.xml",
   };
 }

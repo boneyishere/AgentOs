@@ -182,7 +182,7 @@ export function UseCasesSection() {
   }, [active, started]);
 
   return (
-    <section ref={sectionRef} id="use-cases" className="section-light border-b border-border">
+    <section ref={sectionRef} id="use-cases" className="border-b border-border">
       <Container className="py-20 sm:py-28">
         <SectionHeading
           title="Five jobs it can take off your team today."

@@ -9,7 +9,7 @@ import { CtaSection } from "@/components/cta-section";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Codely pricing, from a solo business trying its first AI agent to custom, high-volume deployments. Pay for minutes and conversations, nothing hidden.",
+    "Bonie pricing, from a solo business trying its first AI agent to custom, high-volume deployments. Pay for minutes and conversations, nothing hidden.",
 };
 
 export default function PricingPage() {

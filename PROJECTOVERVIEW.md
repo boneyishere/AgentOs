@@ -1,4 +1,4 @@
-# Codely — Project Overview
+# Bonie — Project Overview
 
 > **Read this first, every session.** It is the single source of truth for what this project
 > is, how it is organised, and the design rules its UI follows. Before writing or changing
@@ -12,7 +12,7 @@
 
 ## 1. Summary
 
-**Codely** (directory name `AgentOs`, package name `codely`) is a marketing website for an
+**Bonie** (directory name `AgentOs`, package name `bonie`) is a marketing website for an
 AI agent platform. The product story: businesses get AI voice and chat agents that
 understand intent, use the business's own knowledge, remember prior conversations, and take
 real actions (book calendars, update CRMs, trigger workflows).
@@ -80,7 +80,7 @@ D:/agent/
         ├── app/                 # App Router — routes, metadata, global CSS
         │   ├── globals.css      # ALL design tokens live here
         │   ├── layout.tsx       # fonts, site metadata, html/body shell
-        │   ├── icon.svg         # favicon: black rounded square, white "C"
+        │   ├── icon.svg         # favicon: black rounded square, white "B"
         │   ├── page.tsx         # /
         │   ├── not-found.tsx    # 404
         │   ├── robots.ts
@@ -145,11 +145,11 @@ D:/agent/
 metadata, `min-h-full flex flex-col`, and mounts the two global motion singletons,
 `<SmoothScroll />` and `<SpotlightTracker />`). Keep it that way when adding routes.
 
-**Metadata** — root layout sets `metadataBase: https://codely.ai`, a title template
-`"%s | Codely"` (default "Codely | The AI front desk that never clocks out"), plus
+**Metadata** — root layout sets `metadataBase: https://bonie.ai`, a title template
+`"%s | Bonie"` (default "Bonie | The AI front desk that never clocks out"), plus
 OpenGraph and Twitter cards. Each route exports its own `metadata`
 with a short `title` (the template adds the brand) and a `description`. `sitemap.ts` and
-`robots.ts` both hard-code `https://codely.ai`.
+`robots.ts` both hard-code `https://bonie.ai`.
 
 ---
 
@@ -167,11 +167,11 @@ Tailwind colour like `text-gray-500`.**
 | Token | Value | Tailwind utility | Use |
 | --- | --- | --- | --- |
 | `--background` | `#fdffff` | `bg-background` | Page and card background |
-| `--surface` | `#fafafa` | `bg-surface` | Alternating section bands, input wells, inset panels |
+| `--surface` | `#f5f6fb` (faintly cool) | `bg-surface` | Alternating section bands, input wells, inset panels |
 | `--foreground` | `#1a1a1a` | `text-foreground` | Headings, primary text, primary button fill |
 | `--foreground-muted` | `#6b6b70` | `text-foreground-muted` | Body copy, captions, inactive nav |
-| `--border` | `#ebebeb` | `border-border` | Default hairline |
-| `--border-strong` | `#d4d4d8` | `border-border-strong` | Hover / emphasis border |
+| `--border` | `#e8e9ef` | `border-border` | Default hairline |
+| `--border-strong` | `#d2d4dd` | `border-border-strong` | Hover / emphasis border |
 
 **Ink surface — deliberately rare.** Reserved for the hero visual panel and the CTA. Do not
 extend it to other sections without a
@@ -209,7 +209,7 @@ dated), and no hue is ever a solid section fill.
 | `--rose` | `#d8607e` | `text-rose`, `bg-rose` | Chat card, understanding beats (confidence), stats card 3 |
 
 Where hues may appear: particle colour ramps, cursor spotlights and border glows,
-section light cones, small status dots / index numbers / eyebrows, `AgentRun` nodes, glows and
+small status dots / index numbers / eyebrows, `AgentRun` nodes, glows and
 badges. Motion code that needs a hue as rgb reads the CSS variable at
 runtime rather than hard-coding it.
 
@@ -217,10 +217,10 @@ runtime rather than hard-coding it.
 
 - **Film grain** — `body::after`, a fixed SVG-noise layer at `opacity 0.035`, `z-30` (under
   the particle canvas and nav). Keeps white from reading as flat.
-- **`.section-light`** — a faint radial cone from the section's top edge plus a 1px light
-  "seam" along it, in `--light` (default `--accent`). On features, use cases, and stats.
-  Not on the hero or `PageHeader`: as each page's starting section, sitting right under the
-  floating nav's gap made the cone's top edge read as a hard line rather than a glow.
+- **No section washes.** A former `.section-light` (a blurred colour cone from a section's
+  top edge) was removed: the owner found the soft gradient haze behind headings reads as
+  generic AI-template styling. Don't add radial/blurred colour washes behind sections or
+  headings. Section backgrounds are flat `bg-background` / `bg-surface`.
 - **`.spotlight`** — a cursor-tracked inner glow plus a border that lights up near the
   cursor, in `--hue` (default `--accent`). Opt in with the class and an inline `--hue`;
   `<SpotlightTracker>` (one delegated pointer listener, in the root layout) writes
@@ -230,6 +230,12 @@ runtime rather than hard-coding it.
   `.tier-glow`, an accent border with a slow accent/iris light orbiting it (6s, ambient CSS
   loop) plus a blurred halo copy, and "Most popular" in `text-xs` beside four talking accent
   voice bars (`.tier-voice-bar`). Reduced motion leaves a static ring and short bars.
+
+**Hue tints (`bg-tint` / `border-tint`).** Flat, solid washes of an element's inline `--hue`
+(6% into the background for the fill, 16% into `--border` for the edge). Never a gradient. They
+only carry the Impact deck's inset visual panels, where one card is seen at a time. Never tint
+a group of side-by-side cards in different hues (the bento grid and stat cards were tried and
+rejected as an ugly, muddy patchwork), and never use a tint as a full section band.
 
 **Soft cover tints: `ResourceCover` only.** Four static low-alpha tints (`--stat-*-soft`,
 named for their original use) give each resource card's placeholder image a hue. They're
@@ -306,7 +312,7 @@ exposed as CSS variables on `<html>`. There is no monospace font in the system.
 - **Tracking:** `tracking-tight` on every heading and on the wordmark.
 - **Copy voice.** Plain, concrete, specific.
   - No em or en dashes anywhere in user-facing copy, including metadata; the title template
-    is `%s | Codely`.
+    is `%s | Bonie`.
   - No stock SaaS/AI phrasing: "not just X, Y", "seamless", "effortless", "unlock",
     "trusted by teams…", "put AI to work", "book a demo".
   - Prefer real details: times, numbers, what the agent actually did.
@@ -417,7 +423,7 @@ Text field       <SignalField id label value onChange … />   (never a bare <in
 Small label      text-xs text-foreground-muted            (sentence case — never uppercase-tracked)
 ```
 
-**Icons.** Feature and section icons come from Codely's own animated set,
+**Icons.** Feature and section icons come from Bonie's own animated set,
 [components/icons/agent-icons.tsx](src/components/icons/agent-icons.tsx): 18 hand-drawn
 icons on a 24px grid at a 1.5 stroke, 18px by default. Each redraws its strokes and plays a
 signature move when an ancestor `.group` is hovered or focused, or carries
@@ -488,7 +494,7 @@ the mobile menu toggle.
   state; the "before" state is applied on the client.
 - **`DeploymentSection`** (`/features`) — "one agent, every channel", a **live
   switchboard**. Three channel cards (Phone accent / Website iris / Messaging teal) sit on
-  the left, the agent core (the "C" mark in concentric rings) with a readout card in the
+  the left, the agent core (the "B" mark in concentric rings) with a readout card in the
   centre, and Internal operations / Business systems cards on the right. On `lg` the curved
   SVG wires are measured from the live layout (ResizeObserver) and draw in via
   `pathLength=1` dashoffset once the section is in view. The section then cycles

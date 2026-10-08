@@ -109,7 +109,7 @@ export const RESOURCES: Resource[] = [
     image: { color: "indigo", icon: Building2 },
     problem: "After-hours calls went to voicemail and were rarely returned.",
     implementation:
-      "A Codely voice agent answers around the clock, checks store hours and inventory FAQs, and books callbacks.",
+      "A Bonie voice agent answers around the clock, checks store hours and inventory FAQs, and books callbacks.",
     outcome: "Fewer missed customer inquiries, faster response time.",
   },
   {
@@ -121,7 +121,7 @@ export const RESOURCES: Resource[] = [
     image: { color: "violet", icon: Stethoscope },
     problem: "Front desk overwhelmed by reschedule requests.",
     implementation:
-      "Codely handles rescheduling end-to-end via voice and chat, synced to the practice calendar.",
+      "Bonie handles rescheduling end-to-end via voice and chat, synced to the practice calendar.",
     outcome: "Lower front-desk call volume, no double-bookings.",
   },
   {
@@ -134,7 +134,7 @@ export const RESOURCES: Resource[] = [
     problem:
       "Inbound sales calls weren't consistently qualified before reaching reps.",
     implementation:
-      "A Codely voice agent asks qualification questions and pushes structured lead data to the CRM.",
+      "A Bonie voice agent asks qualification questions and pushes structured lead data to the CRM.",
     outcome: "Sales team spends time only on qualified conversations.",
   },
 ];

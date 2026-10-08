@@ -6,7 +6,7 @@ import { useTypingPulse } from "@/lib/motion/use-field-motion";
 const BARS = [0.55, 0.9, 0.7, 0.85];
 
 /**
- * Codely's text field. On focus an accent line traces around the border and
+ * Bonie's text field. On focus an accent line traces around the border and
  * the label floats up. A tiny four-bar voice waveform reacts to every
  * keystroke (the agent "listening"), and once the value is valid it morphs
  * into a check. Errors turn the field rose. The trace and label are CSS

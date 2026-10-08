@@ -35,9 +35,9 @@ export function Nav() {
         <Container className="relative flex items-center justify-between py-2.5">
           <Link href="/" className="flex items-center gap-2">
             <span className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-xs font-bold text-background">
-              C
+              B
             </span>
-            <span className="text-base font-semibold tracking-tight">Codely</span>
+            <span className="text-base font-semibold tracking-tight">Bonie</span>
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">

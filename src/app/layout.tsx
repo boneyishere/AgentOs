@@ -14,20 +14,20 @@ const stackSansText = Stack_Sans_Text({
   subsets: ["latin"],
 });
 
-const SITE_TITLE = "Codely | The AI front desk that never clocks out";
+const SITE_TITLE = "Bonie | The AI front desk that never clocks out";
 const SITE_DESCRIPTION =
-  "Codely answers your calls and chats, remembers every customer, and books, updates, and follows up inside the tools your business already uses.";
+  "Bonie answers your calls and chats, remembers every customer, and books, updates, and follows up inside the tools your business already uses.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://codely.ai"),
+  metadataBase: new URL("https://bonie.ai"),
   title: {
     default: SITE_TITLE,
-    template: "%s | Codely",
+    template: "%s | Bonie",
   },
   description: SITE_DESCRIPTION,
   openGraph: {
     type: "website",
-    siteName: "Codely",
+    siteName: "Bonie",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },

@@ -267,10 +267,10 @@ function AgentCore({
           style={{ backgroundColor: `color-mix(in srgb, ${hue} 8%, transparent)` }}
         />
         <span className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-foreground text-lg font-bold text-background">
-          C
+          B
         </span>
       </div>
-      <p className="mt-3 text-sm font-medium">Codely agent</p>
+      <p className="mt-3 text-sm font-medium">Bonie agent</p>
 
       <div className="mt-6 w-full max-w-[320px] rounded-2xl border border-border bg-background p-4 shadow-soft">
         <div key={key} className="animate-[rise-in_0.5s_ease-out]">

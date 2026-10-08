@@ -13,7 +13,7 @@ import { CtaSection } from "@/components/cta-section";
 export const metadata: Metadata = {
   title: "Features",
   description:
-    "How a Codely agent talks, looks things up, remembers customers, and gets work done across phone, web, and messaging.",
+    "How a Bonie agent talks, looks things up, remembers customers, and gets work done across phone, web, and messaging.",
 };
 
 export default function FeaturesPage() {
@@ -23,7 +23,7 @@ export default function FeaturesPage() {
       <main className="flex-1">
         <PageHeader
           title="What your agent can do, and how it does it."
-          description="The voice, the knowledge, the memory, and the hands. Every part of a Codely agent, explained without the jargon."
+          description="The voice, the knowledge, the memory, and the hands. Every part of a Bonie agent, explained without the jargon."
         />
         <AgentCapabilitiesSection />
         <FeatureDetailList />

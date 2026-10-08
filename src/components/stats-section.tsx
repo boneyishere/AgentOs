@@ -12,10 +12,7 @@ const STATS: { value: string; label: string; hue: string }[] = [
 
 export function StatsSection() {
   return (
-    <section
-      className="section-light border-b border-border"
-      style={{ "--light": "var(--iris)" } as React.CSSProperties}
-    >
+    <section className="border-b border-border">
       <Container className="relative py-20 sm:py-28">
         <SectionHeading
           title="What changes in the first month."

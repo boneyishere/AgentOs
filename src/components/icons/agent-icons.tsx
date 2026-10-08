@@ -1,7 +1,7 @@
 import type { ReactNode, SVGProps } from "react";
 
 /**
- * Codely's hand-drawn icon set (24px grid, 1.5 stroke). Every icon redraws its
+ * Bonie's hand-drawn icon set (24px grid, 1.5 stroke). Every icon redraws its
  * strokes (`ip-draw`) and plays its own signature move when an ancestor
  * `.group` is hovered/focused or carries `data-icon-active="true"`. The
  * choreography lives in globals.css (`.agent-icon` rules); parts only carry

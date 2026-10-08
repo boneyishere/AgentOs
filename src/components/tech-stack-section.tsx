@@ -169,7 +169,7 @@ export function TechStackSection() {
         <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <LogoBentoCard
             headline="Bring the model that fits"
-            subtext="Power every agent with the best available reasoning model, or let Codely choose automatically per conversation."
+            subtext="Power every agent with the best available reasoning model, or let Bonie choose automatically per conversation."
             items={LANGUAGE_MODELS}
             className="lg:col-span-2"
           />

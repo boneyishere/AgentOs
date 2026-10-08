@@ -63,7 +63,7 @@ export function MissedCallsVisual() {
             <span data-count>0</span>
           </p>
         </div>
-        <span className="text-[11px] text-foreground-muted">was 14 before Codely</span>
+        <span className="text-[11px] text-foreground-muted">was 14 before Bonie</span>
       </div>
       <ul className="mt-5 divide-y divide-border overflow-hidden rounded-xl border border-border bg-background">
         {CALLS.map((call) => (

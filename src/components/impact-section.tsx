@@ -78,7 +78,7 @@ function ImpactCard({ item }: { item: (typeof IMPACTS)[number] }) {
         <p className="max-w-sm text-[15px] text-foreground-muted sm:text-base">{item.description}</p>
       </div>
 
-      <div className="m-3 mt-2 flex items-center justify-center rounded-xl border border-border bg-surface p-4 sm:mt-0 sm:p-8 lg:mt-3">
+      <div className="m-3 mt-2 flex items-center justify-center rounded-xl border border-tint bg-tint p-4 sm:mt-0 sm:p-8 lg:mt-3">
         <Visual />
       </div>
 
@@ -124,10 +124,7 @@ export function ImpactSection() {
   }, []);
 
   return (
-    <section
-      className="section-light border-b border-border bg-surface"
-      style={{ "--light": "var(--iris)" } as React.CSSProperties}
-    >
+    <section className="border-b border-border bg-surface">
       <Container className="relative py-20 sm:py-28">
         <SectionHeading
           title="Your team gets its day back."

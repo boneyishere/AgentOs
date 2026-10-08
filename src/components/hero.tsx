@@ -44,7 +44,7 @@ export function Hero() {
             </TextReveal>
 
             <p className="mt-7 max-w-md text-lg leading-8 text-foreground-muted">
-              Codely answers your calls and chats, remembers every customer, and books,
+              Bonie answers your calls and chats, remembers every customer, and books,
               updates, and follows up inside the tools you already use.
             </p>
 
@@ -86,7 +86,7 @@ export function Hero() {
             </div>
             <Image
               src="/images/robot-agent.png"
-              alt="Codely AI agent"
+              alt="Bonie AI agent"
               width={722}
               height={827}
               priority

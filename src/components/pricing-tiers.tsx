@@ -55,7 +55,7 @@ const TIERS = [
     name: "Advanced",
     price: "$1,499",
     period: "/mo",
-    description: "For established businesses running Codely as their primary front line.",
+    description: "For established businesses running Bonie as their primary front line.",
     features: [
       "Up to 5,000 AI call minutes",
       "Up to 12,000 chatbot conversations",

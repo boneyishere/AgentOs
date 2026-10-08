@@ -25,7 +25,7 @@ const INDUSTRIES: Industry[] = [
     eyebrow: "Healthcare",
     headline: "Give every patient a faster first response.",
     description:
-      "Codely can handle appointment requests, common questions, information collection, and routine conversations while keeping your team in control.",
+      "Bonie can handle appointment requests, common questions, information collection, and routine conversations while keeping your team in control.",
     capabilities: [
       "Appointment requests",
       "Patient questions",
@@ -39,7 +39,7 @@ const INDUSTRIES: Industry[] = [
     eyebrow: "ISP Providers",
     headline: "Keep customers connected without keeping your team on the phone.",
     description:
-      "Codely can handle customer questions, service enquiries, troubleshooting conversations, plan information, and support requests around the clock.",
+      "Bonie can handle customer questions, service enquiries, troubleshooting conversations, plan information, and support requests around the clock.",
     capabilities: [
       "Customer support",
       "Service enquiries",
@@ -53,7 +53,7 @@ const INDUSTRIES: Industry[] = [
     eyebrow: "Home Services",
     headline: "Turn incoming calls into booked jobs.",
     description:
-      "Codely can understand what customers need, collect job details, answer questions, and schedule appointments.",
+      "Bonie can understand what customers need, collect job details, answer questions, and schedule appointments.",
     capabilities: ["Answer calls", "Understand the job", "Collect details", "Book appointments"],
     image: "/images/industries/home-services-v2.jpg",
   },
@@ -62,7 +62,7 @@ const INDUSTRIES: Industry[] = [
     eyebrow: "Education",
     headline: "Make every student enquiry easier to handle.",
     description:
-      "Codely can answer questions, handle admissions enquiries, collect information, schedule calls, and guide students through common requests.",
+      "Bonie can answer questions, handle admissions enquiries, collect information, schedule calls, and guide students through common requests.",
     capabilities: [
       "Student enquiries",
       "Admissions questions",
@@ -76,7 +76,7 @@ const INDUSTRIES: Industry[] = [
     eyebrow: "Automotive",
     headline: "Keep customers moving from enquiry to appointment.",
     description:
-      "Codely can handle vehicle enquiries, service requests, appointment scheduling, and customer follow-ups.",
+      "Bonie can handle vehicle enquiries, service requests, appointment scheduling, and customer follow-ups.",
     capabilities: ["Vehicle enquiries", "Service requests", "Appointment booking", "Follow-ups"],
     image: "/images/industries/automotive-v2.jpg",
   },
@@ -85,7 +85,7 @@ const INDUSTRIES: Industry[] = [
     eyebrow: "Law Firms",
     headline: "Handle the first conversation before it reaches your team.",
     description:
-      "Codely can collect initial information, answer common questions, understand the purpose of an enquiry, and schedule consultations.",
+      "Bonie can collect initial information, answer common questions, understand the purpose of an enquiry, and schedule consultations.",
     capabilities: [
       "Initial enquiries",
       "Information collection",
@@ -99,7 +99,7 @@ const INDUSTRIES: Industry[] = [
     eyebrow: "Real Estate",
     headline: "Turn every property enquiry into a real conversation.",
     description:
-      "Codely can answer property enquiries, qualify buyers and sellers, answer common questions, schedule viewings, and follow up with leads.",
+      "Bonie can answer property enquiries, qualify buyers and sellers, answer common questions, schedule viewings, and follow up with leads.",
     capabilities: ["Answer enquiries", "Qualify leads", "Schedule viewings", "Follow up"],
     image: "/images/industries/real-estate-v2.jpg",
   },
@@ -108,7 +108,7 @@ const INDUSTRIES: Industry[] = [
     eyebrow: "Restaurants",
     headline: "Keep every guest conversation moving.",
     description:
-      "Codely can handle reservations, menu questions, booking requests, customer enquiries, and everyday guest conversations without tying up your staff.",
+      "Bonie can handle reservations, menu questions, booking requests, customer enquiries, and everyday guest conversations without tying up your staff.",
     capabilities: ["Reservations", "Guest questions", "Booking requests", "Customer support"],
     image: "/images/industries/restaurants-v2.jpg",
   },
@@ -117,7 +117,7 @@ const INDUSTRIES: Industry[] = [
     eyebrow: "Hospitality",
     headline: "Answer the front desk at 3 AM like it's 3 PM.",
     description:
-      "Codely handles reservations, late check-ins, room questions, and booking changes at any hour, in the guest's own language.",
+      "Bonie handles reservations, late check-ins, room questions, and booking changes at any hour, in the guest's own language.",
     capabilities: ["Reservations", "Guest questions", "Booking requests", "Customer support"],
     image: "/images/industries/hospitality-v2.jpg",
   },

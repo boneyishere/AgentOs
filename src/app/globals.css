@@ -7,11 +7,11 @@
 
   /* light surface (default) */
   --background: #fdffff;
-  --surface: #fafafa;
+  --surface: #f5f6fb;
   --foreground: #1a1a1a;
   --foreground-muted: #6b6b70;
-  --border: #ebebeb;
-  --border-strong: #d4d4d8;
+  --border: #e8e9ef;
+  --border-strong: #d2d4dd;
 
   /* ink surface: the hero visual panel and the CTA card only */
   --ink: #1a1a1a;
@@ -538,42 +538,14 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Section light — a faint cone falling from the section's top edge, plus a
-   hairline "seam" of light along it. Hue from --light (defaults to --accent). */
-.section-light {
-  position: relative;
-  isolation: isolate;
+/* Hue tint: a flat, solid wash of the element's --hue (never a gradient), for
+   cards and inset panels that carry a signal hue. Set --hue inline. */
+@utility bg-tint {
+  background-color: color-mix(in srgb, var(--hue, var(--accent)) 6%, var(--background));
 }
-.section-light::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: min(75%, 560px);
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    46% 100% at 50% 0%,
-    transparent,
-    color-mix(in srgb, var(--light, var(--accent)) 10%, transparent) 26%,
-    transparent 72%
-  );
+@utility border-tint {
+  border-color: color-mix(in srgb, var(--hue, var(--accent)) 16%, var(--border));
 }
-.section-light::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 18%;
-  right: 18%;
-  height: 1px;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--light, var(--accent)) 50%, transparent),
-    transparent
-  );
-}
-
 
 /* Cursor spotlight — <SpotlightTracker> writes --mx/--my on whichever
    .spotlight element the pointer is over. A soft inner glow plus a border that

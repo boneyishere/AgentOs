@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { RESOURCES } from "@/content/resources";
 
-const BASE_URL = "https://codely.ai";
+const BASE_URL = "https://bonie.ai";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = ["", "/features", "/pricing", "/contact", "/resources"].map(

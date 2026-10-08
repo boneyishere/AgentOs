@@ -282,8 +282,8 @@ function NextSteps() {
       </p>
       <p className="border-t border-border pt-4 text-foreground-muted">
         Rather talk to a person first?{" "}
-        <a href="mailto:hello@codely.ai" className="font-medium text-foreground hover:text-accent">
-          hello@codely.ai
+        <a href="mailto:hello@bonie.ai" className="font-medium text-foreground hover:text-accent">
+          hello@bonie.ai
         </a>
       </p>
     </div>

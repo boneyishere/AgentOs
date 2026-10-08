@@ -7,7 +7,7 @@ import { ResourcesGrid } from "@/components/resources-grid";
 export const metadata: Metadata = {
   title: "Resources",
   description:
-    "Articles on designing AI voice and chat agents, and real examples of how businesses put Codely to work.",
+    "Articles on designing AI voice and chat agents, and real examples of how businesses put Bonie to work.",
 };
 
 export default function ResourcesPage() {
@@ -17,7 +17,7 @@ export default function ResourcesPage() {
       <main className="flex-1">
         <PageHeader
           title="Resources for building better agents."
-          description="Articles on designing AI agents, and examples of how businesses put Codely to work."
+          description="Articles on designing AI agents, and examples of how businesses put Bonie to work."
         />
         <ResourcesGrid />
       </main>

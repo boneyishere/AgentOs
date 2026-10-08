@@ -62,7 +62,7 @@ const FEATURES = [
 
 export function FeatureCards() {
   return (
-    <section id="features" className="section-light border-b border-border bg-background">
+    <section id="features" className="border-b border-border bg-background">
       <Container className="relative py-20 sm:py-28">
         <SectionHeading
           title="Six things your agent does from day one."
@@ -71,14 +71,17 @@ export function FeatureCards() {
 
         <div className="mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-6">
           {FEATURES.map(({ title, description, Visual, span, wide, hue }, i) => (
-            <div key={title} className={`bg-background ${span}`}>
+            <div
+              key={title}
+              className={`bg-background ${span}`}
+              style={{ "--hue": hue } as React.CSSProperties}
+            >
               <Reveal delay={(i % 3) * 0.06} className="h-full">
                 <article
                   data-particle-hover
                   className={`spotlight h-full p-6 sm:p-7 ${
                     wide ? "lg:grid lg:grid-cols-[1fr_2fr] lg:items-center lg:gap-14" : "flex flex-col"
                   }`}
-                  style={{ "--hue": hue } as React.CSSProperties}
                 >
                   {wide && (
                     <div className="hidden lg:order-1 lg:block">

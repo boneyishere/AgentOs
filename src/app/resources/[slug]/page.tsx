@@ -79,7 +79,7 @@ export default async function ResourceDetailPage({
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-xs font-bold text-background">
                   C
                 </span>
-                <span className="text-sm font-medium text-foreground">Codely Team</span>
+                <span className="text-sm font-medium text-foreground">Bonie Team</span>
                 <span aria-hidden="true" className="h-3.5 w-px bg-border" />
                 <time dateTime={resource.date} className="text-sm text-foreground-muted">
                   {formatDate(resource.date)}
@@ -103,7 +103,7 @@ export default async function ResourceDetailPage({
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">What Codely did</p>
+                    <p className="text-sm font-medium text-foreground">What Bonie did</p>
                     <p className="mt-2 text-sm text-foreground-muted">
                       {resource.implementation}
                     </p>

@@ -7,7 +7,7 @@ import { LeadIntake } from "@/components/lead-intake";
 export const metadata: Metadata = {
   title: "Get your agent",
   description:
-    "Answer a few quick questions about your business and we'll build a first version of your Codely agent within one business day.",
+    "Answer a few quick questions about your business and we'll build a first version of your Bonie agent within one business day.",
 };
 
 export default function ContactPage() {
